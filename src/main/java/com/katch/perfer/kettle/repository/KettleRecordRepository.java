@@ -14,84 +14,87 @@ import com.katch.perfer.mybatis.mapper.KettleRecordMapper;
 
 @Component
 public class KettleRecordRepository {
-	@Autowired
-	private KettleRecordMapper kettleRecordMapper;
+    @Autowired
+    private KettleRecordMapper kettleRecordMapper;
 
-	/**
-	 * 获取一个
-	 * 
-	 * @param uuid
-	 * @return
-	 * @throws KettleException
-	 */
-	@Transactional(readOnly = true)
-	public KettleRecord queryRecord(String uuid) {
-		return kettleRecordMapper.queryRecord(uuid);
-	}
+    /**
+     * 获取一个
+     * 
+     * @param uuid
+     * @return
+     * @throws KettleException
+     */
+    @Transactional(readOnly = true)
+    public KettleRecord queryRecord(String uuid) {
+	return kettleRecordMapper.queryRecord(uuid);
+    }
 
-	/**
-	 * 补充依赖
-	 * 
-	 * @param record
-	 * @return
-	 */
-	@Transactional(readOnly = true)
-	public KettleRecord queryRecordRelations(KettleRecord record) {
-		List<KettleRecordRelation> kettleRecordRelations = kettleRecordMapper.queryRecordRelations(record.getJobid());
-		record.getRelations().clear();
-		record.getRelations().addAll(kettleRecordRelations);
-		return record;
-	}
+    /**
+     * 补充依赖
+     * 
+     * @param record
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public KettleRecord queryRecordRelations(KettleRecord record) {
+	List<KettleRecordRelation> kettleRecordRelations = kettleRecordMapper.queryRecordRelations(record.getJobid());
+	record.getRelations().clear();
+	record.getRelations().addAll(kettleRecordRelations);
+	return record;
+    }
 
-	/**
-	 * @return
-	 */
-	@Transactional(readOnly = true)
-	public List<KettleRecord> allWaitingRecords() {
-		return kettleRecordMapper.allWaitingRecords();
-	}
+    /**
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<KettleRecord> allWaitingRecords() {
+	return kettleRecordMapper.allWaitingRecords();
+    }
 
-	/**
-	 * @return
-	 */
-	@Transactional(readOnly = true)
-	public List<KettleRecord> allStopRecords() {
-		return kettleRecordMapper.allStopRecords();
-	}
+    /**
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<KettleRecord> allStopRecords() {
+	return kettleRecordMapper.allStopRecords();
+    }
 
-	/**
-	 * 保存
-	 * 
-	 * @param record
-	 */
-	@Transactional()
-	public void insertRecord(KettleRecord record) {
-		Date now = new Date();
-		record.setCreateTime(now);
-		record.setUpdateTime(now);
-		kettleRecordMapper.insertRecord(record);
-		kettleRecordMapper.insertRecordRelations(record.getRelations());
+    /**
+     * 保存
+     * 
+     * @param record
+     */
+    @Transactional()
+    public void insertRecord(KettleRecord record) {
+	Date now = new Date();
+	record.setCreateTime(now);
+	record.setUpdateTime(now);
+	for (KettleRecordRelation recordRelation : record.getRelations()) {
+	    recordRelation.setCreateTime(now);
 	}
+	kettleRecordMapper.insertRecord(record);
+	kettleRecordMapper.insertRecordRelations(record.getRelations());
+    }
 
-	/**
-	 * 更新非状态
-	 * 
-	 * @param record
-	 */
-	@Transactional()
-	public void updateRecord(KettleRecord record) {
-		record.setUpdateTime(new Date());
-		kettleRecordMapper.updateRecord(record);
-	}
+    /**
+     * 更新非状态
+     * 
+     * @param record
+     */
+    @Transactional()
+    public void updateRecord(KettleRecord record) {
+	record.setUpdateTime(new Date());
+	kettleRecordMapper.updateRecord(record);
+    }
 
-	/**
-	 * 删除Record
-	 * 
-	 * @param record
-	 */
-	@Transactional()
-	public void deleteRecord(String uuid) {
-		kettleRecordMapper.deleteRecord(uuid);
-		kettleRecordMapper.deleteRecordRelations(uuid);
-	}
+    /**
+     * 删除Record
+     * 
+     * @param record
+     */
+    @Transactional()
+    public void deleteRecord(String uuid) {
+	kettleRecordMapper.deleteRecord(uuid);
+	kettleRecordMapper.deleteRecordRelations(uuid);
+    }
 }

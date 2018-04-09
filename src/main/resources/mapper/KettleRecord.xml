@@ -92,9 +92,8 @@
 		(MASTER_UUID_ID, META_ID, META_TYPE,
 		CREATE_TIME)
 		VALUES
-		<foreach collection="recordRelations" item="recordRelation"
-			separator=",">
-			(#{recordRelation.masterUUID},#{recordRelation.metaid},#{recordRelation.type},#{recordRelation.createTime})
+		<foreach collection="list" item="item" separator=",">
+			(#{item.masterUUID},#{item.metaid},#{item.type},#{item.createTime})
 		</foreach>
 	</insert>
 
