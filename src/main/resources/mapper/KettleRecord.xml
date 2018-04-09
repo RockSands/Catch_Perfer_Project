@@ -43,7 +43,7 @@
 		UUID = #{uuid}
 	</select>
 
-	<select id="allHandleRecord" resultMap="KettleRecordMap">
+	<select id="allWaitingRecords" resultMap="KettleRecordMap">
 		SELECT
 		<include refid="KettleRecord_Column_List" />
 		FROM

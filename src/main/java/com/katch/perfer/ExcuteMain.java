@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.katch.perfer.kettle.record.remote.KettleRemoteClient;
 import com.katch.perfer.kettle.record.remote.KettleRemotePool;
+import com.katch.perfer.utils.SpringContextUtils;
 
 @SpringBootApplication
 @EnableScheduling
@@ -18,7 +19,7 @@ public class ExcuteMain {
 
 	public static void main(String[] args) throws Exception {
 		ConfigurableApplicationContext context = SpringApplication.run(ExcuteMain.class, args);
-		KettleRemotePool kettleRemotePool = context.getBean(KettleRemotePool.class);
+		KettleRemotePool kettleRemotePool = SpringContextUtils.getBean(KettleRemotePool.class);
 		for(KettleRemoteClient client : kettleRemotePool.getRemoteclients()) {
 			System.out.println("====>" + client.getKettleRepoRepository().getSlaveServers().get(0).getHostname());
 		}
