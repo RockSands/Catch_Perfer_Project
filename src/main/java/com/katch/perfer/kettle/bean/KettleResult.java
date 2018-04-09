@@ -1,4 +1,4 @@
-package com.katch.perfer.bean.kettle;
+package com.katch.perfer.kettle.bean;
 
 /**
  * Kettle的结果,北向

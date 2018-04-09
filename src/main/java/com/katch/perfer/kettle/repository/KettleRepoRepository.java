@@ -1,5 +1,5 @@
 
-package com.katch.perfer.domain.kettle;
+package com.katch.perfer.kettle.repository;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,9 +25,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Component;
 
-import com.katch.perfer.bean.kettle.KettleJobEntireDefine;
-import com.katch.perfer.config.kettle.KettleRepoProperties;
-import com.katch.perfer.consist.kettle.KettleVariables;
+import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
+import com.katch.perfer.kettle.config.KettleRepoProperties;
+import com.katch.perfer.kettle.consist.KettleVariables;
+import com.katch.perfer.kettle.model.KettleRecord;
+import com.katch.perfer.kettle.model.KettleRecordRelation;
 
 /**
  * Kettle资源库
@@ -382,4 +384,5 @@ public class KettleRepoRepository {
 		connect();
 		return this.repository.getSlaveServers();
 	}
+
 }

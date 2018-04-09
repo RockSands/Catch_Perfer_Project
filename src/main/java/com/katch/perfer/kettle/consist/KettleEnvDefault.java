@@ -1,4 +1,4 @@
-package com.katch.perfer.consist.kettle;
+package com.katch.perfer.kettle.consist;
 
 /**
  * Kettle环境的默认值

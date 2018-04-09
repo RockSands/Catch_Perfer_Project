@@ -1,4 +1,4 @@
-package com.katch.perfer.config.kettle;
+package com.katch.perfer.kettle.config;
 
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.KettleEnvironment;

@@ -10,8 +10,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.pentaho.di.core.exception.KettleException;
 
-import com.katch.perfer.consist.kettle.KettleVariables;
-import com.katch.perfer.domain.kettle.KettleRecord;
+import com.katch.perfer.kettle.consist.KettleVariables;
+import com.katch.perfer.kettle.model.KettleRecord;
 
 /**
  * Kettle任务池

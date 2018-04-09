@@ -26,7 +26,7 @@ import org.pentaho.di.trans.steps.selectvalues.SelectValuesMeta;
 import org.pentaho.di.trans.steps.sql.ExecSQLMeta;
 import org.pentaho.di.trans.steps.tableinput.TableInputMeta;
 
-import com.katch.perfer.bean.kettle.KettleJobEntireDefine;
+import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.metas.KettleTableMeta;
 
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;

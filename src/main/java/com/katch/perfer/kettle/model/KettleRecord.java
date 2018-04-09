@@ -1,14 +1,10 @@
-package com.katch.perfer.domain.kettle;
+package com.katch.perfer.kettle.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-import com.katch.perfer.consist.kettle.KettleVariables;
+import com.katch.perfer.kettle.consist.KettleVariables;
 
 /**
  * Kettle记录
@@ -16,76 +12,67 @@ import com.katch.perfer.consist.kettle.KettleVariables;
  * @author Administrator
  *
  */
-@Entity
 public class KettleRecord {
 
 	/**
 	 * UUID
 	 */
-	@Id
-	@Column(name = "UUID", unique = true, nullable = false, length = 11)
 	private String uuid;
 
 	/**
 	 * 任务ID
 	 */
-	@Column(name = "ID_JOB")
 	private String jobid;
 
 	/**
 	 * 名称
 	 */
-	@Column(name = "NAME_JOB")
 	private String name;
 
 	/**
 	 * 运行ID-远程的执行ObjectID
 	 */
-	@Column(name = "ID_RUN")
 	private String runID;
 	/**
 	 * 状态
 	 */
-	@Column(name = "STATUS")
 	private String status;
 
 	/**
 	 * 主机信息
 	 */
-	@Column(name = "HOSTNAME")
 	private String hostname;
+	
+	/**
+	 * 执行类型:
+	 * ONCE:一次 ; PERSISTENT:持久 ; CRON:cron表达式
+	 */
+	private String executionType;
 
 	/**
 	 * CRON表达式
 	 */
-	@Column(name = "CRON_EXPRESSION")
 	private String cronExpression;
 
 	/**
 	 * 创建时间
 	 */
-	@Column(name = "CREATE_TIME")
 	private Date createTime;
 
 	/**
 	 * 更新时间
 	 */
-	@Column(name = "UPDATE_TIME")
 	private Date updateTime;
 
 	/**
 	 * 异常信息
 	 */
-	@Column(name = "ERROR_MSG")
 	private String errMsg;
 
 	/**
 	 * 依赖
 	 */
 	private List<KettleRecordRelation> relations;
-
-	public KettleRecord() {
-	}
 
 	public String getUuid() {
 		return uuid;
@@ -157,6 +144,14 @@ public class KettleRecord {
 			relations = new ArrayList<KettleRecordRelation>();
 		}
 		return relations;
+	}
+	
+	public String getExecutionType() {
+		return executionType;
+	}
+
+	public void setExecutionType(String executionType) {
+		this.executionType = executionType;
 	}
 
 	public String getCronExpression() {

@@ -1,4 +1,4 @@
-package com.katch.perfer.bean.kettle;
+package com.katch.perfer.kettle.bean;
 
 import java.util.ArrayList;
 import java.util.List;

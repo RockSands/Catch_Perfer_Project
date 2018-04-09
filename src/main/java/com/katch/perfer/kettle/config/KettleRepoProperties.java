@@ -1,4 +1,4 @@
-package com.katch.perfer.config.kettle;
+package com.katch.perfer.kettle.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
