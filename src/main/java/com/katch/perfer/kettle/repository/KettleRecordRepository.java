@@ -90,8 +90,8 @@ public class KettleRecordRepository {
 	 * @param record
 	 */
 	@Transactional()
-	public void deleteRecord(KettleRecord record) {
-		kettleRecordMapper.deleteRecord(record.getUuid());
-		kettleRecordMapper.deleteRecordRelations(record.getUuid());
+	public void deleteRecord(String uuid) {
+		kettleRecordMapper.deleteRecord(uuid);
+		kettleRecordMapper.deleteRecordRelations(uuid);
 	}
 }

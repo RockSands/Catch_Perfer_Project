@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.katch.perfer.kettle.record.pool.KettleRecordPool;
+import com.katch.perfer.kettle.record.KettleRecordPool;
 
 @Configuration
 @EnableAutoConfiguration
@@ -43,7 +43,7 @@ public class KettleConfig {
 			}
 			slaves.append(slaveServer.getName());
 		}
-		logger.info("Kettle初始化发现服务端[" + slaves + "]!");
+		logger.info("Kettle初始化发现注册的服务端[" + slaves + "]!");
 		return repository;
 	}
 	
@@ -53,7 +53,7 @@ public class KettleConfig {
 	 * @throws Exception
 	 */
 	@Bean
-	public KettleRecordPool recordPool() throws Exception {
+	public KettleRecordPool kettleRecordPool() throws Exception {
 		KettleRecordPool recordPool = new KettleRecordPool();
 		return recordPool;
 	}

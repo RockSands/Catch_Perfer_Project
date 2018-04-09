@@ -27,7 +27,7 @@ public class KettleRecordTasks {
 	private KettleRepoRepository kettleRepoRepository;
 
 	/**
-	 * 每天凌晨1点执行清理垃圾任务
+	 * 每天凌晨1点执行清理垃圾任务 仅清理Once执行类型的任务
 	 */
 	@Scheduled(cron = "0 0 1 * * ?")
 	public void AutoCleanJob() {
@@ -42,15 +42,14 @@ public class KettleRecordTasks {
 						/ 60 > KettleVariables.KETTLE_RECORD_PERSIST_MAX_HOUR) {
 					kettleRecordRepository.queryRecordRelations(record);
 					kettleRepoRepository.deleteJobEntireDefine(record);
-					kettleRecordRepository.deleteRecord(record);
+					kettleRecordRepository.deleteRecord(record.getUuid());
 				}
 			}
 			/*
-			 * 清理目录,
-			 * persistent: 持久化任务
-			 * cron: Cron任务
+			 * 清理目录
 			 */
-			kettleRepoRepository.deleteEmptyRepoPath(Arrays.asList("persistent", "cron"));
+			kettleRepoRepository.deleteEmptyRepoPath(Arrays.asList(KettleVariables.RECORD_EXECUTION_TYPE_PERSISTENT,
+					KettleVariables.RECORD_EXECUTION_TYPE_CRON));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

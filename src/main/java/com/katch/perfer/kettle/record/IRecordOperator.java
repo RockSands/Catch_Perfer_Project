@@ -1,4 +1,4 @@
-package com.katch.perfer.kettle.record.operation;
+package com.katch.perfer.kettle.record;
 
 import org.pentaho.di.core.exception.KettleException;
 

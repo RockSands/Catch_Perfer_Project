@@ -114,4 +114,24 @@ public class KettleVariables {
 	 * 转换记录的元数据ID:唯一
 	 */
 	public static final String RECORD_TYPE_TRANS = "TRANS";
+
+	/**
+	 * 转换记录的元数据ID:唯一
+	 */
+	public static final String RECORD_E_TRANS = "TRANS";
+
+	/**
+	 * 转换记录的元数据ID:唯一
+	 */
+	public static final String RECORD_EXECUTION_TYPE_ONCE = "ONCE";
+
+	/**
+	 * 转换记录的元数据ID:唯一
+	 */
+	public static final String RECORD_EXECUTION_TYPE_PERSISTENT = "PERSISTENT";
+
+	/**
+	 * 转换记录的元数据ID:唯一
+	 */
+	public static final String RECORD_EXECUTION_TYPE_CRON = "CRON";
 }
