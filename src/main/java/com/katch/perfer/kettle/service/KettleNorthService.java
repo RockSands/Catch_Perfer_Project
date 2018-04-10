@@ -14,13 +14,13 @@ import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.service.record.KettleJobService;
 
 @Service
-@Lazy
 public class KettleNorthService {
 
 	private static Logger logger = LoggerFactory.getLogger(KettleNorthService.class);
 
 	@Autowired
 	@Qualifier("remoteSerialRecordService")
+	@Lazy
 	private KettleJobService kettleJobService;
 
 	/**

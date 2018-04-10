@@ -49,7 +49,6 @@ public class RemoteSerialRecordHandler implements Runnable {
 	/**
 	 * 处理的任务
 	 */
-	@Autowired
 	private RemoteRecordOperator remoteRecordOperator;
 
 	/**
