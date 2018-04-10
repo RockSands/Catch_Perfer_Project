@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
@@ -13,6 +14,7 @@ import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.service.record.KettleJobService;
 
 @Service
+@Lazy
 public class KettleNorthService {
 
 	private static Logger logger = LoggerFactory.getLogger(KettleNorthService.class);

@@ -3,12 +3,18 @@ package com.katch.perfer.kettle.record.remote;
 import org.pentaho.di.core.exception.KettleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.record.BaseRecordOperator;
 import com.katch.perfer.kettle.repository.KettleRecordRepository;
 
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RemoteRecordOperator extends BaseRecordOperator {
 
 	/**
@@ -24,14 +30,14 @@ public class RemoteRecordOperator extends BaseRecordOperator {
 	/**
 	 * 远端
 	 */
-	private final KettleRecordRepository kettleRecordRepository;
+	@Autowired
+	private KettleRecordRepository kettleRecordRepository;
 
 	/**
 	 * @param remoteClient
 	 */
-	public RemoteRecordOperator(KettleRemoteClient remoteClient, KettleRecordRepository kettleRecordRepository) {
+	public RemoteRecordOperator(KettleRemoteClient remoteClient) {
 		this.remoteClient = remoteClient;
-		this.kettleRecordRepository = kettleRecordRepository;
 	}
 
 	@Override

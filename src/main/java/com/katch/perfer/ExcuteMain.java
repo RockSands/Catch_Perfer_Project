@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.katch.perfer.kettle.metas.KettleTableMeta;
 import com.katch.perfer.kettle.service.KettleNorthService;
+import com.katch.perfer.kettle.service.TestService;
 
 @SpringBootApplication
 @EnableScheduling
@@ -25,6 +26,7 @@ public class ExcuteMain {
 
 	public static void main(String[] args) throws Exception {
 		ConfigurableApplicationContext context = SpringApplication.run(ExcuteMain.class, args);
+//		TestService TestService = context.getBean(TestService.class);
 		KettleNorthService kettleNorthService = context.getBean(KettleNorthService.class);
 		System.out.println("------------------------------");
 //		List<String> flags = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",

@@ -14,11 +14,13 @@ import org.pentaho.di.core.logging.LogLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.repository.KettleRepoRepository;
+import com.katch.perfer.utils.SpringContextUtils;
 
 /**
  * Kettle远程池,仅维护远端的状态
@@ -26,7 +28,8 @@ import com.katch.perfer.kettle.repository.KettleRepoRepository;
  * @author Administrator
  *
  */
-@Component
+@Service
+@Lazy
 public class KettleRemotePool {
 	/**
 	 * 日志
@@ -58,7 +61,7 @@ public class KettleRemotePool {
 	public void init() throws KettleException {
 		for (SlaveServer server : kettleRepoRepository.getSlaveServers()) {
 			server.getLogChannel().setLogLevel(LogLevel.ERROR);
-			addRemoteClient(new KettleRemoteClient(kettleRepoRepository, server));
+			addRemoteClient(SpringContextUtils.getBean(KettleRemoteClient.class, server));
 			hostNames.add(server.getHostname());
 		}
 		logger.info("Kettle远程池已经加载Client" + remoteclients.keySet());

@@ -4,13 +4,20 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.record.KettleRecordPool;
-import com.katch.perfer.kettle.repository.KettleRecordRepository;
+import com.katch.perfer.utils.SpringContextUtils;
 
 /**
  * Kettle远程串行行服务,模型比较保守
@@ -18,6 +25,9 @@ import com.katch.perfer.kettle.repository.KettleRecordRepository;
  * @author Administrator
  *
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Lazy
 public class RemoteSerialRecordHandler implements Runnable {
 
 	/**
@@ -33,12 +43,14 @@ public class RemoteSerialRecordHandler implements Runnable {
 	/**
 	 * 任务池
 	 */
+	@Autowired
 	private KettleRecordPool kettleRecordPool;
 
 	/**
 	 * 处理的任务
 	 */
-	private final RemoteRecordOperator remoteRecordOperator;
+	@Autowired
+	private RemoteRecordOperator remoteRecordOperator;
 
 	/**
 	 * 保存遗留的任务
@@ -48,14 +60,16 @@ public class RemoteSerialRecordHandler implements Runnable {
 	/**
 	 * @param client
 	 */
-	public RemoteSerialRecordHandler(KettleRemoteClient remoteClient, KettleRecordRepository kettleRecordRepository,
-			KettleRecordPool kettleRecordPool, List<KettleRecord> oldRecords) {
+	public RemoteSerialRecordHandler(KettleRemoteClient remoteClient, List<KettleRecord> oldRecords) {
 		this.remoteClient = remoteClient;
-		this.remoteRecordOperator = new RemoteRecordOperator(remoteClient, kettleRecordRepository);
-		this.kettleRecordPool = kettleRecordPool;
 		if (oldRecords != null && !oldRecords.isEmpty()) {
 			this.kettleRecords.addAll(oldRecords);
 		}
+	}
+
+	@PostConstruct
+	public void init() {
+		this.remoteRecordOperator = SpringContextUtils.getBean(RemoteRecordOperator.class, remoteClient);
 	}
 
 	/**

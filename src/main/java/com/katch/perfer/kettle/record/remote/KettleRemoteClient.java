@@ -11,6 +11,10 @@ import org.pentaho.di.www.SlaveServerStatus;
 import org.pentaho.di.www.WebResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.model.KettleRecord;
@@ -22,6 +26,8 @@ import com.katch.perfer.kettle.repository.KettleRepoRepository;
  * @author chenkw
  *
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class KettleRemoteClient {
 
 	/**
@@ -42,6 +48,7 @@ public class KettleRemoteClient {
 	/**
 	 * Kettle资源库
 	 */
+	@Autowired
 	private KettleRepoRepository kettleRepoRepository;
 
 	/**
@@ -56,8 +63,7 @@ public class KettleRemoteClient {
 	 * @param remoteServer
 	 * @throws KettleException
 	 */
-	public KettleRemoteClient(final KettleRepoRepository kettleRepoRepository, final SlaveServer remoteServer) {
-		this.kettleRepoRepository = kettleRepoRepository;
+	public KettleRemoteClient(SlaveServer remoteServer) {
 		this.remoteServer = remoteServer;
 		maxRecord = KettleVariables.KETTLE_RECORD_MAX_PER_REMOTE;
 	}

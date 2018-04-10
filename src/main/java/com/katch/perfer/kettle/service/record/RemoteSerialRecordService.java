@@ -14,18 +14,21 @@ import org.pentaho.di.core.exception.KettleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.record.remote.KettleRemoteClient;
 import com.katch.perfer.kettle.record.remote.KettleRemotePool;
 import com.katch.perfer.kettle.record.remote.RemoteSerialRecordHandler;
+import com.katch.perfer.utils.SpringContextUtils;
 
 /**
  * @author Administrator
  *
  */
 @Service
+@Lazy
 public class RemoteSerialRecordService extends KettleJobService {
 
 	/**
@@ -50,13 +53,6 @@ public class RemoteSerialRecordService extends KettleJobService {
 	 */
 	private Boolean hasStart;
 
-	/**
-	 * 构造器
-	 */
-	public RemoteSerialRecordService() {
-
-	}
-
 	@PostConstruct
 	public void init() throws KettleException {
 		threadPool = Executors.newScheduledThreadPool(kettleRemotePool.getRemoteclients().size());
@@ -77,8 +73,8 @@ public class RemoteSerialRecordService extends KettleJobService {
 		}
 		RemoteSerialRecordHandler recordHandler = null;
 		for (KettleRemoteClient remoteClient : kettleRemotePool.getRemoteclients()) {
-			recordHandler = new RemoteSerialRecordHandler(remoteClient, super.kettleRecordRepository,
-					super.kettleRecordPool, oldRecordMap.get(remoteClient.getHostName()));
+			recordHandler = SpringContextUtils.getBean(RemoteSerialRecordHandler.class, remoteClient,
+					oldRecordMap.get(remoteClient.getHostName()));
 			handlers.add(recordHandler);
 		}
 		start();
