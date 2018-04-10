@@ -1,8 +1,5 @@
 package com.katch.perfer.kettle.metas.builder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import org.pentaho.di.core.NotePadMeta;
@@ -46,11 +43,6 @@ public class ConsumerExportCSVBuilder {
 				consumer.getHost(), consumer.getDatabase(), consumer.getPort(), consumer.getUser(), consumer.getPasswd());
 		transMeta.addDatabase(consumerDataBase);
 		/*
-		 * 获取所有列
-		 */
-		final List<String> valueFields = new ArrayList<String>();
-		valueFields.addAll(Arrays.asList(consumer.getConlumns()));
-		/*
 		 * Note
 		 */
 		final String startNote = "Start " + transMeta.getName();
@@ -72,6 +64,11 @@ public class ConsumerExportCSVBuilder {
 		 * Export
 		 */
 		final TextFileOutputMeta tfom = new TextFileOutputMeta();
+		tfom.setDefault();
+		tfom.setSeparator(",");
+		tfom.setExtension("");
+		tfom.setAddToResultFiles(false);
+		tfom.setFileName("${Internal.Entry.Current.Directory}/111.csv");
 		final StepMeta export = new StepMeta("export", tfom);
 		export.setLocation(350, 100);
 		export.setDraw(true);
