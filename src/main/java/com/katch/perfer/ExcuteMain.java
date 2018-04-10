@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.katch.perfer.kettle.metas.KettleTableMeta;
 import com.katch.perfer.kettle.service.KettleNorthService;
-import com.katch.perfer.kettle.service.TestService;
 
 @SpringBootApplication
 @EnableScheduling
