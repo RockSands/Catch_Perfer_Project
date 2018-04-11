@@ -1,5 +1,6 @@
 package com.katch.perfer.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.pentaho.di.core.exception.KettleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +12,7 @@ import com.katch.perfer.kettle.service.KettleNorthService;
 
 /**
  * 消费记录导出
+ * 
  * @author Administrator
  *
  */
@@ -29,8 +31,11 @@ public class ConsumerExportService {
 	 * @return
 	 * @throws KettleException
 	 */
-	public KettleResult doExport() throws KettleException {
+	public String doExport() throws KettleException {
 		KettleResult result = kettleNorthService.excuteJobOnce(exportJobDefine);
-		return result;
+		if (StringUtils.isNotEmpty(result.getErrMsg())) {
+			throw new KettleException("Kettle导出消费记录失败,kettle发生问题:" + result.getErrMsg());
+		}
+		return result.getUuid();
 	}
 }

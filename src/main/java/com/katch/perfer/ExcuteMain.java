@@ -28,13 +28,13 @@ public class ExcuteMain {
 		app.addListeners(new ApplicationPreparedEventListener());
 		app.addListeners(new ApplicationStartedEventListener());
 		ConfigurableApplicationContext context = app.run(args);
-		ConsumerExportService consumerExportService = context
-				.getBean(ConsumerExportService.class);
+		ConsumerExportService consumerExportService = context.getBean(ConsumerExportService.class);
 		KettleNorthService KettleNorthService = context.getBean(KettleNorthService.class);
-		KettleResult result = consumerExportService.doExport();
-		while(true) {
-			result = KettleNorthService.queryJob(result.getUuid());
+		String uuid = consumerExportService.doExport();
+		while (true) {
+			KettleResult result = KettleNorthService.queryJob(uuid);
 			System.out.println("===>" + result.getStatus());
+			Thread.sleep(10000l);
 		}
 	}
 }
