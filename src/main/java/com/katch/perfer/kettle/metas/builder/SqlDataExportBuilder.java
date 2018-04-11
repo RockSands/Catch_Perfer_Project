@@ -17,19 +17,30 @@ import org.pentaho.di.trans.steps.textfileoutput.TextFileOutputMeta;
 
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.metas.KettleSelectSQLMeta;
+import com.katch.perfer.kettle.metas.KettleTextOutputMeta;
 
-public class ConsumerExportCSVBuilder {
+public class SqlDataExportBuilder {
 	/**
 	 * SQL
 	 */
-	private KettleSelectSQLMeta consumer;
+	private KettleSelectSQLMeta sqlData;
 
-	public static ConsumerExportCSVBuilder newBuilder() {
-		return new ConsumerExportCSVBuilder();
+	/**
+	 * 导出
+	 */
+	private KettleTextOutputMeta textExport;
+
+	public static SqlDataExportBuilder newBuilder() {
+		return new SqlDataExportBuilder();
 	}
 
-	public ConsumerExportCSVBuilder consumer(KettleSelectSQLMeta consumer) {
-		this.consumer = consumer;
+	public SqlDataExportBuilder sqlData(KettleSelectSQLMeta sqlData) {
+		this.sqlData = sqlData;
+		return this;
+	}
+
+	public SqlDataExportBuilder txtExport(KettleTextOutputMeta textExport) {
+		this.textExport = textExport;
 		return this;
 	}
 
@@ -38,10 +49,10 @@ public class ConsumerExportCSVBuilder {
 		TransMeta transMeta = null;
 		transMeta = new TransMeta();
 		transMeta.setName("CEC-" + uuid);
-		final DatabaseMeta consumerDataBase = new DatabaseMeta(
-				consumer.getHost() + "_" + consumer.getDatabase() + "_" + consumer.getUser(), consumer.getType(), "Native",
-				consumer.getHost(), consumer.getDatabase(), consumer.getPort(), consumer.getUser(), consumer.getPasswd());
-		transMeta.addDatabase(consumerDataBase);
+		final DatabaseMeta sourceDataBase = new DatabaseMeta(
+				sqlData.getHost() + "_" + sqlData.getDatabase() + "_" + sqlData.getUser(), sqlData.getType(), "Native",
+				sqlData.getHost(), sqlData.getDatabase(), sqlData.getPort(), sqlData.getUser(), sqlData.getPasswd());
+		transMeta.addDatabase(sourceDataBase);
 		/*
 		 * Note
 		 */
@@ -52,8 +63,8 @@ public class ConsumerExportCSVBuilder {
 		 * source
 		 */
 		final TableInputMeta tii = new TableInputMeta();
-		tii.setDatabaseMeta(consumerDataBase);
-		final String selectSQL = consumer.getSql();
+		tii.setDatabaseMeta(sourceDataBase);
+		final String selectSQL = sqlData.getSql();
 		tii.setSQL(selectSQL);
 		final StepMeta query = new StepMeta("source", tii);
 		query.setLocation(150, 100);
@@ -65,10 +76,20 @@ public class ConsumerExportCSVBuilder {
 		 */
 		final TextFileOutputMeta tfom = new TextFileOutputMeta();
 		tfom.setDefault();
-		tfom.setSeparator(",");
-		tfom.setExtension("");
+		if (textExport.getSeparator() != null) {
+			tfom.setSeparator(textExport.getSeparator());
+		}
+		if (textExport.getExtension() != null) {
+			tfom.setExtension(textExport.getExtension());
+		}
+		if (textExport.getExtension() != null) {
+			tfom.setExtension(textExport.getExtension());
+		}
+		tfom.setHeaderEnabled(textExport.isHeaderEnabled());
+		tfom.setFooterEnabled(textExport.isFooterEnabled());
 		tfom.setAddToResultFiles(false);
-		tfom.setFileName("${Internal.Entry.Current.Directory}/111.csv");
+		tfom.setFileName(textExport.getFileName());
+		tfom.setEncoding("UTF-8");
 		final StepMeta export = new StepMeta("export", tfom);
 		export.setLocation(350, 100);
 		export.setDraw(true);

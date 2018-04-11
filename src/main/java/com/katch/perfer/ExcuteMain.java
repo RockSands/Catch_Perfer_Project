@@ -8,7 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.katch.perfer.kettle.metas.KettleSelectSQLMeta;
-import com.katch.perfer.kettle.metas.builder.ConsumerExportCSVBuilder;
+import com.katch.perfer.kettle.metas.KettleTextOutputMeta;
+import com.katch.perfer.kettle.metas.builder.SqlDataExportBuilder;
 import com.katch.perfer.kettle.service.KettleNorthService;
 
 @SpringBootApplication
@@ -28,6 +29,10 @@ public class ExcuteMain {
 		consumer.setUser("root");
 		consumer.setPasswd("123456");
 		consumer.setSql("SELECT * FROM employees");
-		kettleNorthService.excuteJobOnce(ConsumerExportCSVBuilder.newBuilder().consumer(consumer).createJob());
+		KettleTextOutputMeta textExport = new KettleTextOutputMeta();
+		textExport.setSeparator(",");
+		textExport.setExtension("");
+		textExport.setFileName("/111.csv");
+		kettleNorthService.excuteJobOnce(SqlDataExportBuilder.newBuilder().sqlData(consumer).txtExport(textExport).createJob());
 	}
 }
