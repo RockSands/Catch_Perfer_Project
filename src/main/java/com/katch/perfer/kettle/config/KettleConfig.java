@@ -1,7 +1,6 @@
 package com.katch.perfer.kettle.config;
 
 import org.pentaho.di.cluster.SlaveServer;
-import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.RepositoryMeta;
@@ -28,9 +27,8 @@ public class KettleConfig {
 	private KettleRepoProperties repoProperties;
 
 	@Bean
-	public Repository KettleRepo() throws KettleException {
+	public Repository kettleRepo() throws KettleException {
 		logger.info("Kettle的客户端正在初始化....");
-		KettleEnvironment.init();
 		KettleFileRepository repository = new KettleFileRepository();
 		RepositoryMeta repositoryMeta = new KettleFileRepositoryMeta(repoProperties.getId(), repoProperties.getName(),
 				repoProperties.getDescription(), repoProperties.getBaseDirectory());

@@ -51,7 +51,7 @@ public class KettleRepoRepository {
 	 * 资源库
 	 */
 	@Autowired
-	@Qualifier("KettleRepo")
+	@Qualifier("kettleRepo")
 	private Repository repository;
 
 	/**
