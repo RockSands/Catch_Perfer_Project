@@ -27,8 +27,8 @@ public class ConsumerExportService {
 	@Autowired
 	private KettleNorthService kettleNorthService;
 
-	@Autowired
-	private MahoutConsumerService mahoutConsumerService;
+	//@Autowired
+	//private MahoutConsumerService mahoutConsumerService;
 	
 	/**
 	 * 导出

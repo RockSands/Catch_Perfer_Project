@@ -13,4 +13,4 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
 # 配置Mybatis的配置文件位置
 mybatis:
-  mapper-locations: classpath:mapper/*.xml   
+  mapper-locations: classpath:mapper/*.xml 
