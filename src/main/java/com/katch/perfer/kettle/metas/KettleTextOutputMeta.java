@@ -10,7 +10,7 @@ public class KettleTextOutputMeta {
 	/**
 	 * 后缀
 	 */
-	private String extension = "txt";
+	private String extension = "";
 
 	/**
 	 * 文件名称(包含完整路径)
