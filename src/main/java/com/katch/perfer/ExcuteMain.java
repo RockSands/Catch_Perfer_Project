@@ -7,10 +7,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.katch.perfer.kettle.metas.KettleSelectSQLMeta;
-import com.katch.perfer.kettle.metas.KettleTextOutputMeta;
-import com.katch.perfer.kettle.metas.builder.SqlDataExportBuilder;
+import com.katch.perfer.init.ApplicationEnvironmentPreparedEventListener;
+import com.katch.perfer.init.ApplicationFailedEventListener;
+import com.katch.perfer.init.ApplicationPreparedEventListener;
+import com.katch.perfer.init.ApplicationStartedEventListener;
+import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.service.KettleNorthService;
+import com.katch.perfer.service.ConsumerExportService;
 
 @SpringBootApplication
 @EnableScheduling
@@ -19,20 +22,19 @@ import com.katch.perfer.kettle.service.KettleNorthService;
 public class ExcuteMain {
 
 	public static void main(String[] args) throws Exception {
-		ConfigurableApplicationContext context = SpringApplication.run(ExcuteMain.class, args);
-		KettleNorthService kettleNorthService= context.getBean(KettleNorthService.class);
-		KettleSelectSQLMeta consumer = new KettleSelectSQLMeta();
-		consumer.setType("MySQL");
-		consumer.setHost("192.168.80.138");
-		consumer.setPort("3306");
-		consumer.setDatabase("employees");
-		consumer.setUser("root");
-		consumer.setPasswd("123456");
-		consumer.setSql("SELECT * FROM employees");
-		KettleTextOutputMeta textExport = new KettleTextOutputMeta();
-		textExport.setSeparator(",");
-		textExport.setExtension("");
-		textExport.setFileName("/111.csv");
-		kettleNorthService.excuteJobOnce(SqlDataExportBuilder.newBuilder().sqlData(consumer).txtExport(textExport).createJob());
+		SpringApplication app = new SpringApplication(ExcuteMain.class);
+		app.addListeners(new ApplicationEnvironmentPreparedEventListener());
+		app.addListeners(new ApplicationFailedEventListener());
+		app.addListeners(new ApplicationPreparedEventListener());
+		app.addListeners(new ApplicationStartedEventListener());
+		ConfigurableApplicationContext context = app.run(args);
+		ConsumerExportService consumerExportService = context
+				.getBean(ConsumerExportService.class);
+		KettleNorthService KettleNorthService = context.getBean(KettleNorthService.class);
+		KettleResult result = consumerExportService.doExport();
+		while(true) {
+			result = KettleNorthService.queryJob(result.getUuid());
+			System.out.println("===>" + result.getStatus());
+		}
 	}
 }
