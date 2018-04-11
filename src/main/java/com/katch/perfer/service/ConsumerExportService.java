@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.service.KettleNorthService;
+import com.katch.perfer.mahout.service.MahoutConsumerService;
 
 /**
  * 消费记录导出
@@ -18,13 +19,17 @@ import com.katch.perfer.kettle.service.KettleNorthService;
  */
 @Service
 public class ConsumerExportService {
+	
+	@Autowired
+	@Qualifier("consumerExportJobDefine")
+	private KettleJobEntireDefine exportJobDefine;
+	
 	@Autowired
 	private KettleNorthService kettleNorthService;
 
 	@Autowired
-	@Qualifier("consumerExportJobDefine")
-	private KettleJobEntireDefine exportJobDefine;
-
+	private MahoutConsumerService mahoutConsumerService;
+	
 	/**
 	 * 导出
 	 * 
@@ -37,5 +42,11 @@ public class ConsumerExportService {
 			throw new KettleException("Kettle导出消费记录失败,kettle发生问题:" + result.getErrMsg());
 		}
 		return result.getUuid();
+	}
+
+	/**
+	 * 计算
+	 */
+	public void doCompute() {
 	}
 }
