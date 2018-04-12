@@ -8,11 +8,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.katch.perfer.config.Test;
 import com.katch.perfer.init.ApplicationEnvironmentPreparedEventListener;
 import com.katch.perfer.init.ApplicationFailedEventListener;
 import com.katch.perfer.init.ApplicationPreparedEventListener;
 import com.katch.perfer.init.ApplicationStartedEventListener;
+import com.katch.perfer.service.ConsumerNorthService;
 
 @SpringBootApplication
 @EnableAutoConfiguration
@@ -28,8 +28,8 @@ public class ExcuteMain {
 		app.addListeners(new ApplicationPreparedEventListener());
 		app.addListeners(new ApplicationStartedEventListener());
 		ConfigurableApplicationContext context = app.run(args);
-		Test Test = context.getBean(Test.class);
-		System.out.println("===>" + Test.getSeparator());
+		ConsumerNorthService consumerNorthService = context.getBean(ConsumerNorthService.class);
+		consumerNorthService.excute();
 		//MahoutConsumerService mahoutConsumerService = (MahoutConsumerService)context.getBean("mahoutConsumerService");
 		//System.out.println("===>" + mahoutConsumerService);
 //		KettleNorthService KettleNorthService = context.getBean(KettleNorthService.class);

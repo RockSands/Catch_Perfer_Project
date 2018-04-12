@@ -27,14 +27,13 @@ public class ConsumerKettlePolling {
 	 * 执行
 	 * @throws KettleException
 	 */
-	public void excute() throws KettleException {
+	public String excute() {
 		try {
 			Thread.sleep(5000L);
 			KettleResult result;
 			while (true) {
 				result = kettleNorthService.queryJob(kettleUUID);
 				if (KettleVariables.RECORD_STATUS_FINISHED.equals(result.getStatus())) {
-					consumerExportService.doCompute();
 					break;
 				}
 				if (KettleVariables.RECORD_STATUS_ERROR.equals(result.getStatus())) {
@@ -42,8 +41,10 @@ public class ConsumerKettlePolling {
 				}
 				Thread.sleep(10000L);
 			}
+			return "error";
 		} catch (Exception e) {
 			logger.error("Kettle导出消费记录失败!!!");
+			return "error";
 		}
 	}
 
