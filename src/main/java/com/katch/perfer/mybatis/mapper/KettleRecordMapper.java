@@ -22,7 +22,7 @@ public interface KettleRecordMapper {
 
 	void insertRecord(KettleRecord record);
 
-	void insertRecordRelations(@Param("list")List<KettleRecordRelation> recordRelations);
+	void insertRecordRelations(@Param("list") List<KettleRecordRelation> recordRelations);
 
 	void updateRecord(KettleRecord record);
 
