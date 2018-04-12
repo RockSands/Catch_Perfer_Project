@@ -28,8 +28,9 @@ public class ExcuteMain {
 		app.addListeners(new ApplicationPreparedEventListener());
 		app.addListeners(new ApplicationStartedEventListener());
 		ConfigurableApplicationContext context = app.run(args);
-		ConsumerAutoDealService consumerAutoDealService = context.getBean(ConsumerAutoDealService.class);
-		consumerAutoDealService.excute();
+		// ConsumerAutoDealService consumerAutoDealService =
+		// context.getBean(ConsumerAutoDealService.class);
+		// consumerAutoDealService.excute();
 		// MahoutConsumerService mahoutConsumerService =
 		// (MahoutConsumerService)context.getBean("mahoutConsumerService");
 		// System.out.println("===>" + mahoutConsumerService);

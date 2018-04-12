@@ -13,6 +13,8 @@ import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -22,11 +24,13 @@ import com.katch.perfer.config.ConsumerExportCSVProperties;
 @Component("mahoutRecommenderService")
 @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "user", matchIfMissing = true)
 public class UserMahoutRecommenderService extends MahoutRecommenderService {
+	private static Logger logger = LoggerFactory.getLogger(UserMahoutRecommenderService.class);
 	@Autowired
 	private ConsumerExportCSVProperties consumerExportCSVProperties;
 
 	@Override
 	public void excute() throws Exception {
+		logger.error("==3333==>");
 		File file = new File(consumerExportCSVProperties.getFileName());
 		DataModel dataModel = new FileDataModel(file);
 		UserSimilarity similarity = new UncenteredCosineSimilarity(dataModel);
