@@ -51,3 +51,17 @@ CREATE_TIME  datetime NOT NULL
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Table structure for SQY_RZDK_SPTJ
+-- ----------------------------
+DROP TABLE IF EXISTS SQY_RZDK_SPTJ;
+CREATE TABLE SQY_RZDK_SPTJ (
+YH_ID  bigint NOT NULL ,
+SP_ID  bigint NOT NULL ,
+SCORE  double NOT NULL ,
+UPDATE_TIME  datetime NOT NULL
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+ROW_FORMAT=DYNAMIC;

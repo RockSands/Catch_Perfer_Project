@@ -49,13 +49,14 @@ public abstract class MahoutRecommenderService {
 		Recommender index = null;
 		Date now = new Date();
 		for (RecommendedItem recommendedItem : recommendedItems) {
-			if (recommendedItem == null) {
+			if (recommendedItem == null || recommendedItem.getValue() == 0.00) {
 				continue;
 			}
 			index = new Recommender();
-			index.setUpdate_time(now);
+			index.setUpdateTime(now);
 			index.setItemID(recommendedItem.getItemID());
 			index.setUserId(userID);
+			index.setScore(recommendedItem.getValue());
 			recommenders.add(index);
 		}
 		recommenderMapper.deleteRecommenders(userID);

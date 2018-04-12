@@ -15,7 +15,7 @@ public class Recommender {
 
 	private double score;
 
-	private Date update_time;
+	private Date updateTime;
 
 	public long getUserId() {
 		return userId;
@@ -41,11 +41,11 @@ public class Recommender {
 		this.score = score;
 	}
 
-	public Date getUpdate_time() {
-		return update_time;
+	public Date getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setUpdate_time(Date update_time) {
-		this.update_time = update_time;
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 }

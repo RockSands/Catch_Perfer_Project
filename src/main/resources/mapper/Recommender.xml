@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.katch.perfer.mybatis.mapper.RecommenderMapper">
 	<resultMap id="RecommenderMap" type="com.katch.perfer.mahout.model.Recommender">
-		<result column="YH_ID" property="userId" />
+		<result column="YH_ID" property="userID" />
 		<result column="SP_ID" property="itemID" />
 		<result column="SCORE" property="score" />
 		<result column="UPDATE_TIME" property="updateTime" />
@@ -15,11 +15,11 @@
 
 	<select id="queryRecommenders" parameterType="long" resultMap="RecommenderMap">
 		SELECT
-		<include refid="KettleRecord_Column_List" />
+		<include refid="Recommender_Column_List" />
 		FROM
 		SQY_RZDK_SPTJ
 		WHERE
-		YH_ID = #{userId}
+		YH_ID = #{userID}
 	</select>
 
 	<insert id="insertRecommenders">
@@ -36,7 +36,7 @@
 		DELETE FROM
 		SQY_RZDK_SPTJ
 		WHERE
-		YH_ID =#{userId}
+		YH_ID =#{userID}
 	</delete>
 
 </mapper>
