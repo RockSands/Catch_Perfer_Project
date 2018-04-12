@@ -4,16 +4,15 @@
 <mapper namespace="com.katch.perfer.mybatis.mapper.RecommenderMapper">
 	<resultMap id="RecommenderMap" type="com.katch.perfer.mahout.model.Recommender">
 		<result column="YH_ID" property="userID" />
-		<result column="SP_ID" property="itemID" />
-		<result column="SCORE" property="score" />
+		<result column="SP_RECOMMENDS" property="itemRecommedns" />
 		<result column="UPDATE_TIME" property="updateTime" />
 	</resultMap>
 
 	<sql id="Recommender_Column_List">
-		YH_ID, SP_ID, SCORE, UPDATE_TIME
+		YH_ID, SP_RECOMMENDS, UPDATE_TIME
 	</sql>
 
-	<select id="queryRecommenders" parameterType="long" resultMap="RecommenderMap">
+	<select id="queryRecommender" parameterType="long" resultMap="RecommenderMap">
 		SELECT
 		<include refid="Recommender_Column_List" />
 		FROM
@@ -22,17 +21,15 @@
 		YH_ID = #{userID}
 	</select>
 
-	<insert id="insertRecommenders">
+	<insert id="insertRecommender" parameterType="com.katch.perfer.mahout.model.Recommender">
 		INSERT INTO
 		SQY_RZDK_SPTJ
-		(YH_ID, SP_ID, SCORE, UPDATE_TIME)
+			(<include refid="Recommender_Column_List" />)
 		VALUES
-		<foreach collection="list" item="item" separator=",">
-			(#{item.userId},#{item.itemID},#{item.score},#{item.updateTime})
-		</foreach>
+			(#{userID},#{itemRecommedns},#{updateTime})
 	</insert>
 
-	<delete id="deleteRecommenders" parameterType="long">
+	<delete id="deleteRecommender" parameterType="long">
 		DELETE FROM
 		SQY_RZDK_SPTJ
 		WHERE

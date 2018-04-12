@@ -14,9 +14,9 @@ import com.katch.perfer.mahout.model.Recommender;
 @Mapper
 public interface RecommenderMapper {
 
-	List<Recommender> queryRecommenders(@Param("userID") long userID);
+    Recommender queryRecommender(@Param("userID") long userID);
 
-	void deleteRecommenders(@Param("userID") long userID);
+    void deleteRecommender(@Param("userID") long userID);
 
-	void insertRecommenders(@Param("list") List<Recommender> recommenders);
+    void insertRecommender(Recommender recommenders);
 }

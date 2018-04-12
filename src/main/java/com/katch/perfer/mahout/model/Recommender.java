@@ -11,9 +11,7 @@ import java.util.Date;
 public class Recommender {
 	private long userId;
 
-	private long itemID;
-
-	private double score;
+	private String itemRecommedns;
 
 	private Date updateTime;
 
@@ -25,20 +23,12 @@ public class Recommender {
 		this.userId = userId;
 	}
 
-	public long getItemID() {
-		return itemID;
+	public String getItemRecommedns() {
+	    return itemRecommedns;
 	}
 
-	public void setItemID(long itemID) {
-		this.itemID = itemID;
-	}
-
-	public double getScore() {
-		return score;
-	}
-
-	public void setScore(double score) {
-		this.score = score;
+	public void setItemRecommedns(String itemRecommedns) {
+	    this.itemRecommedns = itemRecommedns;
 	}
 
 	public Date getUpdateTime() {
