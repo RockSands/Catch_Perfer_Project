@@ -12,7 +12,7 @@ import com.katch.perfer.init.ApplicationEnvironmentPreparedEventListener;
 import com.katch.perfer.init.ApplicationFailedEventListener;
 import com.katch.perfer.init.ApplicationPreparedEventListener;
 import com.katch.perfer.init.ApplicationStartedEventListener;
-import com.katch.perfer.service.ConsumerNorthService;
+import com.katch.perfer.service.ConsumerAutoDealService;
 
 @SpringBootApplication
 @EnableAutoConfiguration
@@ -28,16 +28,18 @@ public class ExcuteMain {
 		app.addListeners(new ApplicationPreparedEventListener());
 		app.addListeners(new ApplicationStartedEventListener());
 		ConfigurableApplicationContext context = app.run(args);
-		ConsumerNorthService consumerNorthService = context.getBean(ConsumerNorthService.class);
-		consumerNorthService.excute();
-		//MahoutConsumerService mahoutConsumerService = (MahoutConsumerService)context.getBean("mahoutConsumerService");
-		//System.out.println("===>" + mahoutConsumerService);
-//		KettleNorthService KettleNorthService = context.getBean(KettleNorthService.class);
-//		String uuid = consumerExportService.doExport();
-//		while (true) {
-//			KettleResult result = KettleNorthService.queryJob(uuid);
-//			System.out.println("===>" + result.getStatus());
-//			Thread.sleep(10000l);
-//		}
+		ConsumerAutoDealService consumerAutoDealService = context.getBean(ConsumerAutoDealService.class);
+		consumerAutoDealService.excute();
+		// MahoutConsumerService mahoutConsumerService =
+		// (MahoutConsumerService)context.getBean("mahoutConsumerService");
+		// System.out.println("===>" + mahoutConsumerService);
+		// KettleNorthService KettleNorthService =
+		// context.getBean(KettleNorthService.class);
+		// String uuid = consumerExportService.doExport();
+		// while (true) {
+		// KettleResult result = KettleNorthService.queryJob(uuid);
+		// System.out.println("===>" + result.getStatus());
+		// Thread.sleep(10000l);
+		// }
 	}
 }

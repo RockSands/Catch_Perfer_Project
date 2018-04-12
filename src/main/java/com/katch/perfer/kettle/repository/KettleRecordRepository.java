@@ -24,7 +24,6 @@ public class KettleRecordRepository {
 	 * @return
 	 * @throws KettleException
 	 */
-	@Transactional(readOnly = true)
 	public KettleRecord queryRecord(String uuid) {
 		return kettleRecordMapper.queryRecord(uuid);
 	}
@@ -35,7 +34,6 @@ public class KettleRecordRepository {
 	 * @param record
 	 * @return
 	 */
-	@Transactional(readOnly = true)
 	public KettleRecord queryRecordRelations(KettleRecord record) {
 		List<KettleRecordRelation> kettleRecordRelations = kettleRecordMapper.queryRecordRelations(record.getUuid());
 		record.getRelations().clear();
@@ -46,7 +44,6 @@ public class KettleRecordRepository {
 	/**
 	 * @return
 	 */
-	@Transactional(readOnly = true)
 	public List<KettleRecord> allWaitingRecords() {
 		return kettleRecordMapper.allWaitingRecords();
 	}
@@ -54,7 +51,6 @@ public class KettleRecordRepository {
 	/**
 	 * @return
 	 */
-	@Transactional(readOnly = true)
 	public List<KettleRecord> allStopRecords() {
 		return kettleRecordMapper.allStopRecords();
 	}

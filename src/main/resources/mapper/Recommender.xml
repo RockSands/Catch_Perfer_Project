@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.katch.perfer.mybatis.mapper.RecommenderMapper">
+	<resultMap id="RecommenderMap" type="com.katch.perfer.mahout.model.Recommender">
+		<result column="YH_ID" property="userId" />
+		<result column="SP_ID" property="itemID" />
+		<result column="SCORE" property="score" />
+		<result column="UPDATE_TIME" property="updateTime" />
+	</resultMap>
+
+	<sql id="Recommender_Column_List">
+		YH_ID, SP_ID, SCORE, UPDATE_TIME
+	</sql>
+
+	<select id="queryRecommenders" parameterType="long" resultMap="RecommenderMap">
+		SELECT
+		<include refid="KettleRecord_Column_List" />
+		FROM
+		SQY_RZDK_SPTJ
+		WHERE
+		YH_ID = #{userId}
+	</select>
+
+	<insert id="insertRecommenders">
+		INSERT INTO
+		SQY_RZDK_SPTJ
+		(YH_ID, SP_ID, SCORE, UPDATE_TIME)
+		VALUES
+		<foreach collection="list" item="item" separator=",">
+			(#{item.userId},#{item.itemID},#{item.score},#{item.updateTime})
+		</foreach>
+	</insert>
+
+	<delete id="deleteRecommenders" parameterType="long">
+		DELETE FROM
+		SQY_RZDK_SPTJ
+		WHERE
+		YH_ID =#{userId}
+	</delete>
+
+</mapper>

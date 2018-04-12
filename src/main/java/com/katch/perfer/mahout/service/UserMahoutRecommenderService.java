@@ -41,9 +41,7 @@ public class UserMahoutRecommenderService extends MahoutRecommenderService {
 				continue;
 			}
 			recommendedItems = recommender.recommend(userID, 100);
-			for (RecommendedItem item : recommendedItems) {
-				System.out.println("=" + userID + "=>" + item.getItemID() + "[" + item.getValue() + "]");
-			}
+			saveRecommender(userID, recommendedItems);
 		}
 	}
 }
