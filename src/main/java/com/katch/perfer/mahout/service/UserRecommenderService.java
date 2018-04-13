@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.katch.perfer.mahout.model.UserRecommender;
 import com.katch.perfer.mybatis.batch.BatchVO;
@@ -20,20 +22,41 @@ public class UserRecommenderService {
 	@Autowired
 	private MybatisBatchRepoRepository mybatisBatchRepoRepository;
 
+	@Transactional()
 	public void saveBatch(List<UserRecommender> saveRecommenders) {
 		List<BatchVO> vos = new ArrayList<BatchVO>(200);
-		BatchVO vo = null;
 		for (UserRecommender userRecommender : saveRecommenders) {
 			vos.add(new BatchVO(BatchVO.OPERATION_DELET,
 					"com.katch.perfer.mybatis.mapper.UserRecommenderMapper.deleteRecommender",
 					userRecommender.getUserId()));
-			if(!StringUtils.isEmpty(userRecommender.getItemRecommedns())) {
+			if (!StringUtils.isEmpty(userRecommender.getItemRecommedns())) {
 				vos.add(new BatchVO(BatchVO.OPERATION_INSERT,
 						"com.katch.perfer.mybatis.mapper.UserRecommenderMapper.insertRecommender",
 						userRecommender.getUserId()));
 			}
 		}
 	}
+	
+//	@Autowired
+//	private JdbcTemplate jdbcTemplate;
+//	
+//	public void saveBatch(List<UserRecommender> saveRecommenders) {
+//		List<Object[]> deleteParams = new ArrayList<Object[]>(1000);
+//		List<Object[]> insertParams = new ArrayList<Object[]>(1000);
+//		for (UserRecommender userRecommender : saveRecommenders) {
+//			deleteParams.add(new Object[] { userRecommender.getUserId() });
+//			if (StringUtils.isEmpty(userRecommender.getItemRecommedns())) {
+//				continue;
+//			}
+//			insertParams.add(new Object[] { userRecommender.getUserId(), userRecommender.getItemRecommedns(),
+//					userRecommender.getUpdateTime() });
+//		}
+//		jdbcTemplate.batchUpdate("DELETE FROM SQY_RZDK_SPTJ WHERE YH_ID = ?", deleteParams);
+//		jdbcTemplate.batchUpdate("INSERT INTO SQY_RZDK_SPTJ "
+//				+ "(YH_ID, SP_RECOMMENDS, UPDATE_TIME) "
+//				+ "VALUES (?,?,?)",
+//				insertParams);
+//	}
 
 	public UserRecommenderMapper getRecommenderMapper() {
 		return recommenderMapper;

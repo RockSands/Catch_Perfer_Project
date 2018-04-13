@@ -47,6 +47,9 @@
 	<logger name="com.apache.ibatis" level="DEBUG" additivity="false">
 		<appender-ref ref="CONSOLE_LOG" />
 	</logger>
+	<logger name="org.springframework.jdbc" level="DEBUG" additivity="false">
+		<appender-ref ref="CONSOLE_LOG" />
+	</logger>
 	<logger name="com.katch.perfer" level="DEBUG" additivity="false">
 		<appender-ref ref="INFO_LOG" />
 		<appender-ref ref="ERROR_LOG" />

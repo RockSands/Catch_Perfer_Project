@@ -7,6 +7,11 @@ logging:
   config: classpath:logback-spring.xml
 spring:
   datasource:
+    type: org.apache.commons.dbcp2.BasicDataSource
+    dbcp2:
+      initial-size: 3
+      max-idle: 5
+      validation-query: SELECT 1
     url: jdbc:mysql://192.168.80.138:3306/kettle
     username: root
     password: 123456

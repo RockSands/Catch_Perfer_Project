@@ -24,9 +24,11 @@
 	<insert id="insertRecommender" parameterType="com.katch.perfer.mahout.model.UserRecommender">
 		INSERT INTO
 		SQY_RZDK_SPTJ
-			(<include refid="Recommender_Column_List" />)
+		(
+		<include refid="Recommender_Column_List" />
+		)
 		VALUES
-			(#{userId},#{itemRecommedns},#{updateTime})
+		(#{userId},#{itemRecommedns},#{updateTime})
 	</insert>
 
 	<delete id="deleteRecommender" parameterType="long">

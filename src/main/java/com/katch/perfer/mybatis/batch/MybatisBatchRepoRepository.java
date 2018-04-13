@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class MybatisBatchRepoRepository {
 
 	@Autowired
-	private SqlSessionFactory sqlSessionFactory;
+	private SqlSessionTemplate sqlSessionTemplate;
 
 	/**
 	 * 批量执行
@@ -23,7 +23,7 @@ public class MybatisBatchRepoRepository {
 	public void excuteBatch(List<BatchVO> vos) {
 		SqlSession session = null;
 		try {
-			session = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
+			session = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
 			for (Iterator<BatchVO> it = vos.iterator(); it.hasNext();) {
 				BatchVO batchVO = it.next();
 				String operate = batchVO.getOperate();
@@ -38,6 +38,10 @@ public class MybatisBatchRepoRepository {
 				}
 			}
 			session.commit();
+			session.clearCache();
+		} catch (Exception ex) {
+			session.rollback();
+			throw ex;
 		} finally {
 			session.close();
 		}

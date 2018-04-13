@@ -10,12 +10,16 @@ import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.katch.perfer.config.ConsumerExportCSVProperties;
 import com.katch.perfer.mahout.model.UserRecommender;
 
 public abstract class MahoutRecommenderService {
+	private static Logger logger = LoggerFactory.getLogger(UserMahoutRecommenderService.class);
+
 	private DecimalFormat df = new DecimalFormat("##0.000");
 
 	@Autowired
@@ -44,8 +48,8 @@ public abstract class MahoutRecommenderService {
 		UserRecommender index = null;
 		StringBuffer content = new StringBuffer();
 		while (it.hasNext()) {
-			if (saveRecommenders.size() == 100) {
-				userRecommenderService.saveBatch(saveRecommenders);
+			if (saveRecommenders.size() == 150) {
+				saveBatch(saveRecommenders);
 				saveRecommenders.clear();
 			}
 			userID = it.next();
@@ -70,6 +74,14 @@ public abstract class MahoutRecommenderService {
 		if (!saveRecommenders.isEmpty()) {
 			userRecommenderService.saveBatch(saveRecommenders);
 		}
+	}
+
+	/**
+	 * @param saveRecommenders
+	 */
+	public void saveBatch(List<UserRecommender> saveRecommenders) {
+		logger.debug("数据库刷新执行批量操作!");
+		userRecommenderService.saveBatch(saveRecommenders);
 	}
 
 	public ConsumerExportCSVProperties getConsumerExportCSVProperties() {
