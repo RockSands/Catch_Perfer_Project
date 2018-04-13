@@ -21,7 +21,6 @@ public class MybatisBatchRepoRepository {
 	 * @param vos
 	 */
 	public void excuteBatch(List<BatchVO> vos) {
-		long now = System.currentTimeMillis();
 		SqlSession session = null;
 		try {
 			session = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
@@ -40,7 +39,6 @@ public class MybatisBatchRepoRepository {
 			}
 			session.commit();
 			session.clearCache();
-			System.out.println("=话0费=>" + (System.currentTimeMillis() - now));
 		} catch (Exception ex) {
 			session.rollback();
 			throw ex;

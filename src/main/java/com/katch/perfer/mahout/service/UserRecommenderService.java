@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import com.katch.perfer.mybatis.mapper.UserRecommenderMapper;
 
 @Service
 public class UserRecommenderService {
+	private static Logger logger = LoggerFactory.getLogger(UserRecommenderService.class);
+	
 	@Autowired
 	private UserRecommenderMapper recommenderMapper;
 
@@ -34,7 +38,7 @@ public class UserRecommenderService {
 		}
 		long now = System.currentTimeMillis();
 		mybatisBatchRepoRepository.excuteBatch(vos);
-		System.out.println("=话1费=>" + (System.currentTimeMillis() - now));
+		logger.debug("批量提交话费时间:" + (System.currentTimeMillis() - now));
 	}
 	
 //	@Autowired
