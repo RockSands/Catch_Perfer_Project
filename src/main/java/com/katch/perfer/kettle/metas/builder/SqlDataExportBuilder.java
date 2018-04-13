@@ -88,7 +88,7 @@ public class SqlDataExportBuilder {
 		tfom.setHeaderEnabled(textExport.isHeaderEnabled());
 		tfom.setFooterEnabled(textExport.isFooterEnabled());
 		tfom.setAddToResultFiles(false);
-		tfom.setFileName(textExport.getFileName());
+		tfom.setFileName(textExport.getExportFileName());
 		tfom.setEncoding("UTF-8");
 		final StepMeta export = new StepMeta("export", tfom);
 		export.setLocation(350, 100);

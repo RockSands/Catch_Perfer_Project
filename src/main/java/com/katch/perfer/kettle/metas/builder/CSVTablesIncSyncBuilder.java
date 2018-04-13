@@ -71,6 +71,7 @@ public class CSVTablesIncSyncBuilder {
 	ci.setFilename("/shareDatas/consumerDatas/output/recommender.csv");
 	ci.setIncludingFilename(false);
 	ci.setAddResultFile(false);
+	ci.setBufferSize("50000");
 	TextFileInputField field_0 = new TextFileInputField();
 	field_0.setName("YH_ID");
 	field_0.setType(ValueMetaInterface.TYPE_INTEGER);
@@ -80,7 +81,7 @@ public class CSVTablesIncSyncBuilder {
 	field_1.setType(ValueMetaInterface.TYPE_INTEGER);
 	field_1.setTrimType(ValueMetaInterface.TRIM_TYPE_BOTH);
 	TextFileInputField field_2 = new TextFileInputField();
-	field_2.setName("SOURCE");
+	field_2.setName("SCORE");
 	field_2.setType(ValueMetaInterface.TYPE_NUMBER);
 	field_2.setTrimType(ValueMetaInterface.TRIM_TYPE_BOTH);
 	field_2.setFormat("#######.###");
@@ -96,11 +97,15 @@ public class CSVTablesIncSyncBuilder {
 	 * 排序
 	 */
 	SortRowsMeta sourceSR = new SortRowsMeta();
+	sourceSR.setFieldName(new String[] {"YH_ID","SP_ID"});
 	sourceSR.setDirectory("%%java.io.tmpdir%%");
 	sourceSR.setPrefix("sourceSortOut");
 	sourceSR.setSortSize("1000000");
-	sourceSR.setFieldName(new String[] {"YH_ID","SP_ID"});
 	sourceSR.setAscending(new boolean[] {true,true});
+	sourceSR.setCaseSensitive(new boolean[] {true,true});
+	sourceSR.setCollatorStrength(new int[] {0,0});
+	sourceSR.setCollatorEnabled(new boolean[] {false,false});
+	sourceSR.setPreSortedField(new boolean[] {false,false});
 	StepMeta sourceSort = new StepMeta("sourceSort", sourceSR);
 	sourceSort.setLocation(350, 100);
 	sourceSort.setDraw(true);
@@ -123,13 +128,17 @@ public class CSVTablesIncSyncBuilder {
 	 * 排序
 	 */
 	SortRowsMeta targetSR = new SortRowsMeta();
+	targetSR.setFieldName(new String[] {"YH_ID","SP_ID"});
 	targetSR.setDirectory("%%java.io.tmpdir%%");
 	targetSR.setPrefix("sourceSortOut");
 	targetSR.setSortSize("1000000");
-	targetSR.setFieldName(new String[] {"YH_ID","SP_ID"});
 	targetSR.setAscending(new boolean[] {true,true});
+	targetSR.setCaseSensitive(new boolean[] {true,true});
+	targetSR.setCollatorStrength(new int[] {0,0});
+	targetSR.setCollatorEnabled(new boolean[] {false,false});
+	targetSR.setPreSortedField(new boolean[] {false,false});
 	StepMeta targetSort = new StepMeta("targetSort", targetSR);
-	targetSort.setLocation(350, 100);
+	targetSort.setLocation(350, 300);
 	targetSort.setDraw(true);
 	targetSort.setDescription("STEP-TARGETSORT");
 	transMeta.addStep(targetSort);
@@ -148,7 +157,7 @@ public class CSVTablesIncSyncBuilder {
 	merage.setLocation(650, 100);
 	merage.setDraw(true);
 	merage.setDescription("STEP-MERAGE");
-	transMeta.addTransHop(new TransHopMeta(targetQuery, merage));
+	transMeta.addTransHop(new TransHopMeta(targetSort, merage));
 	transMeta.addTransHop(new TransHopMeta(sourceSort, merage));
 
 	/*

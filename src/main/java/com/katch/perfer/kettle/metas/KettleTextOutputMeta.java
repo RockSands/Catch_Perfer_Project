@@ -15,7 +15,7 @@ public class KettleTextOutputMeta {
 	/**
 	 * 文件名称(包含完整路径)
 	 */
-	private String fileName = "file";
+	private String exportFileName = "file";
 	
 	/**
 	 * 文件头
@@ -43,12 +43,12 @@ public class KettleTextOutputMeta {
 		this.extension = extension;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public String getExportFileName() {
+	    return exportFileName;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setExportFileName(String exportFileName) {
+	    this.exportFileName = exportFileName;
 	}
 
 	public boolean isHeaderEnabled() {
