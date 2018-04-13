@@ -16,19 +16,19 @@ import org.springframework.stereotype.Component;
 @Component("mahoutRecommenderService")
 @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = false)
 public class ItemMahoutRecommenderService extends MahoutRecommenderService {
-	
-	private static Logger logger = LoggerFactory.getLogger(ItemMahoutRecommenderService.class);
 
-	@Override
-	public void excute() throws Exception {
-		logger.info("用户消费记录准备计算!");
-		File file = new File(consumerExportCSVProperties.getFileName());
-		DataModel dataModel = new FileDataModel(file);
-		ItemSimilarity similarity = new UncenteredCosineSimilarity(dataModel);
-		ItemBasedRecommender recommender = new GenericItemBasedRecommender(dataModel, similarity);
-		logger.info("用户消费记录计算完成,准备入库!");
-		saveUserRecommender(dataModel, recommender);
-		logger.info("用户消费记录计算完成,入库完成!");
-	}
+    private static Logger logger = LoggerFactory.getLogger(ItemMahoutRecommenderService.class);
+
+    @Override
+    public void excute() throws Exception {
+	logger.info("消费推荐准备计算!");
+	File file = new File(consumerExportCSVProperties.getExportFileName());
+	DataModel dataModel = new FileDataModel(file);
+	ItemSimilarity similarity = new UncenteredCosineSimilarity(dataModel);
+	ItemBasedRecommender recommender = new GenericItemBasedRecommender(dataModel, similarity);
+	logger.info("消费推荐导出文件准备导出!");
+	saveUserRecommender(dataModel, recommender);
+	logger.info("消费推荐导出文件导出完毕!");
+    }
 
 }

@@ -1,7 +1,5 @@
 package com.katch.perfer.mahout.model;
 
-import java.util.Date;
-
 /**
  * 用户商品推荐
  * 
@@ -9,33 +7,33 @@ import java.util.Date;
  *
  */
 public class UserRecommender {
-	private long userId;
+    private long userId;
 
-	private String itemRecommedns;
+    private long itemId;
 
-	private Date updateTime;
+    private double score;
 
-	public long getUserId() {
-		return userId;
-	}
+    public long getUserId() {
+	return userId;
+    }
 
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
+    public void setUserId(long userId) {
+	this.userId = userId;
+    }
 
-	public String getItemRecommedns() {
-	    return itemRecommedns;
-	}
+    public long getItemId() {
+	return itemId;
+    }
 
-	public void setItemRecommedns(String itemRecommedns) {
-	    this.itemRecommedns = itemRecommedns;
-	}
+    public void setItemId(long itemId) {
+	this.itemId = itemId;
+    }
 
-	public Date getUpdateTime() {
-		return updateTime;
-	}
+    public double getScore() {
+	return score;
+    }
 
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
+    public void setScore(double score) {
+	this.score = score;
+    }
 }

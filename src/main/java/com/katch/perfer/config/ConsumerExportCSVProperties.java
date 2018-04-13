@@ -18,7 +18,13 @@ public class ConsumerExportCSVProperties {
 	 * 文件名称(包含完整路径)
 	 */
 	@Value("${consumer.export.fileName}")
-	private String fileName = "";
+	private String exportFileName = "";
+	
+	/**
+	 * 文件名称(包含完整路径)
+	 */
+	@Value("${consumer.output.fileName}")
+	private String outputFileName = "";
 
 	public String getSeparator() {
 		return separator;
@@ -28,11 +34,19 @@ public class ConsumerExportCSVProperties {
 		this.separator = separator;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public String getExportFileName() {
+	    return exportFileName;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setExportFileName(String exportFileName) {
+	    this.exportFileName = exportFileName;
+	}
+
+	public String getOutputFileName() {
+	    return outputFileName;
+	}
+
+	public void setOutputFileName(String outputFileName) {
+	    this.outputFileName = outputFileName;
 	}
 }
