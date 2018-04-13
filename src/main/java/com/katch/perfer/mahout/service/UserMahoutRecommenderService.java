@@ -28,6 +28,7 @@ public class UserMahoutRecommenderService extends MahoutRecommenderService {
 
 	@Override
 	public void excute() throws Exception {
+		logger.info("用户消费记录准备计算!");
 		File file = new File(consumerExportCSVProperties.getFileName());
 		DataModel dataModel = new FileDataModel(file);
 		UserSimilarity similarity = new UncenteredCosineSimilarity(dataModel);

@@ -35,24 +35,5 @@
 		WHERE
 		YH_ID =#{userId}
 	</delete>
-	
-	<insert id="insertRecommenders">
-		INSERT INTO
-		SQY_RZDK_SPTJ
-			(<include refid="Recommender_Column_List" />)
-		VALUES
-		<foreach collection="list" item="item" separator=",">
-			(#{item.userId},#{item.itemRecommedns},#{item.updateTime})
-		</foreach>
-	</insert>
-
-	<delete id="deleteRecommenders">
-		DELETE FROM
-		SQY_RZDK_SPTJ
-		WHERE
-		<foreach collection="list" item="item" separator=",">
-			YH_ID =#{item.userId}
-		</foreach>
-	</delete>
 
 </mapper>

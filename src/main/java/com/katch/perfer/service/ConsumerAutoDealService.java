@@ -59,7 +59,6 @@ public class ConsumerAutoDealService {
 				logger.error("消费记录计算发生异常:\n" + errMsg);
 				return;
 			}
-			logger.info("用户消费记录准备计算!");
 			mahoutRecommenderService.excute();
 			lastUpdateTime = System.currentTimeMillis();
 			status = "FREE";

@@ -1,7 +1,5 @@
 package com.katch.perfer.mybatis.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,9 +16,5 @@ public interface UserRecommenderMapper {
 
     void deleteRecommender(@Param("userID") long userID);
 
-    void insertRecommender(@Param("userID") long userID);
-    
-    void deleteRecommenders(@Param("list")List<UserRecommender> recommenders);
-
-    void insertRecommenders(@Param("list")List<UserRecommender> recommenders);
+    void insertRecommender(UserRecommender userRecommender);
 }

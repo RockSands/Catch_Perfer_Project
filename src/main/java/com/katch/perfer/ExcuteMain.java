@@ -29,6 +29,9 @@ public class ExcuteMain {
 		app.addListeners(new ApplicationStartedEventListener());
 		ConfigurableApplicationContext context = app.run(args);
 		System.out.println("===>" + context.getBean(SqlSessionTemplate.class));
+		System.out.println("===>" + context.getBean(SqlSessionTemplate.class));
+		SqlSessionTemplate templage = context.getBean(SqlSessionTemplate.class);
+		System.out.println("===>" + templage.getExecutorType());
 		// ConsumerAutoDealService consumerAutoDealService =
 		// context.getBean(ConsumerAutoDealService.class);
 		// consumerAutoDealService.excute();
