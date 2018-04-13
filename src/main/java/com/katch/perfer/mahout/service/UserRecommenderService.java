@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.katch.perfer.mahout.model.UserRecommender;
 import com.katch.perfer.mybatis.batch.BatchVO;
@@ -22,7 +20,6 @@ public class UserRecommenderService {
 	@Autowired
 	private MybatisBatchRepoRepository mybatisBatchRepoRepository;
 
-	@Transactional()
 	public void saveBatch(List<UserRecommender> saveRecommenders) {
 		List<BatchVO> vos = new ArrayList<BatchVO>(200);
 		for (UserRecommender userRecommender : saveRecommenders) {
@@ -32,7 +29,7 @@ public class UserRecommenderService {
 			if (!StringUtils.isEmpty(userRecommender.getItemRecommedns())) {
 				vos.add(new BatchVO(BatchVO.OPERATION_INSERT,
 						"com.katch.perfer.mybatis.mapper.UserRecommenderMapper.insertRecommender",
-						userRecommender.getUserId()));
+						userRecommender));
 			}
 		}
 	}
