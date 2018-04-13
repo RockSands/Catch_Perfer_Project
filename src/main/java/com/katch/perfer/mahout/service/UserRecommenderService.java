@@ -32,6 +32,9 @@ public class UserRecommenderService {
 						userRecommender));
 			}
 		}
+		long now = System.currentTimeMillis();
+		mybatisBatchRepoRepository.excuteBatch(vos);
+		System.out.println("=话1费=>" + (System.currentTimeMillis() - now));
 	}
 	
 //	@Autowired

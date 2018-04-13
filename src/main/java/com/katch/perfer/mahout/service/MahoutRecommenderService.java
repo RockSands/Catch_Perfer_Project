@@ -1,11 +1,12 @@
 package com.katch.perfer.mahout.service;
 
+import java.io.BufferedWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
@@ -20,7 +21,7 @@ import com.katch.perfer.mahout.model.UserRecommender;
 public abstract class MahoutRecommenderService {
 	private static Logger logger = LoggerFactory.getLogger(UserMahoutRecommenderService.class);
 
-	private DecimalFormat df = new DecimalFormat("##0.000");
+	private DecimalFormat df = new DecimalFormat("##0.00");
 
 	@Autowired
 	private UserRecommenderService userRecommenderService;
@@ -38,42 +39,48 @@ public abstract class MahoutRecommenderService {
 	/**
 	 * 
 	 * @param dataModel
-	 * @throws TasteException
+	 * @throws Exception
 	 */
-	protected void saveUserRecommender(DataModel dataModel, Recommender recommender) throws TasteException {
-		List<UserRecommender> saveRecommenders = new LinkedList<UserRecommender>();
-		Date now = new Date();
+	protected void saveUserRecommender(DataModel dataModel, Recommender recommender) throws Exception {
+		// List<UserRecommender> saveRecommenders = new LinkedList<UserRecommender>();
+		// Date now = new Date();
 		LongPrimitiveIterator it = dataModel.getUserIDs();
 		Long userID = null;
-		UserRecommender index = null;
-		StringBuffer content = new StringBuffer();
+		// UserRecommender index = null;
+		// StringBuffer content = new StringBuffer();
+		Path path = Paths.get("/shareDatas/consumerDatas/output.csv");
+		BufferedWriter writer = Files.newBufferedWriter(path);
 		while (it.hasNext()) {
-			if (saveRecommenders.size() == 150) {
-				saveBatch(saveRecommenders);
-				saveRecommenders.clear();
-			}
+			// if (saveRecommenders.size() == 150) {
+			// saveBatch(saveRecommenders);
+			// saveRecommenders.clear();
+			// }
 			userID = it.next();
 			if (userID == null) {
 				continue;
 			}
-			for (RecommendedItem recommendedItem : recommender.recommend(userID, 100)) {
+			for (RecommendedItem recommendedItem : recommender.recommend(userID, 50)) {
 				if (recommendedItem == null || recommendedItem.getValue() == 0.00) {
 					continue;
 				}
-				if (content.length() != 0) {
-					content.append(",");
-				}
-				content.append(recommendedItem.getItemID()).append(":").append(df.format(recommendedItem.getValue()));
+				// if (content.length() != 0) {
+				// content.append(",");
+				// }
+				// content.append(recommendedItem.getItemID()).append(":").append(df.format(recommendedItem.getValue()));
+				writer.write(userID + "," + recommendedItem.getItemID() + "," + df.format(recommendedItem.getValue()));
+				writer.newLine();
 			}
-			index = new UserRecommender();
-			index.setUserId(userID);
-			index.setItemRecommedns(content.toString());
-			index.setUpdateTime(now);
-			saveRecommenders.add(index);
+			// index = new UserRecommender();
+			// index.setUserId(userID);
+			// index.setItemRecommedns(content.toString());
+			// index.setUpdateTime(now);
+			// saveRecommenders.add(index);
 		}
-		if (!saveRecommenders.isEmpty()) {
-			userRecommenderService.saveBatch(saveRecommenders);
-		}
+		writer.close();
+		logger.info("==书写完成==>");
+		// if (!saveRecommenders.isEmpty()) {
+		// userRecommenderService.saveBatch(saveRecommenders);
+		// }
 	}
 
 	/**
