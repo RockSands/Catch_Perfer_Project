@@ -30,12 +30,12 @@ public class UserMahoutRecommenderService extends MahoutRecommenderService {
 
 	@Override
 	public void excute() throws Exception {
-		logger.error("==3333==>");
 		File file = new File(consumerExportCSVProperties.getFileName());
 		DataModel dataModel = new FileDataModel(file);
 		UserSimilarity similarity = new UncenteredCosineSimilarity(dataModel);
 		UserNeighborhood userNeighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
 		Recommender recommender = new GenericUserBasedRecommender(dataModel, userNeighborhood, similarity);
+		logger.info("用户消费记录计算完成,准备入库!");
 		LongPrimitiveIterator it = dataModel.getUserIDs();
 		Long userID = null;
 		List<RecommendedItem> recommendedItems = null;
@@ -47,5 +47,6 @@ public class UserMahoutRecommenderService extends MahoutRecommenderService {
 			recommendedItems = recommender.recommend(userID, 100);
 			saveRecommender(userID, recommendedItems);
 		}
+		logger.info("用户消费记录计算完成,入库完成!");
 	}
 }

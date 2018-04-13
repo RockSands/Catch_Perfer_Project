@@ -2,6 +2,8 @@ package com.katch.perfer.service;
 
 import org.apache.commons.lang.StringUtils;
 import org.pentaho.di.core.exception.KettleException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.service.KettleNorthService;
+import com.katch.perfer.mahout.service.UserMahoutRecommenderService;
 
 /**
  * 消费记录导出
@@ -19,6 +22,7 @@ import com.katch.perfer.kettle.service.KettleNorthService;
  */
 @Service
 public class ConsumerExportService {
+	private static Logger logger = LoggerFactory.getLogger(UserMahoutRecommenderService.class);
 
 	@Autowired
 	@Qualifier("consumerExportJobDefine")
@@ -28,13 +32,6 @@ public class ConsumerExportService {
 	private KettleNorthService kettleNorthService;
 
 	/**
-	 * 状态
-	 */
-	private Long lastUpdateTime;
-	
-	private String status = "FREE";
-
-	/**
 	 * 修正
 	 * @throws KettleException 
 	 * @throws InterruptedException 
@@ -42,23 +39,12 @@ public class ConsumerExportService {
 	 * @throws Exception
 	 */
 	public String excute() throws KettleException, InterruptedException {
-		synchronized(status) {
-			if(!"FREE".equals(status)) {
-				return "用户喜好记录刷新中!";
-			}
-			if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime < 10L * 1000L * 60L) {
-				return "用户喜好记录刷新间隔必须超过5分钟!";
-			}
-			lastUpdateTime = System.currentTimeMillis();
-			status = "RUNNING";
-		}
 		String uuid = doExport();
 		kettleRecordDaemon thread = new kettleRecordDaemon();
 		thread.kettleUUID = uuid;
 		thread.start();
 		thread.join();
-		lastUpdateTime = System.currentTimeMillis();
-		status = "FREE";
+		logger.info("用户消费记录导出完成!");
 		return thread.errorMsg;
 	}
 
@@ -69,6 +55,7 @@ public class ConsumerExportService {
 	 * @throws KettleException
 	 */
 	private String doExport() throws KettleException {
+		logger.info("用户消费记录开始导出!");
 		KettleResult result = kettleNorthService.excuteJobOnce(exportJobDefine);
 		if (StringUtils.isNotEmpty(result.getErrMsg())) {
 			throw new KettleException("Kettle导出消费记录失败,kettle发生问题:" + result.getErrMsg());

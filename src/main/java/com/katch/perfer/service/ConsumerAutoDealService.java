@@ -26,6 +26,13 @@ public class ConsumerAutoDealService {
 	@Autowired
 	@Qualifier("mahoutRecommenderService")
 	private MahoutRecommenderService mahoutRecommenderService;
+	
+	/**
+	 * 状态
+	 */
+	private Long lastUpdateTime;
+	
+	private String status = "FREE";
 
 	/**
 	 * 自动执行
@@ -34,13 +41,24 @@ public class ConsumerAutoDealService {
 	 */
 	@Scheduled(cron = "${consumer.mahout.cron}")
 	public void excute() throws Exception {
+		synchronized(status) {
+			if(!"FREE".equals(status)) {
+				logger.error("用户喜好记录刷新中!");
+			}
+			if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime < 5L * 1000L * 60L) {
+				logger.error("用户喜好记录刷新间隔必须超过5分钟!");
+			}
+			lastUpdateTime = System.currentTimeMillis();
+			status = "RUNNING";
+		}
 		String errMsg = consumerExportService.excute();
-		logger.error("==1111==>" + errMsg);
 		if(errMsg != null) {
 			logger.error("消费记录计算发生异常:\n" + errMsg);
 			return;
 		}
-		logger.error("==2222==>" + errMsg);
+		logger.info("用户消费记录准备计算!");
 		mahoutRecommenderService.excute();
+		lastUpdateTime = System.currentTimeMillis();
+		status = "FREE";
 	}
 }
