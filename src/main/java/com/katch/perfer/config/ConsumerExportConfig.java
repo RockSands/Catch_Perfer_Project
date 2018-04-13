@@ -16,7 +16,7 @@ import com.katch.perfer.kettle.metas.builder.SqlDataExportBuilder;
 @Configuration
 @EnableAutoConfiguration
 public class ConsumerExportConfig {
-
+	
 	@Autowired
 	private ConsumerExportDBProperties consumerExportDBProperties;
 

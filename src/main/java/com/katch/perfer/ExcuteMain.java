@@ -1,5 +1,6 @@
 package com.katch.perfer;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,7 +13,6 @@ import com.katch.perfer.init.ApplicationEnvironmentPreparedEventListener;
 import com.katch.perfer.init.ApplicationFailedEventListener;
 import com.katch.perfer.init.ApplicationPreparedEventListener;
 import com.katch.perfer.init.ApplicationStartedEventListener;
-import com.katch.perfer.service.ConsumerAutoDealService;
 
 @SpringBootApplication
 @EnableAutoConfiguration
@@ -28,6 +28,7 @@ public class ExcuteMain {
 		app.addListeners(new ApplicationPreparedEventListener());
 		app.addListeners(new ApplicationStartedEventListener());
 		ConfigurableApplicationContext context = app.run(args);
+		System.out.println("===>" + context.getBean(SqlSessionTemplate.class));
 		// ConsumerAutoDealService consumerAutoDealService =
 		// context.getBean(ConsumerAutoDealService.class);
 		// consumerAutoDealService.excute();

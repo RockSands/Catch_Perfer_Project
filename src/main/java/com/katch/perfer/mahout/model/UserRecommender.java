@@ -8,7 +8,7 @@ import java.util.Date;
  * @author Administrator
  *
  */
-public class Recommender {
+public class UserRecommender {
 	private long userId;
 
 	private String itemRecommedns;

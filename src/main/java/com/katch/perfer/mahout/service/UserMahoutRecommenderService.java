@@ -1,16 +1,13 @@
 package com.katch.perfer.mahout.service;
 
 import java.io.File;
-import java.util.List;
 
-import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
-import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.slf4j.Logger;
@@ -25,6 +22,7 @@ import com.katch.perfer.config.ConsumerExportCSVProperties;
 @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "user", matchIfMissing = true)
 public class UserMahoutRecommenderService extends MahoutRecommenderService {
 	private static Logger logger = LoggerFactory.getLogger(UserMahoutRecommenderService.class);
+
 	@Autowired
 	private ConsumerExportCSVProperties consumerExportCSVProperties;
 
@@ -36,17 +34,7 @@ public class UserMahoutRecommenderService extends MahoutRecommenderService {
 		UserNeighborhood userNeighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
 		Recommender recommender = new GenericUserBasedRecommender(dataModel, userNeighborhood, similarity);
 		logger.info("用户消费记录计算完成,准备入库!");
-		LongPrimitiveIterator it = dataModel.getUserIDs();
-		Long userID = null;
-		List<RecommendedItem> recommendedItems = null;
-		while (it.hasNext()) {
-			userID = it.next();
-			if (userID == null) {
-				continue;
-			}
-			recommendedItems = recommender.recommend(userID, 100);
-			saveRecommender(userID, recommendedItems);
-		}
+		saveUserRecommender(dataModel, recommender);
 		logger.info("用户消费记录计算完成,入库完成!");
 	}
 }

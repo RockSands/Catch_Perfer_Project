@@ -2,21 +2,24 @@ package com.katch.perfer.mahout.service;
 
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
+import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.katch.perfer.config.ConsumerExportCSVProperties;
-import com.katch.perfer.mahout.model.Recommender;
-import com.katch.perfer.mybatis.mapper.RecommenderMapper;
+import com.katch.perfer.mahout.model.UserRecommender;
 
 public abstract class MahoutRecommenderService {
 	private DecimalFormat df = new DecimalFormat("##0.000");
 
 	@Autowired
-	protected RecommenderMapper recommenderMapper;
+	private UserRecommenderService userRecommenderService;
 
 	@Autowired
 	protected ConsumerExportCSVProperties consumerExportCSVProperties;
@@ -29,41 +32,43 @@ public abstract class MahoutRecommenderService {
 	public abstract void excute() throws Exception;
 
 	/**
-	 * 查询
 	 * 
-	 * @param userId
-	 * @return
+	 * @param dataModel
+	 * @throws TasteException
 	 */
-	public Recommender queryRecommenders(long userId) {
-		return recommenderMapper.queryRecommender(userId);
-	}
-
-	/**
-	 * 保存
-	 * 
-	 * @param userID
-	 * @param recommendedItems
-	 */
-	@Transactional()
-	protected void saveRecommender(long userID, List<RecommendedItem> recommendedItems) {
-		Recommender recommender = new Recommender();
+	protected void saveUserRecommender(DataModel dataModel, Recommender recommender) throws TasteException {
+		List<UserRecommender> saveRecommenders = new LinkedList<UserRecommender>();
 		Date now = new Date();
-		recommender.setUpdateTime(now);
-		recommender.setUserId(userID);
+		LongPrimitiveIterator it = dataModel.getUserIDs();
+		Long userID = null;
+		UserRecommender index = null;
 		StringBuffer content = new StringBuffer();
-		for (RecommendedItem recommendedItem : recommendedItems) {
-			if (recommendedItem == null || recommendedItem.getValue() == 0.00) {
+		while (it.hasNext()) {
+			if (saveRecommenders.size() == 100) {
+				userRecommenderService.saveBatch(saveRecommenders);
+				saveRecommenders.clear();
+			}
+			userID = it.next();
+			if (userID == null) {
 				continue;
 			}
-			if (content.length() != 0) {
-				content.append(",");
+			for (RecommendedItem recommendedItem : recommender.recommend(userID, 100)) {
+				if (recommendedItem == null || recommendedItem.getValue() == 0.00) {
+					continue;
+				}
+				if (content.length() != 0) {
+					content.append(",");
+				}
+				content.append(recommendedItem.getItemID()).append(":").append(df.format(recommendedItem.getValue()));
 			}
-			content.append(recommendedItem.getItemID()).append(":").append(df.format(recommendedItem.getValue()));
+			index = new UserRecommender();
+			index.setUserId(userID);
+			index.setItemRecommedns(content.toString());
+			index.setUpdateTime(now);
+			saveRecommenders.add(index);
 		}
-		recommender.setItemRecommedns(content.toString());
-		recommenderMapper.deleteRecommender(userID);
-		if (content.length() > 0) {
-			recommenderMapper.insertRecommender(recommender);
+		if (!saveRecommenders.isEmpty()) {
+			userRecommenderService.saveBatch(saveRecommenders);
 		}
 	}
 
@@ -75,11 +80,11 @@ public abstract class MahoutRecommenderService {
 		this.consumerExportCSVProperties = consumerExportCSVProperties;
 	}
 
-	public RecommenderMapper getRecommenderMapper() {
-		return recommenderMapper;
+	public UserRecommenderService getUserRecommenderService() {
+		return userRecommenderService;
 	}
 
-	public void setRecommenderMapper(RecommenderMapper recommenderMapper) {
-		this.recommenderMapper = recommenderMapper;
+	public void setUserRecommenderService(UserRecommenderService userRecommenderService) {
+		this.userRecommenderService = userRecommenderService;
 	}
 }
