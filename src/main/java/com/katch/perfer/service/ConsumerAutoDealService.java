@@ -24,6 +24,7 @@ public class ConsumerAutoDealService {
     private ConsumerExportService consumerExportService;
     
     @Autowired
+    @Qualifier("consumerImportService")
     private ConsumerImportService consumerImportService;
 
     @Autowired

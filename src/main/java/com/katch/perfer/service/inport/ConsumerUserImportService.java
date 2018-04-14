@@ -1,4 +1,4 @@
-package com.katch.perfer.service;
+package com.katch.perfer.service.inport;
 
 import org.apache.commons.lang.StringUtils;
 import org.pentaho.di.core.exception.KettleException;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.service.KettleNorthService;
+import com.katch.perfer.service.ConsumerImportService;
 import com.katch.perfer.service.kettle.UserRecommendCSV2DBBuild;
 
 /**
