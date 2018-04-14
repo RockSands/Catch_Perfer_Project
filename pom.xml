@@ -5,6 +5,7 @@
 	<artifactId>Catch_Perfer_Project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Catch_Perfer_Project</name>
+	<packaging>war</packaging>
 	<description>Catch_Perfer_Project</description>
 	<!-- 配置 -->
 	<properties>
