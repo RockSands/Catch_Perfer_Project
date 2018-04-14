@@ -23,8 +23,14 @@ public class ConsumerExportCSVProperties {
 	/**
 	 * 文件名称(包含完整路径)
 	 */
-	@Value("${consumer.output.fileName}")
-	private String outputFileName = "";
+	@Value("${consumer.save.item.recommend.fileName}")
+	private String itemRecommendFileName = "";
+	
+	/**
+	 * 文件名称(包含完整路径)
+	 */
+	@Value("${consumer.save.item.recommend.fileName}")
+	private String userRecommendFileName = "";
 
 	public String getSeparator() {
 		return separator;
@@ -42,11 +48,19 @@ public class ConsumerExportCSVProperties {
 	    this.exportFileName = exportFileName;
 	}
 
-	public String getOutputFileName() {
-	    return outputFileName;
+	public String getItemRecommendFileName() {
+		return itemRecommendFileName;
 	}
 
-	public void setOutputFileName(String outputFileName) {
-	    this.outputFileName = outputFileName;
+	public void setItemRecommendFileName(String itemRecommendFileName) {
+		this.itemRecommendFileName = itemRecommendFileName;
+	}
+
+	public String getUserRecommendFileName() {
+		return userRecommendFileName;
+	}
+
+	public void setUserRecommendFileName(String userRecommendFileName) {
+		this.userRecommendFileName = userRecommendFileName;
 	}
 }
