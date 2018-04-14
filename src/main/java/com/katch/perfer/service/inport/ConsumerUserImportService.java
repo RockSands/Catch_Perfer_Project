@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.service.KettleNorthService;
 import com.katch.perfer.service.ConsumerImportService;
-import com.katch.perfer.service.kettle.UserRecommendCSV2DBBuild;
 
 /**
  * 消费记录导出
@@ -27,6 +27,9 @@ public class ConsumerUserImportService implements ConsumerImportService{
 
 	@Autowired
 	private KettleNorthService kettleNorthService;
+	
+	@Autowired
+	private KettleJobEntireDefine user2DBJobDefine;
 
 	/**
 	 * 修正
@@ -61,7 +64,7 @@ public class ConsumerUserImportService implements ConsumerImportService{
 	 */
 	private String doImport() throws KettleException {
 		logger.info("商品推荐表记录开始导入!");
-		KettleResult result = kettleNorthService.excuteJobOnce(UserRecommendCSV2DBBuild.createJob());
+		KettleResult result = kettleNorthService.excuteJobOnce(user2DBJobDefine);
 		if (StringUtils.isNotEmpty(result.getErrMsg())) {
 			throw new KettleException("Kettle商品推荐表记录导入失败,kettle发生问题:" + result.getErrMsg());
 		}

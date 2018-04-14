@@ -10,10 +10,12 @@ import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.metas.KettleSelectSQLMeta;
 import com.katch.perfer.kettle.metas.KettleTextOutputMeta;
 import com.katch.perfer.kettle.metas.builder.SqlDataExportBuilder;
+import com.katch.perfer.service.kettle.ItemRecommendCSV2DBBuild;
+import com.katch.perfer.service.kettle.UserRecommendCSV2DBBuild;
 
 @Configuration
 @EnableAutoConfiguration
-public class ConsumerExportConfig {
+public class ConsumerKettleConfig {
 	
 	@Autowired
 	private ConsumerExportDBProperties consumerExportDBProperties;
@@ -34,5 +36,17 @@ public class ConsumerExportConfig {
 		BeanUtils.copyProperties(consumerExportDBProperties, consumer);
 		BeanUtils.copyProperties(consumerExportCSVProperties, textExport);
 		return SqlDataExportBuilder.newBuilder().sqlData(consumer).txtExport(textExport).createJob();
+	}
+	
+	@Bean
+	public KettleJobEntireDefine itemRecommendCSV2DBBuild() throws Exception {
+		ItemRecommendCSV2DBBuild itemRecommendCSV2DBBuild = new ItemRecommendCSV2DBBuild();
+		return itemRecommendCSV2DBBuild.createJob();
+	}
+	
+	@Bean
+	public KettleJobEntireDefine userRecommendCSV2DBBuild() throws Exception {
+		UserRecommendCSV2DBBuild userRecommendCSV2DBBuild = new UserRecommendCSV2DBBuild();
+		return userRecommendCSV2DBBuild.createJob();
 	}
 }

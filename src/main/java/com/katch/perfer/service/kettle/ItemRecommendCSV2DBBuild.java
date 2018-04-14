@@ -44,7 +44,6 @@ public class ItemRecommendCSV2DBBuild {
 	@Autowired
 	private ConsumerExportCSVProperties consumerExportCSVProperties;
 	
-	@SuppressWarnings("deprecation")
 	private TransMeta createTrans() throws KettleException {
 		String uuid = UUID.randomUUID().toString().replace("-", "");
 		TransMeta transMeta = null;

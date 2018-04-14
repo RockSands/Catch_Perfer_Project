@@ -29,7 +29,7 @@ public class ConsumerExportCSVProperties {
 	/**
 	 * 文件名称(包含完整路径)
 	 */
-	@Value("${consumer.save.item.recommend.fileName}")
+	@Value("${consumer.save.user.recommend.fileName}")
 	private String userRecommendFileName = "";
 
 	public String getSeparator() {

@@ -26,7 +26,9 @@ import org.pentaho.di.trans.steps.tableinput.TableInputMeta;
 import org.pentaho.di.trans.steps.tableoutput.TableOutputMeta;
 import org.pentaho.di.trans.steps.textfileinput.TextFileInputField;
 import org.pentaho.di.trans.steps.update.UpdateMeta;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.katch.perfer.config.ConsumerExportCSVProperties;
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 
 /**
@@ -37,9 +39,11 @@ import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
  */
 @SuppressWarnings("deprecation")
 public class UserRecommendCSV2DBBuild {
+	
+	@Autowired
+	private ConsumerExportCSVProperties consumerExportCSVProperties;
 
-	@SuppressWarnings("deprecation")
-	private static TransMeta createTrans() throws KettleException {
+	private TransMeta createTrans() throws KettleException {
 		String uuid = UUID.randomUUID().toString().replace("-", "");
 		TransMeta transMeta = null;
 		transMeta = new TransMeta();
@@ -66,7 +70,7 @@ public class UserRecommendCSV2DBBuild {
 		CsvInputMeta ci = new CsvInputMeta();
 		ci.setDelimiter(",");
 		ci.setEncoding("UTF-8");
-		ci.setFilename("/shareDatas/consumerDatas/output/recommender.csv");
+		ci.setFilename(consumerExportCSVProperties.getUserRecommendFileName());
 		ci.setIncludingFilename(false);
 		ci.setAddResultFile(false);
 		ci.setBufferSize("50000");
@@ -268,7 +272,7 @@ public class UserRecommendCSV2DBBuild {
 		return transMeta;
 	}
 
-	public static KettleJobEntireDefine createJob() throws KettleException {
+	public KettleJobEntireDefine createJob() throws KettleException {
 		KettleJobEntireDefine kettleJobEntireDefine = new KettleJobEntireDefine();
 		TransMeta transMeta = createTrans();
 		kettleJobEntireDefine.getDependentTrans().add(transMeta);
