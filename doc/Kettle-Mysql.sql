@@ -35,27 +35,28 @@ DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
--- Table structure for SQY_RZDK_SPTJ
+-- Table structure for SQY_RZDK_JYYH_SPTJ
 -- ----------------------------
 DROP TABLE IF EXISTS SQY_RZDK_JYYH_SPTJ;
-CREATE TABLE SQY_RZDK_SPTJ (
+CREATE TABLE SQY_RZDK_JYYH_SPTJ (
 YH_ID  bigint NOT NULL ,
 SP_ID  bigint NOT NULL ,
-SCORE  double NOT NULL ,
+SCORE  double NOT NULL 
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
--- Table structure for SQY_RZDK_SPTJ
+-- Table structure for SQY_RZDK_JYSP_SPTJ
 -- ----------------------------
 DROP TABLE IF EXISTS SQY_RZDK_JYSP_SPTJ;
-CREATE TABLE SQY_RZDK_SPTJ (
+CREATE TABLE SQY_RZDK_JYSP_SPTJ (
 SP_ID  bigint NOT NULL ,
 SP_ID2  bigint NOT NULL ,
-SCORE  double NOT NULL ,
+SCORE  double NOT NULL 
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 ROW_FORMAT=DYNAMIC;
+

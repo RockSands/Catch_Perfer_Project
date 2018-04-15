@@ -47,11 +47,11 @@ public class ConsumerUserImportService implements ConsumerImportService{
 			thread.kettleUUID = uuid;
 			thread.start();
 			thread.join();
-			logger.info("商品推荐表导入完成!");
+			logger.info("用户商品推荐表导入完成!");
 			return thread.errorMsg;
 		} catch (Exception e) {
-			logger.error("商品推荐表导入失败!",e);
-			return "商品推荐表导入失败!";
+			logger.error("用户商品推荐表导入失败!",e);
+			return "用户商品推荐表导入失败!";
 		}
 		
 	}
@@ -63,10 +63,10 @@ public class ConsumerUserImportService implements ConsumerImportService{
 	 * @throws KettleException
 	 */
 	private String doImport() throws KettleException {
-		logger.info("商品推荐表记录开始导入!");
+		logger.info("用户商品推荐表记录开始导入!");
 		KettleResult result = kettleNorthService.excuteJobOnce(userRecommendCSV2DBBuild.createJob());
 		if (StringUtils.isNotEmpty(result.getErrMsg())) {
-			throw new KettleException("Kettle商品推荐表记录导入失败,kettle发生问题:" + result.getErrMsg());
+			throw new KettleException("Kettle用户商品推荐表记录导入失败,kettle发生问题:" + result.getErrMsg());
 		}
 		return result.getUuid();
 	}
