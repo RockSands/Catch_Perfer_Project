@@ -1,4 +1,4 @@
-package com.katch.perfer.config.mybatis;
+package com.katch.perfer.mybatis.config;
 
 import java.lang.reflect.Method;
 

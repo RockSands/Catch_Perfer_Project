@@ -1,4 +1,4 @@
-package com.katch.perfer.config.mybatis;
+package com.katch.perfer.mybatis.config;
 
 /**
  * 数据源的Enum

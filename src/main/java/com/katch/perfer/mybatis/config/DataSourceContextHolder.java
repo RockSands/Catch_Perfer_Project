@@ -1,4 +1,4 @@
-package com.katch.perfer.config.mybatis;
+package com.katch.perfer.mybatis.config;
 
 /**
  * 构建一个DataSourceEnum容器，并提供了向其中设置和获取DataSorceEnum的方法

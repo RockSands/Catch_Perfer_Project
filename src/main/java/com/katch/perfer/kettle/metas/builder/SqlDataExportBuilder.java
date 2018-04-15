@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.pentaho.di.core.NotePadMeta;
 import org.pentaho.di.core.database.DatabaseMeta;
+import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.job.JobHopMeta;
 import org.pentaho.di.job.JobMeta;
 import org.pentaho.di.job.entries.special.JobEntrySpecial;
@@ -44,7 +45,7 @@ public class SqlDataExportBuilder {
 		return this;
 	}
 
-	public TransMeta createTrans() throws Exception {
+	public TransMeta createTrans() throws KettleException {
 		final String uuid = UUID.randomUUID().toString().replace("-", "");
 		TransMeta transMeta = null;
 		transMeta = new TransMeta();
@@ -99,7 +100,7 @@ public class SqlDataExportBuilder {
 		return transMeta;
 	}
 
-	public KettleJobEntireDefine createJob() throws Exception {
+	public KettleJobEntireDefine createJob() throws KettleException {
 		KettleJobEntireDefine kettleJobEntireDefine = new KettleJobEntireDefine();
 		TransMeta transMeta = createTrans();
 		kettleJobEntireDefine.getDependentTrans().add(transMeta);

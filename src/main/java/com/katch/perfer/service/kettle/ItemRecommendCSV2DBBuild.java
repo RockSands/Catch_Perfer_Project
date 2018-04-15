@@ -304,4 +304,12 @@ public class ItemRecommendCSV2DBBuild {
 		kettleJobEntireDefine.setMainJob(mainJob);
 		return kettleJobEntireDefine;
 	}
+
+	public ConsumerExportCSVProperties getConsumerExportCSVProperties() {
+	    return consumerExportCSVProperties;
+	}
+
+	public void setConsumerExportCSVProperties(ConsumerExportCSVProperties consumerExportCSVProperties) {
+	    this.consumerExportCSVProperties = consumerExportCSVProperties;
+	}
 }

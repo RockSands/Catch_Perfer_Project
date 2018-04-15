@@ -1,4 +1,4 @@
-package com.katch.perfer.config.mybatis;
+package com.katch.perfer.mybatis.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -14,21 +14,21 @@ spring:
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
-      # type: org.apache.commons.dbcp2.BasicDataSource
-      # dbcp2:
-      #   initial-size: 3
-      #   max-idle: 5
-      #   validation-query: SELECT 1
+      type: org.apache.commons.dbcp2.BasicDataSource
+      dbcp2:
+        initial-size: 3
+        max-idle: 5
+        validation-query: SELECT 1
     secondary: 
       url: jdbc:mysql://192.168.80.138:3306/kettle
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
-      # type: org.apache.commons.dbcp2.BasicDataSource
-      # dbcp2:
-      #   initial-size: 3
-      #   max-idle: 5
-      #   validation-query: SELECT 1
+      type: org.apache.commons.dbcp2.BasicDataSource
+      dbcp2:
+        initial-size: 3
+        max-idle: 5
+        validation-query: SELECT 1
 # 配置Mybatis的配置文件位置
 mybatis:
   mapper-locations: classpath:mapper/*.xml 

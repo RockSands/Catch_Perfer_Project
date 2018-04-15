@@ -3,9 +3,9 @@ package com.katch.perfer.mybatis.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.katch.perfer.config.mybatis.DataSourceEnum;
-import com.katch.perfer.config.mybatis.DataSourceTypeAnno;
 import com.katch.perfer.mahout.model.UserRecommender;
+import com.katch.perfer.mybatis.config.DataSourceEnum;
+import com.katch.perfer.mybatis.config.DataSourceTypeAnno;
 
 /**
  * @author Administrator

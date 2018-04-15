@@ -1,4 +1,4 @@
-package com.katch.perfer.config.mybatis;
+package com.katch.perfer.mybatis.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,13 +34,15 @@ public class MyBatisConfig {
     @Bean("primaryDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.primary")
     public DataSource primaryDataSource() throws Exception {
-	return DataSourceBuilder.create().build();
+	DataSourceBuilder builder = DataSourceBuilder.create();
+	return builder.build();
     }
 
     @Bean("secondaryDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.secondary")
     public DataSource secondaryDataSource() throws Exception {
-	return DataSourceBuilder.create().build();
+	DataSourceBuilder builder = DataSourceBuilder.create();
+	return builder.build();
     }
 
     /**

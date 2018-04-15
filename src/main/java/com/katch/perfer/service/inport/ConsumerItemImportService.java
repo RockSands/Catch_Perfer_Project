@@ -11,18 +11,20 @@ import org.springframework.stereotype.Service;
 import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.service.KettleNorthService;
-import com.katch.perfer.mahout.service.UserMahoutRecommenderService;
-import com.katch.perfer.service.kettle.UserRecommendCSV2DBBuild;
+import com.katch.perfer.service.kettle.ItemRecommendCSV2DBBuild;
 
 @Service("consumerImportService")
 @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = false)
 public class ConsumerItemImportService {
 
-	private static Logger logger = LoggerFactory.getLogger(UserMahoutRecommenderService.class);
+	private static Logger logger = LoggerFactory.getLogger(ConsumerItemImportService.class);
 
 	@Autowired
 	private KettleNorthService kettleNorthService;
 
+	@Autowired
+	private ItemRecommendCSV2DBBuild itemRecommendCSV2DBBuild;
+	
 	/**
 	 * 修正
 	 * 
@@ -49,8 +51,7 @@ public class ConsumerItemImportService {
 	 */
 	private String doImport() throws KettleException {
 		logger.info("商品推荐表记录开始导入!");
-		UserRecommendCSV2DBBuild cSVTablesIncSyncBuilder = new UserRecommendCSV2DBBuild();
-		KettleResult result = kettleNorthService.excuteJobOnce(cSVTablesIncSyncBuilder.createJob());
+		KettleResult result = kettleNorthService.excuteJobOnce(itemRecommendCSV2DBBuild.createJob());
 		if (StringUtils.isNotEmpty(result.getErrMsg())) {
 			throw new KettleException("Kettle商品推荐表记录导入失败,kettle发生问题:" + result.getErrMsg());
 		}
