@@ -1,4 +1,4 @@
-package com.katch.perfer.kettle.model;
+package com.katch.perfer.mybatis.model;
 
 import java.util.ArrayList;
 import java.util.Date;

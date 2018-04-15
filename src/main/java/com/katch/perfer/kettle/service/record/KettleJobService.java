@@ -15,10 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.consist.KettleVariables;
-import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.record.KettleRecordPool;
 import com.katch.perfer.kettle.repository.KettleRecordRepository;
 import com.katch.perfer.kettle.repository.KettleRepoRepository;
+import com.katch.perfer.mybatis.model.KettleRecord;
 
 public abstract class KettleJobService {
 	private static Logger logger = LoggerFactory.getLogger(KettleJobService.class);

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.katch.perfer.mybatis.mapper.KettleRecordMapper">
-	<resultMap id="KettleRecordMap" type="com.katch.perfer.kettle.model.KettleRecord">
+	<resultMap id="KettleRecordMap" type="com.katch.perfer.mybatis.model.KettleRecord">
 		<id column="UUID" property="uuid" />
 		<id column="ID_JOB" property="jobid" />
 		<result column="NAME_JOB" property="name" />
@@ -17,7 +17,7 @@
 	</resultMap>
 
 	<resultMap id="KettleRecordRelationMap"
-		type="com.katch.perfer.kettle.model.KettleRecordRelation">
+		type="com.katch.perfer.mybatis.model.KettleRecordRelation">
 		<result column="MASTER_UUID_ID" property="masterUUID" />
 		<result column="META_ID" property="metaid" />
 		<result column="META_TYPE" property="type" />
@@ -75,7 +75,7 @@
 		WHERE MASTER_UUID_ID = #{masterUuid}
 	</select>
 
-	<insert id="insertRecord" parameterType="com.katch.perfer.kettle.model.KettleRecord">
+	<insert id="insertRecord" parameterType="com.katch.perfer.mybatis.model.KettleRecord">
 		INSERT INTO
 		R_RECORD_JOB
 		(UUID, ID_JOB, NAME_JOB, ID_RUN, STATUS, HOSTNAME,
@@ -97,7 +97,7 @@
 		</foreach>
 	</insert>
 
-	<update id="updateRecord" parameterType="com.katch.perfer.kettle.model.KettleRecord">
+	<update id="updateRecord" parameterType="com.katch.perfer.mybatis.model.KettleRecord">
 		UPDATE
 		R_RECORD_JOB
 		SET

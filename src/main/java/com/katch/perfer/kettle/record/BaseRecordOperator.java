@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.katch.perfer.kettle.consist.KettleVariables;
-import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.repository.KettleRecordRepository;
+import com.katch.perfer.mybatis.model.KettleRecord;
 
 @Component
 @Scope("prototype")

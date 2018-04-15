@@ -28,8 +28,8 @@ import org.springframework.stereotype.Component;
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.config.KettleRepoProperties;
 import com.katch.perfer.kettle.consist.KettleVariables;
-import com.katch.perfer.kettle.model.KettleRecord;
-import com.katch.perfer.kettle.model.KettleRecordRelation;
+import com.katch.perfer.mybatis.model.KettleRecord;
+import com.katch.perfer.mybatis.model.KettleRecordRelation;
 
 /**
  * Kettle资源库

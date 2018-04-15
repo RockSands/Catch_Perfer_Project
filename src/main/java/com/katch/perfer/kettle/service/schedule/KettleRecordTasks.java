@@ -8,9 +8,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.kettle.consist.KettleVariables;
-import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.repository.KettleRecordRepository;
 import com.katch.perfer.kettle.repository.KettleRepoRepository;
+import com.katch.perfer.mybatis.model.KettleRecord;
 
 /**
  * 每天凌晨处理任务

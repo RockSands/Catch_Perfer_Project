@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.pentaho.di.core.exception.KettleException;
 
 import com.katch.perfer.kettle.consist.KettleVariables;
-import com.katch.perfer.kettle.model.KettleRecord;
+import com.katch.perfer.mybatis.model.KettleRecord;
 
 /**
  * Kettle任务池

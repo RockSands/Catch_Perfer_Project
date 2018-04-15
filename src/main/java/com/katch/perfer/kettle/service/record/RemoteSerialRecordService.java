@@ -17,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.record.remote.KettleRemoteClient;
 import com.katch.perfer.kettle.record.remote.KettleRemotePool;
 import com.katch.perfer.kettle.record.remote.RemoteSerialRecordHandler;
+import com.katch.perfer.mybatis.model.KettleRecord;
 import com.katch.perfer.utils.SpringContextUtils;
 
 /**

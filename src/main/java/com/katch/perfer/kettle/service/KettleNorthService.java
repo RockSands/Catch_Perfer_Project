@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.bean.KettleResult;
-import com.katch.perfer.kettle.model.KettleRecord;
 import com.katch.perfer.kettle.service.record.KettleJobService;
+import com.katch.perfer.mybatis.model.KettleRecord;
 
 @Service
 public class KettleNorthService {

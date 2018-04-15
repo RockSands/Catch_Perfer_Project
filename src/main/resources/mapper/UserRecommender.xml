@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.katch.perfer.mybatis.mapper.UserRecommenderMapper">
-	<resultMap id="RecommenderMap" type="com.katch.perfer.mahout.model.UserRecommender">
+	<resultMap id="RecommenderMap" type="com.katch.perfer.mybatis.model.UserRecommender">
 		<result column="YH_ID" property="userId" />
 		<result column="SP_ID" property="itemRecommedns" />
 		<result column="SCORE" property="score" />

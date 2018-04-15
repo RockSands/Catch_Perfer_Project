@@ -2,7 +2,7 @@ package com.katch.perfer.kettle.record;
 
 import org.pentaho.di.core.exception.KettleException;
 
-import com.katch.perfer.kettle.model.KettleRecord;
+import com.katch.perfer.mybatis.model.KettleRecord;
 
 /**
  * Record的操作定义

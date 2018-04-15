@@ -1,4 +1,4 @@
-package com.katch.perfer.mahout.model;
+package com.katch.perfer.mybatis.model;
 
 /**
  * 用户商品推荐
