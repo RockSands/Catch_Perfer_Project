@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.katch.perfer.mybatis.mapper.UserConsumptionMapper">
+	<resultMap id="UserConsumptionMap"
+		type="com.katch.perfer.mybatis.model.UserConsumption">
+		<result column="YHID" property="userId" />
+		<result column="SPID_1" property="itmeId" />
+		<result column="LLRQ" property="createTime" />
+	</resultMap>
+
+	<sql id="Recommender_Column_List">
+		YHID, SPID_1, LLRQ
+	</sql>
+
+	<select id="queryUserConsumptions" parameterType="long" resultMap="UserConsumptionMap">
+		SELECT
+		<include refid="Recommender_Column_List" />
+		FROM
+		SQY_RZDK_DD
+		WHERE
+		YHID = '#{userID}' ORDER BY LLRQ DESC
+	</select>
+
+</mapper>

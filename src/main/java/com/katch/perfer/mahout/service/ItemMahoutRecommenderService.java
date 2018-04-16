@@ -17,11 +17,9 @@ import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-@Component("mahoutRecommenderService")
-@ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = false)
+@Component()
 public class ItemMahoutRecommenderService extends MahoutRecommenderService {
 
 	private DecimalFormat df = new DecimalFormat("##0.###");

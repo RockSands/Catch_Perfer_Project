@@ -1,4 +1,4 @@
-package com.katch.perfer.service;
+package com.katch.perfer.service.schedule;
 
 import org.apache.commons.lang.StringUtils;
 import org.pentaho.di.core.exception.KettleException;
@@ -77,7 +77,6 @@ public class ConsumerExportService {
 		while (true) {
 		    Thread.sleep(10000L);
 		    KettleResult result = kettleNorthService.queryJob(kettleUUID);
-		    System.out.println("=Status=>" + result.getStatus());
 		    if (KettleVariables.RECORD_STATUS_FINISHED.equals(result.getStatus())) {
 			break;
 		    } else if (KettleVariables.RECORD_STATUS_ERROR.equals(result.getStatus())) {

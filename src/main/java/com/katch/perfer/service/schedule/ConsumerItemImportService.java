@@ -1,4 +1,4 @@
-package com.katch.perfer.service.inport;
+package com.katch.perfer.service.schedule;
 
 import org.apache.commons.lang.StringUtils;
 import org.pentaho.di.core.exception.KettleException;
@@ -11,25 +11,19 @@ import org.springframework.stereotype.Service;
 import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.service.KettleNorthService;
-import com.katch.perfer.service.ConsumerImportService;
-import com.katch.perfer.service.kettle.UserRecommendCSV2DBBuild;
+import com.katch.perfer.service.kettle.ItemRecommendCSV2DBBuild;
 
-/**
- * 消费记录导出
- * 
- * @author Administrator
- *
- */
-@Service("consumerImportService")
-@ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "user", matchIfMissing = true)
-public class ConsumerUserImportService implements ConsumerImportService{
-	private static Logger logger = LoggerFactory.getLogger(ConsumerUserImportService.class);
+@Service()
+@ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = false)
+public class ConsumerItemImportService implements ConsumerImportService {
+
+	private static Logger logger = LoggerFactory.getLogger(ConsumerItemImportService.class);
 
 	@Autowired
 	private KettleNorthService kettleNorthService;
-	
+
 	@Autowired
-	private UserRecommendCSV2DBBuild userRecommendCSV2DBBuild;
+	private ItemRecommendCSV2DBBuild itemRecommendCSV2DBBuild;
 
 	/**
 	 * 修正
@@ -39,7 +33,6 @@ public class ConsumerUserImportService implements ConsumerImportService{
 	 * 
 	 * @throws Exception
 	 */
-	@Override
 	public String excute() {
 		try {
 			String uuid = doImport();
@@ -47,13 +40,12 @@ public class ConsumerUserImportService implements ConsumerImportService{
 			thread.kettleUUID = uuid;
 			thread.start();
 			thread.join();
-			logger.info("用户商品推荐表导入完成!");
+			logger.info("商品推荐表导入完成!");
 			return thread.errorMsg;
 		} catch (Exception e) {
-			logger.error("用户商品推荐表导入失败!",e);
-			return "用户商品推荐表导入失败!";
+			logger.error("商品推荐表导入失败!", e);
+			return "商品推荐表导入失败!";
 		}
-		
 	}
 
 	/**
@@ -63,10 +55,10 @@ public class ConsumerUserImportService implements ConsumerImportService{
 	 * @throws KettleException
 	 */
 	private String doImport() throws KettleException {
-		logger.info("用户商品推荐表记录开始导入!");
-		KettleResult result = kettleNorthService.excuteJobOnce(userRecommendCSV2DBBuild.createJob());
+		logger.info("商品推荐表记录开始导入!");
+		KettleResult result = kettleNorthService.excuteJobOnce(itemRecommendCSV2DBBuild.createJob());
 		if (StringUtils.isNotEmpty(result.getErrMsg())) {
-			throw new KettleException("Kettle用户商品推荐表记录导入失败,kettle发生问题:" + result.getErrMsg());
+			throw new KettleException("Kettle商品推荐表记录导入失败,kettle发生问题:" + result.getErrMsg());
 		}
 		return result.getUuid();
 	}
@@ -103,4 +95,5 @@ public class ConsumerUserImportService implements ConsumerImportService{
 			}
 		}
 	}
+
 }

@@ -1,12 +1,11 @@
 package com.katch.perfer.mybatis.model;
 
 /**
- * 用户商品推荐
- * 
+ * 基于用户
  * @author Administrator
  *
  */
-public class UserRecommender {
+public class BaseUserRecommend {
     private long userId;
 
     private long itemId;

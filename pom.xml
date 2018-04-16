@@ -42,6 +42,11 @@
 			<scope>system</scope>
 			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Spring MVC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -244,12 +249,23 @@
 		</dependency>
 	</dependencies>
 	<!-- 使用SpringBoot的Maven插件构建 -->
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+
+	    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warName>Catch_Perfer</warName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
