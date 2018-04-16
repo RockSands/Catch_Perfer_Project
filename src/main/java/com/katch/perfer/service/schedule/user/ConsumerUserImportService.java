@@ -1,4 +1,4 @@
-package com.katch.perfer.service.schedule;
+package com.katch.perfer.service.schedule.user;
 
 import org.apache.commons.lang.StringUtils;
 import org.pentaho.di.core.exception.KettleException;
@@ -12,6 +12,7 @@ import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.service.KettleNorthService;
 import com.katch.perfer.service.kettle.UserRecommendCSV2DBBuild;
+import com.katch.perfer.service.schedule.ConsumerImportService;
 
 /**
  * 消费记录导出
