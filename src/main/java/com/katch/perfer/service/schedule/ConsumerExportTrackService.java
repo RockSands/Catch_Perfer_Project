@@ -1,13 +1,24 @@
 package com.katch.perfer.service.schedule;
 
+import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Date;
 
+import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
+import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
+import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
+import org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
+import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.katch.perfer.config.ConsumerExportCSVProperties;
 import com.katch.perfer.consist.Consist;
 import com.katch.perfer.kettle.bean.KettleResult;
 import com.katch.perfer.kettle.consist.KettleVariables;
@@ -30,8 +41,16 @@ public class ConsumerExportTrackService {
 
 	@Autowired
 	private RecommendTaskTrackMapper recommendTaskTrackMapper;
+	
+	/**
+	 * 格式化
+	 */
+	private DecimalFormat df = new DecimalFormat("##0.###");
 
-	@Scheduled(cron = "*/5 * * * * ?")
+	@Autowired
+	private ConsumerExportCSVProperties consumerExportCSVProperties;
+
+	@Scheduled(cron = "*/10 * * * * ?")
 	public void excute() {
 		try {
 			RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY00001");
@@ -58,7 +77,11 @@ public class ConsumerExportTrackService {
 					track.setStep(Consist.RECOM_TASK_TRACK_STEP_MAHOUT_COM);
 					track.setUpdateTime(new Date());
 					recommendTaskTrackMapper.updateRecommendTaskTrack(track);
-					
+					File file = new File(consumerExportCSVProperties.getExportFileName());
+					DataModel dataModel = new FileDataModel(file);
+					UserSimilarity similarity = new UncenteredCosineSimilarity(dataModel);
+					UserNeighborhood userNeighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
+					Recommender recommender = new GenericUserBasedRecommender(dataModel, userNeighborhood, similarity);
 				}
 			}
 		} catch (Exception ex) {
