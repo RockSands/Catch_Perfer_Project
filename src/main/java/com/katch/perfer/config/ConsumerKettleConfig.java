@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.metas.KettleSelectSQLMeta;
 import com.katch.perfer.kettle.metas.KettleTextOutputMeta;
 import com.katch.perfer.kettle.metas.builder.SqlDataExportBuilder;

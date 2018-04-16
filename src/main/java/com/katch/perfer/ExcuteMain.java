@@ -1,15 +1,11 @@
 package com.katch.perfer;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -31,23 +27,6 @@ public class ExcuteMain {
 	app.addListeners(new ApplicationFailedEventListener());
 	app.addListeners(new ApplicationPreparedEventListener());
 	app.addListeners(new ApplicationStartedEventListener());
-	ConfigurableApplicationContext context = app.run(args);
-	DataSource DataSource = (DataSource)context.getBean("secondaryDataSource");
-	System.out.println("===>" + BasicDataSource.class.isInstance(DataSource));
-	System.out.println("===>" + DataSource.getClass().getName());
-	// ConsumerAutoDealService consumerAutoDealService =
-	// context.getBean(ConsumerAutoDealService.class);
-	// consumerAutoDealService.excute();
-	// MahoutConsumerService mahoutConsumerService =
-	// (MahoutConsumerService)context.getBean("mahoutConsumerService");
-	// System.out.println("===>" + mahoutConsumerService);
-	// KettleNorthService KettleNorthService =
-	// context.getBean(KettleNorthService.class);
-	// String uuid = consumerExportService.doExport();
-	// while (true) {
-	// KettleResult result = KettleNorthService.queryJob(uuid);
-	// System.out.println("===>" + result.getStatus());
-	// Thread.sleep(10000l);
-	// }
+	app.run(args);
     }
 }
