@@ -9,5 +9,5 @@ import com.katch.perfer.mybatis.model.BaseItemRecommend;
 
 @Mapper
 public interface BaseItemRecommendMapper {
-	List<BaseItemRecommend> queryRecommender(@Param("itemID") long itemID);
+	List<BaseItemRecommend> queryRecommenders(@Param("itemID") long itemID);
 }

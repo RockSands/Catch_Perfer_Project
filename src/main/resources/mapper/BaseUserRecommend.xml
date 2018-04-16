@@ -3,22 +3,22 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.katch.perfer.mybatis.mapper.BaseUserRecommendMapper">
 	<resultMap id="RecommenderMap" type="com.katch.perfer.mybatis.model.BaseUserRecommend">
-		<result column="YH_ID" property="userId" />
-		<result column="SP_ID" property="itemId" />
+		<result column="USER_ID" property="userId" />
+		<result column="ITEM_ID" property="itemId" />
 		<result column="SCORE" property="score" />
 	</resultMap>
 
 	<sql id="Recommender_Column_List">
-		YH_ID, SP_ID, SCORE
+		USER_ID, ITEM_ID, SCORE
 	</sql>
 
-	<select id="queryRecommender" parameterType="long" resultMap="RecommenderMap">
+	<select id="queryRecommenders" parameterType="long" resultMap="RecommenderMap">
 		SELECT
 		<include refid="Recommender_Column_List" />
 		FROM
-		SQY_RZDK_JYYH_SPTJ
+		RECOMMEND_BASE_USER_TABLE
 		WHERE
-		YH_ID = #{userID}
+		USER_ID = #{userID}
 	</select>
 
 </mapper>

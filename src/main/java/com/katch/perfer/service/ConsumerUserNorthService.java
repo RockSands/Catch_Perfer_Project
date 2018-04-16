@@ -18,7 +18,7 @@ public class ConsumerUserNorthService implements ConsumerNorthService {
 
 	@Override
 	public List<Long> queryRecommend(long yhid, String qy) {
-		List<BaseUserRecommend> recommends = baseUserRecommendMapper.queryRecommender(yhid);
+		List<BaseUserRecommend> recommends = baseUserRecommendMapper.queryRecommenders(yhid);
 		List<Long> recommendList = new ArrayList<Long>();
 		for (BaseUserRecommend recommend : recommends) {
 			recommendList.add(recommend.getItemId());

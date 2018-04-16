@@ -13,5 +13,5 @@ import com.katch.perfer.mybatis.model.BaseUserRecommend;
  */
 @Mapper
 public interface BaseUserRecommendMapper {
-	List<BaseUserRecommend> queryRecommender(@Param("userID") long userID);
+	List<BaseUserRecommend> queryRecommenders(@Param("userID") long userID);
 }

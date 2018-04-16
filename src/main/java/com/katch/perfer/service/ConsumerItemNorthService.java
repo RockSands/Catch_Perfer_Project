@@ -33,7 +33,7 @@ public class ConsumerItemNorthService implements ConsumerNorthService {
 		int index = 0;
 		double score = 0.0;
 		for (UserConsumption consumption : consumptions.subList(0, 10)) {
-			for (BaseItemRecommend itemRecommend : baseItemRecommendMapper.queryRecommender(consumption.getItmeId())) {
+			for (BaseItemRecommend itemRecommend : baseItemRecommendMapper.queryRecommenders(consumption.getItmeId())) {
 				if (!map.containsKey(itemRecommend.getItemId2())) {
 					map.put(itemRecommend.getItemId2(), itemRecommend.getScore() - 0.1 * index);
 				} else {
