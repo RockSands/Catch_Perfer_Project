@@ -48,7 +48,8 @@ public class MahoutFile2DBResoluter extends ConsumerRecommendResoluter{
 			}
 		} else if (KettleVariables.RECORD_STATUS_FINISHED.equals(kettleResult.getStatus())) {
 			logger.info("推荐信息导入数据库完成!");
-			track.setStep(Consist.RECOM_TASK_TRACK_STEP_MAHOUT_COM);
+			track.setStep(Consist.RECOM_TASK_TRACK_STEP_FREE);
+			track.setStatus(Consist.RECOM_TASK_TRACK_STATUS_FINISHED);
 			track.setUpdateTime(new Date());
 			track.setJobUuid(null);
 			recommendTaskTrackMapper.updateRecommendTaskTrack(track);
