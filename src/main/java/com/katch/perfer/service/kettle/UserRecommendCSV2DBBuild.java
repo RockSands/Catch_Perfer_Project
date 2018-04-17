@@ -210,7 +210,7 @@ public class UserRecommendCSV2DBBuild {
 		 */
 		TableOutputMeta toi = new TableOutputMeta();
 		toi.setDatabaseMeta(targetDatabase);
-		toi.setTableName("SQY_RZDK_JYYH_SPTJ");
+		toi.setTableName("RECOMMEND_BASE_USER_TABLE");
 		toi.setCommitSize(100);
 		toi.setTruncateTable(false);
 		toi.setSpecifyFields(true);

@@ -37,7 +37,8 @@ public class CSVExportTrackResoluter extends ConsumerRecommendResoluter {
 		if (KettleVariables.RECORD_STATUS_ERROR.equals(kettleResult.getStatus())) {
 			logger.error("消费记录导出CSV发生错误，Kettle[" + jobUuid + "]执行错误!\n" + kettleResult.getErrMsg());
 			throw new Exception("消费记录导出CSV发生错误，Kettle[" + jobUuid + "]执行错误!");
-		} else if (KettleVariables.RECORD_STATUS_RUNNING.equals(kettleResult.getStatus())) {
+		} else if (KettleVariables.RECORD_STATUS_RUNNING.equals(kettleResult.getStatus())
+				|| KettleVariables.RECORD_STATUS_APPLY.equals(kettleResult.getStatus())) {
 			if (System.currentTimeMillis() - track.getUpdateTime().getTime() > 30L * 60L * 1000L) {
 				throw new Exception("消费记录导出CSV超时，Kettle[" + track.getJobUuid() + "]执行错误!");
 			}

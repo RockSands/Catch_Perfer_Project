@@ -41,7 +41,10 @@ public class ConsumerRecommendAutoStartTask {
 		logger.info("消费推荐同步信息启动!");
 		if (Consist.RECOM_TASK_TRACK_STEP_FREE.equals(track.getStep())
 				|| (Consist.RECOM_TASK_TRACK_STATUS_ERROR.equals(track.getStep()))) {
-			excute(track);
+			//TODO 设置间隔
+			if (System.currentTimeMillis() - track.getUpdateTime().getTime() > 1000L) {
+				excute(track);
+			}
 		}
 	}
 

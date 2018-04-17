@@ -36,12 +36,10 @@
 		SET
 		STEP = #{step},
 		STATUS = #{status},
-		JOB_UUID =
-		#{jobUuid},
+		JOB_UUID = #{jobUuid},
 		START_TIME = #{startTime},
 		UPDATE_TIME = #{updateTime}
 		WHERE
 		ID = #{id}
 	</update>
-
 </mapper>
