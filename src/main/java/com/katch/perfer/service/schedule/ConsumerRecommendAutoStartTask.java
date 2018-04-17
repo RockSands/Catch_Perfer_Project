@@ -7,16 +7,15 @@ import org.pentaho.di.core.exception.KettleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.consist.Consist;
 import com.katch.perfer.kettle.bean.KettleResult;
-import com.katch.perfer.kettle.metas.builder.SqlDataExportBuilder;
 import com.katch.perfer.kettle.service.KettleNorthService;
 import com.katch.perfer.mybatis.mapper.RecommendTaskTrackMapper;
 import com.katch.perfer.mybatis.model.RecommendTaskTrack;
+import com.katch.perfer.service.kettle.ConsumerExportCSVBuilder;
 
 @Service
 public class ConsumerRecommendAutoStartTask {
@@ -26,8 +25,7 @@ public class ConsumerRecommendAutoStartTask {
 	private RecommendTaskTrackMapper recommendTaskTrackMapper;
 
 	@Autowired
-	@Qualifier("consumerExportJobBuilder")
-	private SqlDataExportBuilder consumerExportJobBuilder;
+	private ConsumerExportCSVBuilder consumerExportCSVBuilder;
 
 	@Autowired
 	private KettleNorthService kettleNorthService;
@@ -79,7 +77,7 @@ public class ConsumerRecommendAutoStartTask {
 	 */
 	private String doExport() throws KettleException {
 		logger.info("用户消费记录开始导出!");
-		KettleResult result = kettleNorthService.excuteJobOnce(consumerExportJobBuilder.createJob());
+		KettleResult result = kettleNorthService.excuteJobOnce(consumerExportCSVBuilder.createJob());
 		if (StringUtils.isNotEmpty(result.getErrMsg())) {
 			throw new KettleException("Kettle导出消费记录失败,kettle发生问题:" + result.getErrMsg());
 		}

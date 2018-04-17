@@ -26,10 +26,6 @@ public class ConsumerExportCSVBuilder {
 	@Autowired
 	private ConsumerProperties consumerProperties;
 
-	public static ConsumerExportCSVBuilder newBuilder() {
-		return new ConsumerExportCSVBuilder();
-	}
-
 	public TransMeta createTrans() throws KettleException {
 		final String uuid = UUID.randomUUID().toString().replace("-", "");
 		TransMeta transMeta = null;
