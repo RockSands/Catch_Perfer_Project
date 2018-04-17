@@ -22,10 +22,10 @@ import org.springframework.stereotype.Service;
 
 import com.katch.perfer.config.ConsumerExportCSVProperties;
 
-@Service("mahoutRecommenderService")
+@Service()
 @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "user", matchIfMissing = true)
-public class UserMahoutRecommenderService extends MahoutRecommenderService {
-	private static Logger logger = LoggerFactory.getLogger(UserMahoutRecommenderService.class);
+public class MahoutUserExportService extends MahoutExportService {
+	private static Logger logger = LoggerFactory.getLogger(MahoutUserExportService.class);
 
 	@Autowired
 	private ConsumerExportCSVProperties consumerExportCSVProperties;
@@ -35,9 +35,7 @@ public class UserMahoutRecommenderService extends MahoutRecommenderService {
 		UserSimilarity similarity = new UncenteredCosineSimilarity(dataModel);
 		UserNeighborhood userNeighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
 		Recommender recommender = new GenericUserBasedRecommender(dataModel, userNeighborhood, similarity);
-		logger.info("用户消费记录计算完成,准备入库!");
 		saveUserRecommenderFile(dataModel, recommender);
-		logger.info("用户消费记录计算完成,入库完成!");
 	}
 
 	/**
@@ -46,7 +44,7 @@ public class UserMahoutRecommenderService extends MahoutRecommenderService {
 	 * @throws Exception
 	 */
 	private void saveUserRecommenderFile(DataModel dataModel, Recommender recommender) throws Exception {
-		logger.debug("消费推荐导出文件准备导出!");
+		logger.debug("基于用户的消费推荐文件导出准备!");
 		LongPrimitiveIterator it = dataModel.getUserIDs();
 		Long userID = null;
 		Path path = Paths.get(consumerExportCSVProperties.getUserRecommendFileName());
@@ -65,5 +63,6 @@ public class UserMahoutRecommenderService extends MahoutRecommenderService {
 			}
 		}
 		writer.close();
+		logger.debug("基于商品的消费推荐文件导出完成!");
 	}
 }
