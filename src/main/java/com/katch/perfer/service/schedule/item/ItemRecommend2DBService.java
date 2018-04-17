@@ -38,7 +38,7 @@ public class ItemRecommend2DBService extends Recommend2DBService {
 		if (StringUtils.isNotEmpty(result.getErrMsg())) {
 			throw new Exception("基于商品写入数据库的Kettle任务发生错误:" + result.getErrMsg());
 		}
-		track.setJobUuid(track.getJobUuid());
+		track.setJobUuid(result.getUuid());
 		track.setUpdateTime(new Date());
 		recommendTaskTrackMapper.updateRecommendTaskTrack(track);
 	}

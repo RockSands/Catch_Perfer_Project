@@ -43,7 +43,7 @@ public class MahoutItemExportService extends MahoutExportService {
 			itemID = it.next();
 			maxVal = 4.5;
 			index = 0;
-			for (RecommendedItem recommendedItem : recommender.mostSimilarItems(itemID, 25)) {
+			for (RecommendedItem recommendedItem : recommender.mostSimilarItems(itemID, 30)) {
 				if (recommendedItem == null || recommendedItem.getValue() == 0.00) {
 					continue;
 				}
