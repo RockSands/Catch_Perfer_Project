@@ -39,7 +39,7 @@
 		JOB_UUID =
 		#{jobUuid},
 		START_TIME = #{startTime},
-		UPDATE_TIME = #{updateTime},
+		UPDATE_TIME = #{updateTime}
 		WHERE
 		ID = #{id}
 	</update>
