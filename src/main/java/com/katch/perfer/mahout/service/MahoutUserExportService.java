@@ -16,19 +16,13 @@ import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-
-import com.katch.perfer.config.ConsumerExportCSVProperties;
 
 @Service()
 @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "user", matchIfMissing = true)
 public class MahoutUserExportService extends MahoutExportService {
 	private static Logger logger = LoggerFactory.getLogger(MahoutUserExportService.class);
-
-	@Autowired
-	private ConsumerExportCSVProperties consumerExportCSVProperties;
 
 	@Override
 	public void excute() throws Exception {
@@ -47,7 +41,7 @@ public class MahoutUserExportService extends MahoutExportService {
 		logger.debug("基于用户的消费推荐文件导出准备!");
 		LongPrimitiveIterator it = dataModel.getUserIDs();
 		Long userID = null;
-		Path path = Paths.get(consumerExportCSVProperties.getUserRecommendFileName());
+		Path path = Paths.get(recommendPropeties.getUserRecommendFileName());
 		BufferedWriter writer = Files.newBufferedWriter(path);
 		while (it.hasNext()) {
 			userID = it.next();

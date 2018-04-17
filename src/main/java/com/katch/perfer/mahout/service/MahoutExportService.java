@@ -5,13 +5,16 @@ import java.text.DecimalFormat;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.katch.perfer.config.ConsumerExportCSVProperties;
+import com.katch.perfer.config.RecommendPropeties;
 
 public abstract class MahoutExportService {
 
 	@Autowired
-	protected ConsumerExportCSVProperties consumerExportCSVProperties;
+	protected RecommendPropeties recommendPropeties;
 
+	/**
+	 * Mahout计算
+	 */
 	protected DataModel dataModel;
 
 	/**
@@ -26,14 +29,6 @@ public abstract class MahoutExportService {
 	 */
 	public abstract void excute() throws Exception;
 
-	public ConsumerExportCSVProperties getConsumerExportCSVProperties() {
-		return consumerExportCSVProperties;
-	}
-
-	public void setConsumerExportCSVProperties(ConsumerExportCSVProperties consumerExportCSVProperties) {
-		this.consumerExportCSVProperties = consumerExportCSVProperties;
-	}
-
 	public DataModel getDataModel() {
 		return dataModel;
 	}
@@ -42,4 +37,11 @@ public abstract class MahoutExportService {
 		this.dataModel = dataModel;
 	}
 
+	public RecommendPropeties getRecommendPropeties() {
+		return recommendPropeties;
+	}
+
+	public void setRecommendPropeties(RecommendPropeties recommendPropeties) {
+		this.recommendPropeties = recommendPropeties;
+	}
 }

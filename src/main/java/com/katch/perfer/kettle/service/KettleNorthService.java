@@ -1,8 +1,6 @@
 package com.katch.perfer.kettle.service;
 
 import org.pentaho.di.core.exception.KettleException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
@@ -15,8 +13,6 @@ import com.katch.perfer.mybatis.model.KettleRecord;
 
 @Service
 public class KettleNorthService {
-
-	private static Logger logger = LoggerFactory.getLogger(KettleNorthService.class);
 
 	@Autowired
 	@Qualifier("remoteSerialRecordService")

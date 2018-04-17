@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.katch.perfer.config.ConsumerExportCSVProperties;
+import com.katch.perfer.config.ConsumerProperties;
 import com.katch.perfer.consist.Consist;
 import com.katch.perfer.mybatis.mapper.RecommendTaskTrackMapper;
 import com.katch.perfer.mybatis.model.RecommendTaskTrack;
@@ -18,7 +18,7 @@ public abstract class ConsumerRecommendResoluter {
 	protected RecommendTaskTrackMapper recommendTaskTrackMapper;
 
 	@Autowired
-	protected ConsumerExportCSVProperties consumerExportCSVProperties;
+	protected ConsumerProperties consumerProperties;
 
 	/**
 	 * 外面调用

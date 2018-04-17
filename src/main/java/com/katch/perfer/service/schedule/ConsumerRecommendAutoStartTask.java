@@ -54,8 +54,6 @@ public class ConsumerRecommendAutoStartTask {
 	private void excute(RecommendTaskTrack track) {
 		logger.info("用户消费记录导出CSV启动!");
 		String uuid = null;
-		// 清理子任务
-		recommendTaskTrackMapper.deleteRecommendTaskSubTrack(track.getId());
 		try {
 			uuid = doExport();
 			track.setJobUuid(uuid);

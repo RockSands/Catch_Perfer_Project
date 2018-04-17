@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.katch.perfer.mybatis.mapper.RecommendTaskTrackMapper">
+
+	<resultMap id="TrackMap"
+		type="com.katch.perfer.mybatis.model.RecommendTaskTrack">
+		<id column="ID" property="id" />
+		<result column="STEP" property="step" />
+		<result column="STATUS" property="status" />
+		<result column="JOB_UUID" property="jobUuid" />
+		<result column="START_TIME" property="startTime" />
+		<result column="UPDATE_TIME" property="updateTime" />
+	</resultMap>
+
+	<sql id="Track_Column_List">
+		ID,STEP,STATUS,JOB_UUID,START_TIME,UPDATE_TIME
+	</sql>
+
+	<sql id="Sub_Track_Column_List">
+		ID,STEP,STATUS,JOB_UUID,START_TIME,UPDATE_TIME
+	</sql>
+
+	<select id="queryRecommendTaskTrack" resultMap="TrackMap">
+		SELECT
+		<include refid="Track_Column_List" />
+		FROM
+		RECOMMEND_TASK_TRACK
+		WHERE
+		ID = #{id}
+	</select>
+
+	<update id="updateRecommendTaskTrack" parameterType="com.katch.perfer.mybatis.model.RecommendTaskTrack">
+		UPDATE
+		RECOMMEND_TASK_TRACK
+		SET
+		STEP = #{step},
+		STATUS = #{status},
+		JOB_UUID =
+		#{jobUuid},
+		START_TIME = #{startTime},
+		UPDATE_TIME = #{updateTime},
+		WHERE
+		ID = #{id}
+	</update>
+
+</mapper>

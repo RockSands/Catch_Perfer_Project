@@ -69,7 +69,7 @@ public class MahoutComReSoluter extends ConsumerRecommendResoluter {
 		@Override
 		public void run() {
 			status = "start";
-			File file = new File(consumerExportCSVProperties.getExportFileName());
+			File file = new File(consumerProperties.getTargetPath());
 			try {
 				dataMode = new FileDataModel(file);
 				status = "finish";
@@ -78,7 +78,5 @@ public class MahoutComReSoluter extends ConsumerRecommendResoluter {
 				status = "error";
 			}
 		}
-
 	}
-
 }

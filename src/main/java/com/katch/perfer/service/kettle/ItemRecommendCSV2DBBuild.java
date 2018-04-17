@@ -29,7 +29,7 @@ import org.pentaho.di.trans.steps.update.UpdateMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.katch.perfer.config.ConsumerExportCSVProperties;
+import com.katch.perfer.config.RecommendPropeties;
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 
 /**
@@ -42,16 +42,22 @@ import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 @SuppressWarnings("deprecation")
 public class ItemRecommendCSV2DBBuild {
 	@Autowired
-	private ConsumerExportCSVProperties consumerExportCSVProperties;
-	
+	private RecommendPropeties recommendPropeties;
+
 	private TransMeta createTrans() throws KettleException {
 		String uuid = UUID.randomUUID().toString().replace("-", "");
 		TransMeta transMeta = null;
 		transMeta = new TransMeta();
 		transMeta.setName("CTIS-" + uuid);
-		DatabaseMeta targetDatabase = new DatabaseMeta("192.168.80.138_kettle", "MySql", "Native", "192.168.80.138",
-				"kettle", "3306", "root", "123456");
+		DatabaseMeta targetDatabase = new DatabaseMeta(
+				recommendPropeties.getTargetHost() + "_" + recommendPropeties.getTargetPort() + "_"
+						+ recommendPropeties.getTargetDatabase() + "_" + recommendPropeties.getTargetUser(),
+				recommendPropeties.getTargetType(), "Native", recommendPropeties.getTargetHost(),
+				recommendPropeties.getTargetDatabase(), recommendPropeties.getTargetPort(),
+				recommendPropeties.getTargetUser(), recommendPropeties.getTargetPasswd());
 		transMeta.addDatabase(targetDatabase);
+		String[] pkColumns = new String[] { "ITEM_ID", "ITEM_ID2" };
+		String[] allColumns = new String[] { "ITEM_ID", "ITEM_ID2", "SCORE" };
 		/*
 		 * 条件
 		 */
@@ -71,16 +77,16 @@ public class ItemRecommendCSV2DBBuild {
 		CsvInputMeta ci = new CsvInputMeta();
 		ci.setDelimiter(",");
 		ci.setEncoding("UTF-8");
-		ci.setFilename(consumerExportCSVProperties.getItemRecommendFileName());
+		ci.setFilename(recommendPropeties.getItemRecommendFileName());
 		ci.setIncludingFilename(false);
 		ci.setAddResultFile(false);
 		ci.setBufferSize("50000");
 		TextFileInputField field_0 = new TextFileInputField();
-		field_0.setName("SP_ID");
+		field_0.setName("ITEM_ID");
 		field_0.setType(ValueMetaInterface.TYPE_INTEGER);
 		field_0.setTrimType(ValueMetaInterface.TRIM_TYPE_BOTH);
 		TextFileInputField field_1 = new TextFileInputField();
-		field_1.setName("SP_ID2");
+		field_1.setName("ITEM_ID2");
 		field_1.setType(ValueMetaInterface.TYPE_INTEGER);
 		field_1.setTrimType(ValueMetaInterface.TRIM_TYPE_BOTH);
 		TextFileInputField field_2 = new TextFileInputField();
@@ -95,12 +101,11 @@ public class ItemRecommendCSV2DBBuild {
 		source.setDraw(true);
 		source.setDescription("STEP-SOURCE");
 		transMeta.addStep(source);
-
 		/*
 		 * 排序
 		 */
 		SortRowsMeta sourceSR = new SortRowsMeta();
-		sourceSR.setFieldName(new String[] { "SP_ID", "SP_ID2" });
+		sourceSR.setFieldName(pkColumns);
 		sourceSR.setDirectory("%%java.io.tmpdir%%");
 		sourceSR.setPrefix("sourceSortOut");
 		sourceSR.setSortSize("1000000");
@@ -115,13 +120,12 @@ public class ItemRecommendCSV2DBBuild {
 		sourceSort.setDescription("STEP-SOURCETARGET");
 		transMeta.addStep(sourceSort);
 		transMeta.addTransHop(new TransHopMeta(source, sourceSort));
-
 		/*
 		 * target
 		 */
 		TableInputMeta targettii = new TableInputMeta();
 		targettii.setDatabaseMeta(targetDatabase);
-		targettii.setSQL("SELECT SP_ID,SP_ID2,SCORE FROM SQY_RZDK_JYSP_SPTJ");
+		targettii.setSQL("SELECT ITEM_ID,ITEM_ID2,SCORE FROM RECOMMEND_BASE_ITEM_TABLE");
 		StepMeta targetQuery = new StepMeta("target", targettii);
 		transMeta.addStep(targetQuery);
 		targetQuery.setLocation(150, 300);
@@ -131,7 +135,7 @@ public class ItemRecommendCSV2DBBuild {
 		 * 排序
 		 */
 		SortRowsMeta targetSR = new SortRowsMeta();
-		targetSR.setFieldName(new String[] { "SP_ID", "SP_ID2" });
+		targetSR.setFieldName(pkColumns);
 		targetSR.setDirectory("%%java.io.tmpdir%%");
 		targetSR.setPrefix("sourceSortOut");
 		targetSR.setSortSize("1000000");
@@ -146,14 +150,13 @@ public class ItemRecommendCSV2DBBuild {
 		targetSort.setDescription("STEP-TARGETSORT");
 		transMeta.addStep(targetSort);
 		transMeta.addTransHop(new TransHopMeta(targetQuery, targetSort));
-
 		/*
 		 * merage
 		 */
 		MergeRowsMeta mrm = new MergeRowsMeta();
 		mrm.setFlagField("flagfield");
 		mrm.setValueFields(new String[] { "SCORE" });
-		mrm.setKeyFields(new String[] { "SP_ID", "SP_ID2" });
+		mrm.setKeyFields(pkColumns);
 		mrm.getStepIOMeta().setInfoSteps(new StepMeta[] { targetSort, sourceSort });
 		StepMeta merage = new StepMeta("merage", mrm);
 		transMeta.addStep(merage);
@@ -162,7 +165,6 @@ public class ItemRecommendCSV2DBBuild {
 		merage.setDescription("STEP-MERAGE");
 		transMeta.addTransHop(new TransHopMeta(targetSort, merage));
 		transMeta.addTransHop(new TransHopMeta(sourceSort, merage));
-
 		/*
 		 * noChange
 		 */
@@ -203,12 +205,12 @@ public class ItemRecommendCSV2DBBuild {
 		 */
 		TableOutputMeta toi = new TableOutputMeta();
 		toi.setDatabaseMeta(targetDatabase);
-		toi.setTableName("SQY_RZDK_JYSP_SPTJ");
+		toi.setTableName("RECOMMEND_BASE_ITEM_TABLE");
 		toi.setCommitSize(100);
 		toi.setTruncateTable(false);
 		toi.setSpecifyFields(true);
-		toi.setFieldDatabase(new String[] { "SP_ID", "SP_ID2", "SCORE" });
-		toi.setFieldStream(new String[] { "SP_ID", "SP_ID2", "SCORE" });
+		toi.setFieldDatabase(allColumns);
+		toi.setFieldStream(allColumns);
 		StepMeta insert = new StepMeta("insert", toi);
 		insert.setLocation(1250, 300);
 		insert.setDraw(true);
@@ -235,15 +237,15 @@ public class ItemRecommendCSV2DBBuild {
 		UpdateMeta um = new UpdateMeta();
 		um.setDatabaseMeta(targetDatabase);
 		um.setUseBatchUpdate(true);
-		um.setTableName("SQY_RZDK_JYSP_SPTJ");
+		um.setTableName("RECOMMEND_BASE_ITEM_TABLE");
 		um.setCommitSize("100");
-		um.setKeyLookup(new String[] { "SP_ID", "SP_ID2" });
-		um.setKeyStream(new String[] { "SP_ID", "SP_ID2" });
+		um.setKeyLookup(pkColumns);
+		um.setKeyStream(pkColumns);
 		um.setKeyCondition(conditions);
 		um.setKeyStream2(new String[2]);
 		um.setUseBatchUpdate(true);
-		um.setUpdateLookup(new String[] { "SP_ID", "SP_ID2", "SCORE" });
-		um.setUpdateStream(new String[] { "SP_ID", "SP_ID2", "SCORE" });
+		um.setUpdateLookup(allColumns);
+		um.setUpdateStream(allColumns);
 
 		StepMeta update = new StepMeta("update", um);
 		update.setLocation(1850, 300);
@@ -257,12 +259,12 @@ public class ItemRecommendCSV2DBBuild {
 		 */
 		DeleteMeta dm = new DeleteMeta();
 		dm.setDatabaseMeta(targetDatabase);
-		dm.setTableName("SQY_RZDK_JYSP_SPTJ");
+		dm.setTableName("RECOMMEND_BASE_ITEM_TABLE");
 		dm.setCommitSize("100");
 		dm.setKeyCondition(conditions);
-		dm.setKeyLookup(new String[] { "SP_ID", "SP_ID2" });
+		dm.setKeyLookup(pkColumns);
 		dm.setKeyStream2(new String[2]);
-		dm.setKeyStream(new String[] { "SP_ID", "SP_ID2" });
+		dm.setKeyStream(pkColumns);
 		StepMeta delete = new StepMeta("delete", dm);
 		delete.setLocation(1550, 300);
 		delete.setDraw(true);
@@ -305,11 +307,11 @@ public class ItemRecommendCSV2DBBuild {
 		return kettleJobEntireDefine;
 	}
 
-	public ConsumerExportCSVProperties getConsumerExportCSVProperties() {
-	    return consumerExportCSVProperties;
+	public RecommendPropeties getRecommendPropeties() {
+		return recommendPropeties;
 	}
 
-	public void setConsumerExportCSVProperties(ConsumerExportCSVProperties consumerExportCSVProperties) {
-	    this.consumerExportCSVProperties = consumerExportCSVProperties;
+	public void setRecommendPropeties(RecommendPropeties recommendPropeties) {
+		this.recommendPropeties = recommendPropeties;
 	}
 }

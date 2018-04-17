@@ -34,7 +34,7 @@ public class MahoutItemExportService extends MahoutExportService {
 		logger.debug("基于商品的消费推荐文件导出准备!");
 		LongPrimitiveIterator it = dataModel.getItemIDs();
 		long itemID = 0;
-		Path path = Paths.get(consumerExportCSVProperties.getItemRecommendFileName());
+		Path path = Paths.get(recommendPropeties.getItemRecommendFileName());
 		BufferedWriter writer = Files.newBufferedWriter(path);
 		double maxVal = 4.5;
 		double declineVal = 0.1;
