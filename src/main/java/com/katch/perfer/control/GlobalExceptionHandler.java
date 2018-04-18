@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.katch.perfer.mahout.service.MahoutItemExportService;
-
 /**
  * 使用@ControllerAdvice + @ExceptionHandler 完成对每个@Controller的异常处理
  * 注意的是该Handler只能处理Exception以及其子类.无法处理Throwable等高级别异常
