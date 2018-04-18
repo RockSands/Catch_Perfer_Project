@@ -19,72 +19,72 @@ import com.katch.perfer.service.kettle.ConsumerExportCSVBuilder;
 
 @Service
 public class ConsumerRecommendAutoStartTask {
-	private static Logger logger = LoggerFactory.getLogger(ConsumerRecommendAutoStartTask.class);
+    private static Logger logger = LoggerFactory.getLogger(ConsumerRecommendAutoStartTask.class);
 
-	@Autowired
-	private RecommendTaskTrackMapper recommendTaskTrackMapper;
+    @Autowired
+    private RecommendTaskTrackMapper recommendTaskTrackMapper;
 
-	@Autowired
-	private ConsumerExportCSVBuilder consumerExportCSVBuilder;
+    @Autowired
+    private ConsumerExportCSVBuilder consumerExportCSVBuilder;
 
-	@Autowired
-	private KettleNorthService kettleNorthService;
+    @Autowired
+    private KettleNorthService kettleNorthService;
 
-	/**
-	 * 自动执行
-	 * 
-	 * @throws Exception
-	 */
-	@Scheduled(cron = "${consumer.mahout.cron}")
-	public void excute() {
-		RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY00001");
-		logger.info("消费推荐同步信息启动!");
-		if (Consist.RECOM_TASK_TRACK_STEP_FREE.equals(track.getStep())
-				|| (Consist.RECOM_TASK_TRACK_STATUS_ERROR.equals(track.getStep()))) {
-			//TODO 设置间隔
-			if (System.currentTimeMillis() - track.getUpdateTime().getTime() > 1000L) {
-				excute(track);
-			}
-		}
+    /**
+     * 自动执行
+     * 
+     * @throws Exception
+     */
+    @Scheduled(cron = "${consumer.mahout.cron}")
+    public void excute() {
+	RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY00001");
+	logger.info("消费推荐同步信息启动!");
+	if (Consist.RECOM_TASK_TRACK_STEP_FREE.equals(track.getStep())
+		|| (Consist.RECOM_TASK_TRACK_STATUS_ERROR.equals(track.getStep()))) {
+	    // TODO 设置间隔
+	    if (track.getUpdateTime() == null || System.currentTimeMillis() - track.getUpdateTime().getTime() > 1000L) {
+		excute(track);
+	    }
 	}
+    }
 
-	/**
-	 * 修正
-	 * 
-	 * @param track
-	 */
-	private void excute(RecommendTaskTrack track) {
-		logger.info("用户消费记录导出CSV启动!");
-		String uuid = null;
-		try {
-			uuid = doExport();
-			track.setJobUuid(uuid);
-			track.setStep(Consist.RECOM_TASK_TRACK_STEP_CSV_EXPORT);
-			track.setStartTime(new Date());
-			track.setUpdateTime(new Date());
-			track.setStatus(Consist.RECOM_TASK_TRACK_STATUS_RUNNING);
-			recommendTaskTrackMapper.updateRecommendTaskTrack(track);
-		} catch (Exception e) {
-			logger.error("用户消费记录导出CSV启动异常!", e);
-			track.setStep(Consist.RECOM_TASK_TRACK_STEP_FREE);
-			track.setUpdateTime(new Date());
-			track.setStatus(Consist.RECOM_TASK_TRACK_STATUS_ERROR);
-			recommendTaskTrackMapper.updateRecommendTaskTrack(track);
-		}
+    /**
+     * 修正
+     * 
+     * @param track
+     */
+    private void excute(RecommendTaskTrack track) {
+	logger.info("用户消费记录导出CSV启动!");
+	String uuid = null;
+	try {
+	    uuid = doExport();
+	    track.setJobUuid(uuid);
+	    track.setStep(Consist.RECOM_TASK_TRACK_STEP_CSV_EXPORT);
+	    track.setStartTime(new Date());
+	    track.setUpdateTime(new Date());
+	    track.setStatus(Consist.RECOM_TASK_TRACK_STATUS_RUNNING);
+	    recommendTaskTrackMapper.updateRecommendTaskTrack(track);
+	} catch (Exception e) {
+	    logger.error("用户消费记录导出CSV启动异常!", e);
+	    track.setStep(Consist.RECOM_TASK_TRACK_STEP_FREE);
+	    track.setUpdateTime(new Date());
+	    track.setStatus(Consist.RECOM_TASK_TRACK_STATUS_ERROR);
+	    recommendTaskTrackMapper.updateRecommendTaskTrack(track);
 	}
+    }
 
-	/**
-	 * 导出
-	 * 
-	 * @return
-	 * @throws KettleException
-	 */
-	private String doExport() throws KettleException {
-		logger.info("用户消费记录开始导出!");
-		KettleResult result = kettleNorthService.excuteJobOnce(consumerExportCSVBuilder.createJob());
-		if (StringUtils.isNotEmpty(result.getErrMsg())) {
-			throw new KettleException("Kettle导出消费记录失败,kettle发生问题:" + result.getErrMsg());
-		}
-		return result.getUuid();
+    /**
+     * 导出
+     * 
+     * @return
+     * @throws KettleException
+     */
+    private String doExport() throws KettleException {
+	logger.info("用户消费记录开始导出!");
+	KettleResult result = kettleNorthService.excuteJobOnce(consumerExportCSVBuilder.createJob());
+	if (StringUtils.isNotEmpty(result.getErrMsg())) {
+	    throw new KettleException("Kettle导出消费记录失败,kettle发生问题:" + result.getErrMsg());
 	}
+	return result.getUuid();
+    }
 }
