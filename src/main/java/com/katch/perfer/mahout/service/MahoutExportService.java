@@ -27,7 +27,14 @@ public abstract class MahoutExportService {
 	 * 
 	 * @throws Exception
 	 */
-	public abstract void excute() throws Exception;
+	public void excute() throws Exception{
+		if(dataModel == null) {
+			throw new Exception("推荐记录导出发生异常,DataModel未找到!");
+		}
+		export();
+	}
+	
+	public abstract void export() throws Exception;
 
 	public DataModel getDataModel() {
 		return dataModel;

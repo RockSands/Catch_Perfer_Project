@@ -25,7 +25,8 @@ public class MahoutUserExportService extends MahoutExportService {
 	private static Logger logger = LoggerFactory.getLogger(MahoutUserExportService.class);
 
 	@Override
-	public void excute() throws Exception {
+	public void export() throws Exception {
+		
 		UserSimilarity similarity = new UncenteredCosineSimilarity(dataModel);
 		UserNeighborhood userNeighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
 		Recommender recommender = new GenericUserBasedRecommender(dataModel, userNeighborhood, similarity);
@@ -55,6 +56,7 @@ public class MahoutUserExportService extends MahoutExportService {
 				writer.write(userID + "," + recommendedItem.getItemID() + "," + df.format(recommendedItem.getValue()));
 				writer.newLine();
 			}
+			writer.flush();
 		}
 		writer.close();
 		logger.debug("基于商品的消费推荐文件导出完成!");

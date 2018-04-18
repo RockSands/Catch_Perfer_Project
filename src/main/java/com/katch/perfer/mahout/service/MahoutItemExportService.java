@@ -24,7 +24,7 @@ public class MahoutItemExportService extends MahoutExportService {
 	private static Logger logger = LoggerFactory.getLogger(MahoutItemExportService.class);
 
 	@Override
-	public void excute() throws Exception {
+	public void export() throws Exception {
 		ItemSimilarity similarity = new LogLikelihoodSimilarity(dataModel);
 		ItemBasedRecommender recommender = new GenericItemBasedRecommender(dataModel, similarity);
 		saveItemRecommenderFile(dataModel, recommender);
