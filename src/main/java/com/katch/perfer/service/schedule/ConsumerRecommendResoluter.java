@@ -31,7 +31,7 @@ public abstract class ConsumerRecommendResoluter {
 				resolve(track);
 			}
 			if (System.currentTimeMillis() - track.getStartTime().getTime() > 2L * 60L * 60L * 1000L) {
-				logger.error("消费信息推荐进程失败，执行超时!");
+				throw new Exception("消费信息推荐进程失败，执行超时!");
 			}
 		} catch (Exception ex) {
 			logger.error("消费信息推荐进程失败!", ex);
