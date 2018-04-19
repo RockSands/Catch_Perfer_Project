@@ -57,6 +57,7 @@ public class MahoutUserExportService extends MahoutExportService {
 				}
 				buffer.append(userID + "," + recommendedItem.getItemID() + "," + df.format(recommendedItem.getValue())
 						+ "\r\n");
+				lines++;
 			}
 			if (lines > 10000) {
 				logger.debug("基于用户的消费推荐文件书写数据行数:" + lines);
