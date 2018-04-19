@@ -94,6 +94,26 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 			}
 			index++;
 		}
+		for (RecommendItemScore roll : weightScores) {
+			if (recommendList.contains(roll.getItemId())) {
+				continue;
+			}
+			if (!map.containsKey(roll.getItemId())) {
+				map.put(roll.getItemId(), roll.getScore());
+			} else {
+				map.put(roll.getItemId(), roll.getScore() + map.get(roll.getItemId()));
+			}
+		}
+		for (RecommendItemScore roll : newItemScores) {
+			if (recommendList.contains(roll.getItemId())) {
+				continue;
+			}
+			if (!map.containsKey(roll.getItemId())) {
+				map.put(roll.getItemId(), roll.getScore());
+			} else {
+				map.put(roll.getItemId(), roll.getScore() + map.get(roll.getItemId()));
+			}
+		}
 		List<Map.Entry<Long, Double>> mapList = new ArrayList<Map.Entry<Long, Double>>(map.entrySet());
 		Collections.sort(mapList, new Comparator<Map.Entry<Long, Double>>() {
 			@Override
