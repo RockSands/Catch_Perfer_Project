@@ -14,7 +14,7 @@ public class RecommendRestProperties {
 	@Value("${recommend.new.item.open}")
 	private boolean newItemOpen;
 
-	@Value("${new.item.weight.score}")
+	@Value("${recommend.new.item.weight.score}")
 	private double newItemWeight;
 
 	@Value("${recommend.new.item.size}")
