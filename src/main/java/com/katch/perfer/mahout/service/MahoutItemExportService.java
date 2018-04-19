@@ -36,6 +36,7 @@ public class MahoutItemExportService extends MahoutExportService {
 		long itemID = 0;
 		Path path = Paths.get(recommendPropeties.getItemRecommendFileName());
 		// 清空文件,如果不存在则创建
+		Files.deleteIfExists(path);
 		Files.write(path, "".getBytes("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 		double maxVal = 4.5;
 		double declineVal = 0.1;
@@ -55,7 +56,8 @@ public class MahoutItemExportService extends MahoutExportService {
 				index++;
 				lines++;
 			}
-			if (lines > 20000) {
+			if (lines > 10000) {
+				logger.debug("基于商品的消费推荐文件书写数据行数:" + lines);
 				Files.write(path, buffer.toString().getBytes("UTF-8"), StandardOpenOption.APPEND);
 				buffer.delete(0, buffer.length());
 				lines = 0;

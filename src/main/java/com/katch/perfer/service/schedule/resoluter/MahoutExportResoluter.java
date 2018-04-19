@@ -30,6 +30,7 @@ public class MahoutExportResoluter extends ConsumerRecommendResoluter {
 	protected void resolve(RecommendTaskTrack track) throws Exception {
 		if (deamon == null) {
 			deamon = new Deamon();
+			deamon.setPriority(8);
 			deamon.start();
 		}
 		if ("finish".equals(deamon.status)) {

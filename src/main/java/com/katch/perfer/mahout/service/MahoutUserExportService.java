@@ -42,7 +42,7 @@ public class MahoutUserExportService extends MahoutExportService {
 		LongPrimitiveIterator it = dataModel.getUserIDs();
 		Long userID = null;
 		Path path = Paths.get(recommendPropeties.getUserRecommendFileName());
-		// 清空文件,如果不存在则创建
+		Files.deleteIfExists(path);
 		Files.write(path, "".getBytes("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 		int lines = 0;
 		StringBuffer buffer = new StringBuffer();
@@ -51,14 +51,15 @@ public class MahoutUserExportService extends MahoutExportService {
 			if (userID == null) {
 				continue;
 			}
-			for (RecommendedItem recommendedItem : recommender.recommend(userID, 50)) {
+			for (RecommendedItem recommendedItem : recommender.recommend(userID, 100)) {
 				if (recommendedItem == null || recommendedItem.getValue() == 0.00) {
 					continue;
 				}
 				buffer.append(userID + "," + recommendedItem.getItemID() + "," + df.format(recommendedItem.getValue())
 						+ "\r\n");
 			}
-			if (lines > 20000) {
+			if (lines > 10000) {
+				logger.debug("基于用户的消费推荐文件书写数据行数:" + lines);
 				Files.write(path, buffer.toString().getBytes("UTF-8"), StandardOpenOption.APPEND);
 				buffer.delete(0, buffer.length());
 				lines = 0;
@@ -67,6 +68,6 @@ public class MahoutUserExportService extends MahoutExportService {
 		if (buffer.length() > 0) {
 			Files.write(path, buffer.toString().getBytes("UTF-8"), StandardOpenOption.APPEND);
 		}
-		logger.debug("基于商品的消费推荐文件导出完成!");
+		logger.debug("基于用户的消费推荐文件导出完成!");
 	}
 }
