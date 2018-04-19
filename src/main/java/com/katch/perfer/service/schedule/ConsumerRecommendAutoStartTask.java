@@ -35,7 +35,8 @@ public class ConsumerRecommendAutoStartTask {
 	 * 
 	 * @throws Exception
 	 */
-	@Scheduled(cron = "${consumer.mahout.cron}")
+	//@Scheduled(cron = "${consumer.mahout.cron}")
+	@Scheduled(initialDelay=5000L,fixedDelay=1000L * 60L * 60L *24)
 	public void excute() {
 		RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY00001");
 		logger.info("消费推荐同步信息启动!");

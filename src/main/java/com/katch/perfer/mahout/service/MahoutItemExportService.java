@@ -3,8 +3,7 @@ package com.katch.perfer.mahout.service;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
 import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
@@ -17,8 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-
-import au.com.bytecode.opencsv.CSVWriter;
 
 @Service()
 @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = true)
@@ -38,11 +35,13 @@ public class MahoutItemExportService extends MahoutExportService {
 		LongPrimitiveIterator it = dataModel.getItemIDs();
 		long itemID = 0;
 		Path path = Paths.get(recommendPropeties.getItemRecommendFileName());
-		CSVWriter writer = new CSVWriter(Files.newBufferedWriter(path), ',', '\0');
+		// 清空文件,如果不存在则创建
+		Files.write(path, "".getBytes("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 		double maxVal = 4.5;
 		double declineVal = 0.1;
 		int index = 0;
-		List<String[]> lines = new ArrayList<String[]>(2500);
+		int lines = 0;
+		StringBuffer buffer = new StringBuffer();
 		while (it.hasNext()) {
 			itemID = it.next();
 			maxVal = 4.5;
@@ -51,20 +50,20 @@ public class MahoutItemExportService extends MahoutExportService {
 				if (recommendedItem == null || recommendedItem.getValue() == 0.00) {
 					continue;
 				}
-				lines.add(new String[] { String.valueOf(itemID), String.valueOf(recommendedItem.getItemID()),
-						df.format(maxVal - declineVal * index) });
+				buffer.append(itemID + "," + recommendedItem.getItemID() + "," + df.format(maxVal - declineVal * index)
+						+ "\r\n");
 				index++;
+				lines++;
 			}
-			if (lines.size() > 2500) {
-				writer.writeAll(lines);
-				lines.clear();
+			if (lines > 20000) {
+				Files.write(path, buffer.toString().getBytes("UTF-8"), StandardOpenOption.APPEND);
+				buffer.delete(0, buffer.length());
+				lines = 0;
 			}
 		}
-		if (lines.size() > 0) {
-			writer.writeAll(lines);
-			lines.clear();
+		if (buffer.length() > 0) {
+			Files.write(path, buffer.toString().getBytes("UTF-8"), StandardOpenOption.APPEND);
 		}
-		writer.close();
 		logger.debug("基于商品的消费推荐文件导出完成!");
 	}
 
