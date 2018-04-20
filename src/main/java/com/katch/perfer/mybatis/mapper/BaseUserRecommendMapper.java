@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.katch.perfer.mybatis.model.BaseUserRecommend;
+import com.katch.perfer.mybatis.model.RecommendItemScore;
 
 /**
  * @author Administrator
@@ -13,5 +13,5 @@ import com.katch.perfer.mybatis.model.BaseUserRecommend;
  */
 @Mapper
 public interface BaseUserRecommendMapper {
-	List<BaseUserRecommend> queryRecommenders(@Param("userID") long userID);
+	List<RecommendItemScore> queryRecommenders(@Param("userID") long userID);
 }

@@ -3,8 +3,8 @@ package com.katch.perfer.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.katch.perfer.mybatis.mapper.BaseItemRecommendMapper;
 import com.katch.perfer.mybatis.mapper.UserConsumptionMapper;
-import com.katch.perfer.mybatis.model.BaseItemRecommend;
 import com.katch.perfer.mybatis.model.RecommendItemScore;
 import com.katch.perfer.mybatis.model.UserConsumption;
 
@@ -30,7 +29,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 
 	@Override
 	public List<Long> queryRecommend(long yhid, String qy) {
-		List<Long> recommendList = new ArrayList<Long>();
+		List<Long> returnList = new ArrayList<Long>();
 		// 增加权重
 		List<RecommendItemScore> weightScores = priorityService.queryItemWeight(qy);
 		RecommendItemScore itemScore = null;
@@ -41,7 +40,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 					break;
 				}
 				itemScore = it.next();
-				recommendList.add(itemScore.getItemId());
+				returnList.add(itemScore.getItemId());
 				it.remove();
 				index--;
 			}
@@ -57,8 +56,8 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 						break;
 					}
 					itemScore = it.next();
-					if (!recommendList.contains(itemScore.getItemId())) {
-						recommendList.add(itemScore.getItemId());
+					if (!returnList.contains(itemScore.getItemId())) {
+						returnList.add(itemScore.getItemId());
 						it.remove();
 						index--;
 					}
@@ -67,54 +66,58 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 		}
 		// 消费记录
 		List<UserConsumption> consumptions = userConsumptionMapper.queryUserConsumptions(yhid);
-		Map<Long, Double> map = new LinkedHashMap<Long, Double>();
-		int index = 0;
-		double score = 0.0;
+		Map<Long, Double> scoreMap = new HashMap<Long, Double>();
+		double initScore = 4.4;
+		double scortTmp = 0.0;
+		List<RecommendItemScore> baseItemScores;
+		RecommendItemScore itemRoll;
 		for (UserConsumption consumption : consumptions.subList(0, 10)) {
-			for (BaseItemRecommend itemRecommend : baseItemRecommendMapper.queryRecommenders(consumption.getItmeId())) {
-				if (recommendList.contains(itemRecommend.getItemId2())) {
+			initScore = initScore - 0.2;
+			baseItemScores = baseItemRecommendMapper.queryRecommenders(consumption.getItmeId());
+			for (int i = 0; i < baseItemScores.size(); i++) {
+				itemRoll = baseItemScores.get(i);
+				if (returnList.contains(itemRoll.getItemId())) {
 					continue;
 				}
-				if (!map.containsKey(itemRecommend.getItemId2())) {
-					map.put(itemRecommend.getItemId2(), itemRecommend.getScore() - 0.1 * index);
+				if (!scoreMap.containsKey(itemRoll.getItemId())) {
+					scoreMap.put(itemRoll.getItemId(), itemRoll.getScore() - 0.1 * i);
 				} else {
-					score = map.get(itemRecommend.getItemId2());
-					if (score > 4.95D) {
-						map.put(itemRecommend.getItemId2(), 5.0D);
-					} else if (score > 4.5) {
-						map.put(itemRecommend.getItemId2(), 0.05D);
-					} else if (score > 4) {
-						map.put(itemRecommend.getItemId2(), 0.1D);
-					} else if (score > 3) {
-						map.put(itemRecommend.getItemId2(), 0.3D);
+					scortTmp = scoreMap.get(itemRoll.getItemId());
+					if (scortTmp > 4.95D) {
+						scoreMap.put(itemRoll.getItemId(), 5.0D);
+					} else if (scortTmp > 4.5) {
+						scoreMap.put(itemRoll.getItemId(), scortTmp + 0.05);
+					} else if (scortTmp > 4) {
+						scoreMap.put(itemRoll.getItemId(), scortTmp + 0.1D);
+					} else if (scortTmp > 3) {
+						scoreMap.put(itemRoll.getItemId(), scortTmp + 0.3D);
 					} else {
-						map.put(itemRecommend.getItemId2(), 0.5D);
+						scoreMap.put(itemRoll.getItemId(), scortTmp + 0.5D);
 					}
 				}
 			}
-			index++;
 		}
 		for (RecommendItemScore roll : weightScores) {
-			if (recommendList.contains(roll.getItemId())) {
+			if (returnList.contains(roll.getItemId())) {
 				continue;
 			}
-			if (!map.containsKey(roll.getItemId())) {
-				map.put(roll.getItemId(), roll.getScore());
+			if (!scoreMap.containsKey(roll.getItemId())) {
+				scoreMap.put(roll.getItemId(), roll.getScore());
 			} else {
-				map.put(roll.getItemId(), roll.getScore() + map.get(roll.getItemId()));
+				scoreMap.put(roll.getItemId(), roll.getScore() + scoreMap.get(roll.getItemId()));
 			}
 		}
 		for (RecommendItemScore roll : newItemScores) {
-			if (recommendList.contains(roll.getItemId())) {
+			if (returnList.contains(roll.getItemId())) {
 				continue;
 			}
-			if (!map.containsKey(roll.getItemId())) {
-				map.put(roll.getItemId(), roll.getScore());
+			if (!scoreMap.containsKey(roll.getItemId())) {
+				scoreMap.put(roll.getItemId(), roll.getScore());
 			} else {
-				map.put(roll.getItemId(), roll.getScore() + map.get(roll.getItemId()));
+				scoreMap.put(roll.getItemId(), roll.getScore() + scoreMap.get(roll.getItemId()));
 			}
 		}
-		List<Map.Entry<Long, Double>> mapList = new ArrayList<Map.Entry<Long, Double>>(map.entrySet());
+		List<Map.Entry<Long, Double>> mapList = new ArrayList<Map.Entry<Long, Double>>(scoreMap.entrySet());
 		Collections.sort(mapList, new Comparator<Map.Entry<Long, Double>>() {
 			@Override
 			public int compare(Entry<Long, Double> o1, Entry<Long, Double> o2) {
@@ -122,9 +125,9 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 			}
 		});
 		for (Map.Entry<Long, Double> entry : mapList) {
-			recommendList.add(entry.getKey());
+			returnList.add(entry.getKey());
 		}
-		return recommendList;
+		return returnList;
 	}
 
 }

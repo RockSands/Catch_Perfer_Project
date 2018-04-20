@@ -30,7 +30,8 @@ public abstract class ConsumerRecommendResoluter {
 			if (canResolve(track)) {
 				resolve(track);
 			}
-			if (System.currentTimeMillis() - track.getStartTime().getTime() > 2L * 60L * 60L * 1000L) {
+			if (Consist.RECOM_TASK_TRACK_STATUS_RUNNING.equals(track.getStatus())
+					&& System.currentTimeMillis() - track.getStartTime().getTime() > 2L * 60L * 60L * 1000L) {
 				throw new Exception("消费信息推荐进程失败，执行超时!");
 			}
 		} catch (Exception ex) {

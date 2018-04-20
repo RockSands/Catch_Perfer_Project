@@ -3,8 +3,8 @@ package com.katch.perfer.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,7 +14,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.mybatis.mapper.BaseUserRecommendMapper;
-import com.katch.perfer.mybatis.model.BaseUserRecommend;
 import com.katch.perfer.mybatis.model.RecommendItemScore;
 
 @Service()
@@ -25,7 +24,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 
 	@Override
 	public List<Long> queryRecommend(long userId, String qy) {
-		List<Long> recommendList = new ArrayList<Long>();
+		List<Long> returnList = new ArrayList<Long>();
 		// 增加权重
 		List<RecommendItemScore> weightScores = priorityService.queryItemWeight(qy);
 		RecommendItemScore itemScore = null;
@@ -36,7 +35,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 					break;
 				}
 				itemScore = it.next();
-				recommendList.add(itemScore.getItemId());
+				returnList.add(itemScore.getItemId());
 				it.remove();
 				index--;
 			}
@@ -52,8 +51,8 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 						break;
 					}
 					itemScore = it.next();
-					if (!recommendList.contains(itemScore.getItemId())) {
-						recommendList.add(itemScore.getItemId());
+					if (!returnList.contains(itemScore.getItemId())) {
+						returnList.add(itemScore.getItemId());
 						it.remove();
 						index--;
 					}
@@ -61,17 +60,17 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 			}
 		}
 		// 用户的物品
-		List<BaseUserRecommend> userItemScores = baseUserRecommendMapper.queryRecommenders(userId);
-		Map<Long, Double> map = new LinkedHashMap<Long, Double>();
-		for (BaseUserRecommend recommend : userItemScores) {
-			recommendList.add(recommend.getItemId());
-			if (recommendList.contains(recommend.getItemId())) {
+		List<RecommendItemScore> userItemScores = baseUserRecommendMapper.queryRecommenders(userId);
+		Map<Long, Double> map = new HashMap<Long, Double>();
+		for (RecommendItemScore recommend : userItemScores) {
+			returnList.add(recommend.getItemId());
+			if (returnList.contains(recommend.getItemId())) {
 				continue;
 			}
 			map.put(recommend.getItemId(), recommend.getScore());
 		}
-		for (RecommendItemScore index : weightScores) {
-			if (recommendList.contains(index.getItemId())) {
+		for (RecommendItemScore index : weightScores) {// 新物品是否加权
+			if (returnList.contains(index.getItemId())) {
 				continue;
 			}
 			if (!map.containsKey(index.getItemId())) {
@@ -81,7 +80,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 			}
 		}
 		for (RecommendItemScore index : newItemScores) {
-			if (recommendList.contains(index.getItemId())) {
+			if (returnList.contains(index.getItemId())) {
 				continue;
 			}
 			if (!map.containsKey(index.getItemId())) {
@@ -100,12 +99,12 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 			}
 		});
 		for (Map.Entry<Long, Double> entry : mapList) {
-			recommendList.add(entry.getKey());
-			if (recommendList.size() >= recommendRestProperties.getReturnSize()) {
+			returnList.add(entry.getKey());
+			if (returnList.size() >= recommendRestProperties.getReturnSize()) {
 				break;
 			}
 		}
-		return recommendList;
+		return returnList;
 	}
 
 }

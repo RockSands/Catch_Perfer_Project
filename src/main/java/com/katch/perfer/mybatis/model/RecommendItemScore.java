@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * 推荐物品评分-可用于加权 新物品加权
+ * 
  * @author Administrator
  *
  */
@@ -13,15 +14,20 @@ public class RecommendItemScore {
 	 */
 	private long itemId;
 
-    /**
-     * 评分
-     */
-    private double score;
-    
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+	/**
+	 * 评分
+	 */
+	private double score;
+
+	/**
+	 * 策略
+	 */
+	private int policy;
+
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
 
 	public long getItemId() {
 		return itemId;
@@ -45,5 +51,13 @@ public class RecommendItemScore {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public int getPolicy() {
+		return policy;
+	}
+
+	public void setPolicy(int policy) {
+		this.policy = policy;
 	}
 }

@@ -2,17 +2,16 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.katch.perfer.mybatis.mapper.BaseItemRecommendMapper">
-	<resultMap id="RecommenderMap" type="com.katch.perfer.mybatis.model.BaseItemRecommend">
-		<result column="ITEM_ID" property="itemId" />
-		<result column="ITEM_ID2" property="itemId2" />
+	<resultMap id="RecommendItemScore" type="com.katch.perfer.mybatis.model.RecommendItemScore">
+		<result column="ITEM_ID2" property="itemId" />
 		<result column="SCORE" property="score" />
 	</resultMap>
 
 	<sql id="Recommender_Column_List">
-		ITEM_ID, ITEM_ID2, SCORE
+		ITEM_ID2, SCORE
 	</sql>
 
-	<select id="queryRecommenders" parameterType="long" resultMap="RecommenderMap">
+	<select id="queryRecommenders" parameterType="long" resultMap="RecommendItemScore">
 		SELECT
 		<include refid="Recommender_Column_List" />
 		FROM
