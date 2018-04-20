@@ -6,11 +6,11 @@
 		type="com.katch.perfer.mybatis.model.UserConsumption">
 		<result column="YHID" property="userId" />
 		<result column="SPID_1" property="itmeId" />
-		<result column="LLRQ" property="createTime" />
+		<result column="LRRQ" property="createTime" />
 	</resultMap>
 
 	<sql id="Consumption_Column_List">
-		YHID, SPID_1, LLRQ
+		YHID, SPID_1, LRRQ
 	</sql>
 
 	<select id="queryUserConsumptions" parameterType="long" resultMap="UserConsumptionMap">
@@ -19,7 +19,7 @@
 		FROM
 		SQY_RZDK_DD
 		WHERE
-		YHID = ('' + #{userID}) ORDER BY LLRQ DESC
+		YHID = #{userID} ORDER BY LRRQ DESC
 	</select>
 
 </mapper>
