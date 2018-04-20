@@ -1,5 +1,6 @@
 package com.katch.perfer.mybatis.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -17,7 +18,7 @@ public interface ItemWeighMapper {
 	@Select("SELECT SPID_1 AS itemId,0 AS score,LRRQ AS createTime FROM SQY_RZDK_SP")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class),
-			@Result(property = "createTime", column = "createTime", javaType = Double.class) })
+			@Result(property = "createTime", column = "createTime", javaType = Date.class) })
 	List<RecommendItemScore> queryAllItems();
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
@@ -25,7 +26,7 @@ public interface ItemWeighMapper {
 			+ "FROM SQY_RZDK_SP WHERE LRRQ IS NOT NULL ORDER BY LRRQ DESC")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class),
-			@Result(property = "createTime", column = "createTime", javaType = Double.class) })
+			@Result(property = "createTime", column = "createTime", javaType = Date.class) })
 	List<RecommendItemScore> queryNewItems();
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)

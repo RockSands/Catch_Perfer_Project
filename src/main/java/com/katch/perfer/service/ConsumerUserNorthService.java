@@ -106,5 +106,4 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 		}
 		return returnList;
 	}
-
 }
