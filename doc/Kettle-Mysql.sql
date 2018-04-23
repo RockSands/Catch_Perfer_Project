@@ -28,7 +28,7 @@ SET utf8 COLLATE utf8_general_ci NULL,
 SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for R_RECORD_HISTORY
+-- Table structure for R_RECORD_DEPENDENT
 -- ----------------------------
 DROP TABLE
 IF EXISTS R_RECORD_DEPENDENT;

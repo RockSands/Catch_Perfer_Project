@@ -13,22 +13,29 @@ import com.katch.perfer.mybatis.model.KettleRecordRelation;
 public interface KettleRecordMapper {
     KettleRecord queryRecord(@Param("uuid") String uuid);
 
-    List<KettleRecord> allWaitingRecords();
-
-    List<KettleRecord> allStopRecords();
-
     List<KettleRecordRelation> queryRecordRelations(@Param("masterUuid") String masterUuid);
+    
+    List<KettleRecord> allUnassignedRecords();
+    
+	List<KettleRecord> allCanDelRecords();
+    
+    List<KettleRecord> queryRunningRecordsByHostName(@Param("hostname")String hostname);
+    
+    List<KettleRecord> queryApplyRecordsByHostName(@Param("hostname")String hostname);
+    
+    int insertRecord(KettleRecord record);
 
-    void insertRecord(KettleRecord record);
+    int insertRecordRelations(@Param("list") List<KettleRecordRelation> recordRelations);
 
-    void insertRecordRelations(@Param("list") List<KettleRecordRelation> recordRelations);
+    int updateRecord(KettleRecord record);
+    
+    int assignedRecord(KettleRecord record);
 
-    void updateRecord(KettleRecord record);
-
-    void updateRecordRelationID(@Param("newID") String newID, @Param("createTime") Date createTime,
+    int updateRecordRelationID(@Param("newID") String newID, @Param("createTime") Date createTime,
 	    @Param("oldID") String oldID);
 
-    void deleteRecord(@Param("uuid") String uuid);
+    int deleteRecord(@Param("uuid") String uuid);
 
-    void deleteRecordRelations(@Param("masterUUID") String masterUUID);
+    int deleteRecordRelations(@Param("masterUUID") String masterUUID);
+
 }

@@ -1,4 +1,4 @@
-package com.katch.perfer.kettle.record.remote;
+package com.katch.perfer.kettle.remote;
 
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.exception.KettleException;
@@ -12,9 +12,6 @@ import org.pentaho.di.www.WebResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import com.katch.perfer.kettle.consist.KettleVariables;
 import com.katch.perfer.kettle.repository.KettleRepoRepository;
@@ -26,8 +23,6 @@ import com.katch.perfer.mybatis.model.KettleRecord;
  * @author chenkw
  *
  */
-@Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class KettleRemoteClient {
 
 	/**
@@ -35,10 +30,12 @@ public class KettleRemoteClient {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(KettleRemoteClient.class);
 
+	private final String hostName;
+
 	/**
-	 * 远端状态 -- 初始状态未运行中
+	 * 远端状态
 	 */
-	private String remoteStatus = KettleVariables.REMOTE_STATUS_RUNNING;
+	private String remoteStatus;
 
 	/**
 	 * 远程服务
@@ -49,48 +46,12 @@ public class KettleRemoteClient {
 	 * Kettle资源库
 	 */
 	@Autowired
-	private KettleRepoRepository kettleRepoRepository;
+	private final KettleRepoRepository kettleRepoRepository;
 
-	/**
-	 * 最大任务数量
-	 */
-	public final int maxRecord;
-
-	/**
-	 * 构造器
-	 * @param kettleRepoRepository 
-	 * 
-	 * @param remoteServer
-	 * @throws KettleException
-	 */
-	public KettleRemoteClient(SlaveServer remoteServer) {
+	public KettleRemoteClient(KettleRepoRepository kettleRepoRepository, SlaveServer remoteServer) {
+		hostName = remoteServer.getHostname();
+		this.kettleRepoRepository = kettleRepoRepository;
 		this.remoteServer = remoteServer;
-		maxRecord = KettleVariables.KETTLE_RECORD_MAX_PER_REMOTE;
-	}
-
-	/**
-	 * 远端状态
-	 * 
-	 * @return
-	 */
-	private String fetchRemoteStatus() {
-		try {
-			SlaveServerStatus status = remoteServer.getStatus();
-			if (!KettleVariables.REMOTE_STATUS_RUNNING.equals(remoteStatus)) {
-				logger.error("Kettle远端[" + getHostName() + "]异常状态:" + status.getStatusDescription());
-			}
-			return status.getStatusDescription();
-		} catch (Exception e) {
-			logger.error("Kettle远端[" + getHostName() + "]查看状态发生异常\n", e);
-			return KettleVariables.REMOTE_STATUS_ERROR;
-		}
-	}
-
-	/**
-	 * 刷新状态
-	 */
-	public void refreshRemoteStatus() {
-		remoteStatus = fetchRemoteStatus();
 	}
 
 	/**
@@ -100,6 +61,20 @@ public class KettleRemoteClient {
 	 */
 	public boolean isRunning() {
 		return KettleVariables.REMOTE_STATUS_RUNNING.equals(remoteStatus);
+	}
+
+	public void refreshStatus() {
+		try {
+			SlaveServerStatus status = remoteServer.getStatus();
+			if (!KettleVariables.REMOTE_STATUS_RUNNING.equals(status.getStatusDescription())) {
+				logger.error("Kettle远端[" + getHostName() + "]异常状态:" + status.getStatusDescription());
+				remoteStatus = KettleVariables.REMOTE_STATUS_ERROR;
+			} else {
+				remoteStatus = KettleVariables.REMOTE_STATUS_RUNNING;
+			}
+		} catch (Exception e) {
+			logger.error("Kettle远端[" + this.getHostName() + "]查询状态失败!", e);
+		}
 	}
 
 	/**
@@ -133,7 +108,7 @@ public class KettleRemoteClient {
 	public void remoteStartJob(KettleRecord job) throws KettleException {
 		WebResult result;
 		try {
-			result = remoteServer.startJob(job.getName(), job.getRunID());
+			result = remoteServer.startJob(job.getJobid(), job.getRunID());
 		} catch (Exception e) {
 			throw new KettleException("Kettle远端[" + this.getHostName() + "]启动Job[" + job.getUuid() + "]失败!", e);
 		}
@@ -241,10 +216,6 @@ public class KettleRemoteClient {
 	 * @return
 	 */
 	public String getHostName() {
-		return this.remoteServer.getHostname();
-	}
-
-	public KettleRepoRepository getKettleRepoRepository() {
-		return kettleRepoRepository;
+		return hostName;
 	}
 }

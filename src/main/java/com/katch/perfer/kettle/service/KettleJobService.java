@@ -1,8 +1,7 @@
-package com.katch.perfer.kettle.service.record;
+package com.katch.perfer.kettle.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.pentaho.di.core.exception.KettleException;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.consist.KettleVariables;
-import com.katch.perfer.kettle.record.KettleRecordPool;
 import com.katch.perfer.kettle.repository.KettleRecordRepository;
 import com.katch.perfer.kettle.repository.KettleRepoRepository;
 import com.katch.perfer.mybatis.model.KettleRecord;
@@ -27,8 +25,6 @@ public abstract class KettleJobService {
 	protected KettleRecordRepository kettleRecordRepository;
 	@Autowired
 	protected KettleRepoRepository kettleRepoRepository;
-	@Autowired
-	protected KettleRecordPool kettleRecordPool;
 
 	/**
 	 * 检查KettleJobEntireDefine的定义
@@ -81,19 +77,15 @@ public abstract class KettleJobService {
 	 * @throws KettleException
 	 */
 	public KettleRecord excuteJobOnce(KettleJobEntireDefine jobEntire) throws KettleException {
+		checkStatus();
 		checkKettleJobEntireDefine(jobEntire);
 		KettleRecord record = savejobEntire2KettleRepo(jobEntire, null);
 		record.setStatus(KettleVariables.RECORD_STATUS_APPLY);
 		record.setExecutionType(KettleVariables.RECORD_EXECUTION_TYPE_ONCE);
-		if (kettleRecordPool.addRecord(record)) {
-			try {
-				kettleRecordRepository.insertRecord(record);
-			} catch (Exception ex) {
-				kettleRecordPool.deleteRecord(record.getUuid());
-				throw new KettleException("Job申请执行失败!", ex);
-			}
-		} else {
-			throw new KettleException("Job申请执行失败,任务池已满!");
+		try {
+			kettleRecordRepository.insertRecord(record);
+		} catch (Exception ex) {
+			throw new KettleException("Job申请执行失败!", ex);
 		}
 		return record;
 	}
@@ -106,6 +98,7 @@ public abstract class KettleJobService {
 	 * @throws KettleException
 	 */
 	public KettleRecord registeJob(KettleJobEntireDefine jobEntire) throws KettleException {
+		checkStatus();
 		checkKettleJobEntireDefine(jobEntire);
 		KettleRecord record = savejobEntire2KettleRepo(jobEntire, KettleVariables.RECORD_EXECUTION_TYPE_PERSISTENT);
 		record.setStatus(KettleVariables.RECORD_STATUS_REGISTE);
@@ -127,6 +120,7 @@ public abstract class KettleJobService {
 	 * @throws KettleException
 	 */
 	public void excuteJob(String uuid) throws KettleException {
+		checkStatus();
 		KettleRecord record = kettleRecordRepository.queryRecord(uuid);
 		if (record == null) {
 			throw new KettleException("Job[" + uuid + "]未找到,请先注册!");
@@ -140,14 +134,10 @@ public abstract class KettleJobService {
 		if (record.isApply()) {
 			throw new KettleException("Job[" + uuid + "]已经在执行队列中,无法再次执行!");
 		}
-		if (kettleRecordPool.addRecord(record)) {
-			record.setStatus(KettleVariables.RECORD_STATUS_APPLY);
-			KettleRecord update = new KettleRecord();
-			update.setStatus(KettleVariables.RECORD_STATUS_APPLY);
-			kettleRecordRepository.updateRecord(update);
-		} else {
-			throw new KettleException("Job[" + uuid + "]申请执行失败,被任务池已满或任务已经存在!");
-		}
+		record.setStatus(KettleVariables.RECORD_STATUS_APPLY);
+		KettleRecord update = new KettleRecord();
+		update.setStatus(KettleVariables.RECORD_STATUS_APPLY);
+		kettleRecordRepository.updateRecord(update);
 	}
 
 	/**
@@ -157,13 +147,13 @@ public abstract class KettleJobService {
 	 * @throws KettleException
 	 */
 	public void deleteJob(String uuid) throws KettleException {
+		checkStatus();
 		KettleRecord record = kettleRecordRepository.queryRecord(uuid);
 		if (record == null) {
 			return;
 		}
 		if (record.isError() || record.isFinished() || record.isRegiste()) {
 			kettleRecordRepository.queryRecordRelations(record);
-			kettleRecordPool.deleteRecord(uuid);
 			kettleRecordRepository.deleteRecord(uuid);
 			kettleRepoRepository.deleteJobEntireDefine(record);
 			return;
@@ -178,25 +168,18 @@ public abstract class KettleJobService {
 	 * @throws KettleException
 	 */
 	public void deleteJobImmediately(String uuid) throws KettleException {
+		checkStatus();
 		KettleRecord record = kettleRecordRepository.queryRecord(uuid);
 		if (record == null) {
 			return;
 		}
 		kettleRecordRepository.queryRecordRelations(record);
 		if (record.isError() || record.isFinished() || record.isRegiste()) {
-			kettleRecordPool.deleteRecord(uuid);
 			kettleRecordRepository.deleteRecord(uuid);
 			kettleRepoRepository.deleteJobEntireDefine(record);
 			return;
 		}
 		jobMustDie(record);
-	}
-
-	/**
-	 * @return
-	 */
-	protected List<KettleRecord> getAllWaitingRecords() {
-		return kettleRecordRepository.allWaitingRecords();
 	}
 
 	/**
@@ -208,6 +191,12 @@ public abstract class KettleJobService {
 	protected abstract void jobMustDie(KettleRecord record) throws KettleException;
 
 	/**
+	 * 查看状态
+	 * 
+	 */
+	protected abstract void checkStatus() throws KettleException;
+
+	/**
 	 * 查询JOB
 	 * 
 	 * @param uuid
@@ -215,29 +204,5 @@ public abstract class KettleJobService {
 	 */
 	public KettleRecord queryJob(String uuid) {
 		return kettleRecordRepository.queryRecord(uuid);
-	}
-
-	public KettleRecordRepository getKettleRecordRepository() {
-		return kettleRecordRepository;
-	}
-
-	public void setKettleRecordRepository(KettleRecordRepository kettleRecordRepository) {
-		this.kettleRecordRepository = kettleRecordRepository;
-	}
-
-	public KettleRepoRepository getKettleRepoRepository() {
-		return kettleRepoRepository;
-	}
-
-	public void setKettleRepoRepository(KettleRepoRepository kettleRepoRepository) {
-		this.kettleRepoRepository = kettleRepoRepository;
-	}
-
-	public KettleRecordPool getKettleRecordPool() {
-		return kettleRecordPool;
-	}
-
-	public void setKettleRecordPool(KettleRecordPool kettleRecordPool) {
-		this.kettleRecordPool = kettleRecordPool;
 	}
 }

@@ -14,83 +14,120 @@ import com.katch.perfer.mybatis.model.KettleRecordRelation;
 
 @Component
 public class KettleRecordRepository {
-    @Autowired
-    private KettleRecordMapper kettleRecordMapper;
+	@Autowired
+	private KettleRecordMapper kettleRecordMapper;
 
-    /**
-     * 获取一个
-     * 
-     * @param uuid
-     * @return
-     * @throws KettleException
-     */
-    public KettleRecord queryRecord(String uuid) {
-	return kettleRecordMapper.queryRecord(uuid);
-    }
-
-    /**
-     * 补充依赖
-     * 
-     * @param record
-     * @return
-     */
-    public KettleRecord queryRecordRelations(KettleRecord record) {
-	List<KettleRecordRelation> kettleRecordRelations = kettleRecordMapper.queryRecordRelations(record.getUuid());
-	record.getRelations().clear();
-	record.getRelations().addAll(kettleRecordRelations);
-	return record;
-    }
-
-    /**
-     * @return
-     */
-    public List<KettleRecord> allWaitingRecords() {
-	return kettleRecordMapper.allWaitingRecords();
-    }
-
-    /**
-     * @return
-     */
-    public List<KettleRecord> allStopRecords() {
-	return kettleRecordMapper.allStopRecords();
-    }
-
-    /**
-     * 保存
-     * 
-     * @param record
-     */
-    @Transactional()
-    public void insertRecord(KettleRecord record) {
-	Date now = new Date();
-	record.setCreateTime(now);
-	record.setUpdateTime(now);
-	for (KettleRecordRelation recordRelation : record.getRelations()) {
-	    recordRelation.setCreateTime(now);
+	/**
+	 * 获取一个
+	 * 
+	 * @param uuid
+	 * @return
+	 * @throws KettleException
+	 */
+	@Transactional(readOnly = true)
+	public KettleRecord queryRecord(String uuid) {
+		return kettleRecordMapper.queryRecord(uuid);
 	}
-	kettleRecordMapper.insertRecord(record);
-	kettleRecordMapper.insertRecordRelations(record.getRelations());
-    }
 
-    /**
-     * 更新非状态
-     * 
-     * @param record
-     */
-    @Transactional()
-    public void updateRecord(KettleRecord record) {
-	record.setUpdateTime(new Date());
-	kettleRecordMapper.updateRecord(record);
-    }
+	/**
+	 * 补充依赖
+	 * 
+	 * @param record
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public KettleRecord queryRecordRelations(KettleRecord record) {
+		List<KettleRecordRelation> kettleRecordRelations = kettleRecordMapper.queryRecordRelations(record.getUuid());
+		record.getRelations().clear();
+		record.getRelations().addAll(kettleRecordRelations);
+		return record;
+	}
 
-    /**
-     * 删除Record
-     * 
-     * @param record
-     */
-    @Transactional()
-    public void deleteRecord(String uuid) {
-	kettleRecordMapper.deleteRecord(uuid);
-	kettleRecordMapper.deleteRecordRelations(uuid);
-    }
+	/**
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<KettleRecord> allUnassignedRecords() {
+		return kettleRecordMapper.allUnassignedRecords();
+	}
+
+	/**
+	 * 获取Cline端的运行中任务
+	 * 
+	 * @param hostName
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<KettleRecord> queryRunningRecordsByHostName(String hostName) {
+		return kettleRecordMapper.queryRunningRecordsByHostName(hostName);
+	}
+
+	/**
+	 * 获取Cline端的待运行的任务
+	 * 
+	 * @param hostName
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<KettleRecord> queryApplyRecordsByHostName(String hostName) {
+		return kettleRecordMapper.queryApplyRecordsByHostName(hostName);
+	}
+
+	/**
+	 * 获取可删除任务
+	 * 
+	 * @return
+	 */
+	public List<KettleRecord> allCanDelRecords() {
+		return kettleRecordMapper.allCanDelRecords();
+	}
+
+	/**
+	 * 保存
+	 * 
+	 * @param record
+	 */
+	@Transactional()
+	public void insertRecord(KettleRecord record) {
+		Date now = new Date();
+		record.setCreateTime(now);
+		record.setUpdateTime(now);
+		for (KettleRecordRelation recordRelation : record.getRelations()) {
+			recordRelation.setCreateTime(now);
+		}
+		kettleRecordMapper.insertRecord(record);
+		kettleRecordMapper.insertRecordRelations(record.getRelations());
+	}
+
+	/**
+	 * 更新非状态
+	 * 
+	 * @param record
+	 */
+	@Transactional()
+	public int updateRecord(KettleRecord record) {
+		record.setUpdateTime(new Date());
+		return kettleRecordMapper.updateRecord(record);
+	}
+
+	@Transactional()
+	public int assignedRecord(String uuid, String hostName) {
+		KettleRecord record = new KettleRecord();
+		record.setUuid(uuid);
+		record.setHostname(hostName);
+		record.setUpdateTime(new Date());
+		return kettleRecordMapper.assignedRecord(record);
+	}
+
+	/**
+	 * 删除Record
+	 * 
+	 * @param record
+	 */
+	@Transactional()
+	public void deleteRecord(String uuid) {
+		kettleRecordMapper.deleteRecord(uuid);
+		kettleRecordMapper.deleteRecordRelations(uuid);
+	}
+
 }

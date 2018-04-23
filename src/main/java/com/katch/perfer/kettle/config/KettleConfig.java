@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.katch.perfer.kettle.record.KettleRecordPool;
+import com.katch.perfer.kettle.remote.KettleRemotePool;
+import com.katch.perfer.kettle.repository.KettleRepoRepository;
 
 @Configuration
 @EnableAutoConfiguration
@@ -44,15 +46,14 @@ public class KettleConfig {
 		logger.info("Kettle初始化发现注册的服务端[" + slaves + "]!");
 		return repository;
 	}
-	
-	/**
-	 * 任务池,堆放任务
-	 * @return
-	 * @throws Exception
-	 */
+
 	@Bean
-	public KettleRecordPool kettleRecordPool() throws Exception {
-		KettleRecordPool recordPool = new KettleRecordPool();
-		return recordPool;
+	public KettleRemotePool kettleRemotePool(KettleRepoRepository kettleRepoRepository) throws KettleException {
+		return new KettleRemotePool(kettleRepoRepository);
+	}
+
+	@Bean
+	public KettleRecordPool kettleRecordPool() throws KettleException {
+		return new KettleRecordPool();
 	}
 }

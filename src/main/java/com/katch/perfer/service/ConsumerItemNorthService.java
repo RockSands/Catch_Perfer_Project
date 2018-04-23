@@ -71,7 +71,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 		double scortTmp = 0.0;
 		List<RecommendItemScore> baseItemScores;
 		RecommendItemScore itemRoll;
-		for (UserConsumption consumption : consumptions.subList(0, 10)) {
+		for (UserConsumption consumption : consumptions.subList(0, 5)) {
 			initScore = initScore - 0.2;
 			baseItemScores = baseItemRecommendMapper.queryRecommenders(consumption.getItmeId());
 			for (int i = 0; i < baseItemScores.size(); i++) {

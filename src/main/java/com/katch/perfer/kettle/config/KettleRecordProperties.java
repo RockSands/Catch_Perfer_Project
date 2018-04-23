@@ -1,41 +1,43 @@
 package com.katch.perfer.kettle.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
-//@Component
-//@PropertySource("classpath:/config/kettle_env.properties")
+@Component
+@PropertySource("classpath:/config/kettle_env.properties")
 public class KettleRecordProperties {
 
-    @Value("kettle.record.maxPreRemote")
-    private int maxPreRemote;
+	@Value("${kettle.record.maxPreRemote}")
+	private int maxPreRemote;
 
-    @Value("kettle.record.runningTimeOut")
-    private int runningTimeOut;
-    
-    @Value("kettle.record.pool.max")
-    private int poolMax;
+	@Value("${kettle.record.run.timeout}")
+	private int runTimeout;
+	
+	@Value("${kettle.record.once.save.period}")
+	private int onceRecordSavePeriod;
 
-    public int getMaxPreRemote() {
-        return maxPreRemote;
-    }
+	public int getMaxPreRemote() {
+		return maxPreRemote;
+	}
 
-    public void setMaxPreRemote(int maxPreRemote) {
-        this.maxPreRemote = maxPreRemote;
-    }
+	public void setMaxPreRemote(int maxPreRemote) {
+		this.maxPreRemote = maxPreRemote;
+	}
 
-    public int getRunningTimeOut() {
-        return runningTimeOut;
-    }
+	public int getRunTimeout() {
+		return runTimeout;
+	}
 
-    public void setRunningTimeOut(int runningTimeOut) {
-        this.runningTimeOut = runningTimeOut;
-    }
+	public void setRunTimeout(int runTimeout) {
+		this.runTimeout = runTimeout;
+	}
 
-    public int getPoolMax() {
-        return poolMax;
-    }
+	public int getOnceRecordSavePeriod() {
+		return onceRecordSavePeriod;
+	}
 
-    public void setPoolMax(int poolMax) {
-        this.poolMax = poolMax;
-    }
+	public void setOnceRecordSavePeriod(int onceRecordSavePeriod) {
+		this.onceRecordSavePeriod = onceRecordSavePeriod;
+	}
 }

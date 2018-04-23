@@ -2,23 +2,17 @@ package com.katch.perfer.kettle.service;
 
 import org.pentaho.di.core.exception.KettleException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 import com.katch.perfer.kettle.bean.KettleResult;
-import com.katch.perfer.kettle.service.record.KettleJobService;
 import com.katch.perfer.mybatis.model.KettleRecord;
 
 @Service
 public class KettleNorthService {
-
 	@Autowired
-	@Qualifier("remoteSerialRecordService")
-	@Lazy
 	private KettleJobService kettleJobService;
-
+	
 	/**
 	 * 
 	 * @param jobEntire
@@ -33,6 +27,7 @@ public class KettleNorthService {
 		result.setErrMsg(record.getErrMsg());
 		return result;
 	}
+
 
 	/**
 	 * 注册一个Job,只有调用Excute才开始执行
@@ -95,13 +90,5 @@ public class KettleNorthService {
 	 */
 	public void deleteJobForce(String uuid) throws KettleException {
 		kettleJobService.deleteJobImmediately(uuid);
-	}
-
-	public KettleJobService getKettleJobService() {
-		return kettleJobService;
-	}
-
-	public void setKettleJobService(KettleJobService kettleJobService) {
-		this.kettleJobService = kettleJobService;
 	}
 }
