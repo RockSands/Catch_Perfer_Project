@@ -7,6 +7,7 @@ import org.pentaho.di.core.exception.KettleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,9 @@ public class ConsumerRecommendAutoStartTask {
 	@Autowired
 	private KettleNorthService kettleNorthService;
 
+	@Value("${consumer.mahout.min.interval}")
+	private int minInterval;
+
 	/**
 	 * 自动执行
 	 * 
@@ -38,12 +42,12 @@ public class ConsumerRecommendAutoStartTask {
 	@Scheduled(cron = "${consumer.mahout.cron}")
 	public void excute() {
 		RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY00001");
-		logger.info("消费推荐同步信息启动!");
+		logger.info("消费推荐同步信息准备启动!");
 		if (Consist.RECOM_TASK_TRACK_STEP_FREE.equals(track.getStep())
 				|| (Consist.RECOM_TASK_TRACK_STATUS_ERROR.equals(track.getStep()))) {
 			// 间隔1小时刷新
 			if (track.getUpdateTime() == null
-					|| System.currentTimeMillis() - track.getUpdateTime().getTime() > 60L * 60L * 1000L) {
+					|| System.currentTimeMillis() - track.getUpdateTime().getTime() > minInterval * 60L * 1000L) {
 				excute(track);
 			}
 		}

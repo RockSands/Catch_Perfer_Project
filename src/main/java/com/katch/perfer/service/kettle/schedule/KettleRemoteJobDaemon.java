@@ -70,9 +70,9 @@ public class KettleRemoteJobDaemon extends Thread {
 					client.remoteRemoveJobNE(recordRoll);
 					it.remove();
 				} else if (recordRoll.isRunning()) {
-					if (kettleRecordProperties.getRunTimeout() > 0
-							&& ((System.currentTimeMillis() - recordRoll.getUpdateTime().getTime())
-									/ 60000L) > kettleRecordProperties.getRunTimeout()) {
+					if (kettleRecordProperties.getRunTimeout() > 0 && System.currentTimeMillis()
+							- recordRoll.getUpdateTime().getTime() > kettleRecordProperties.getRunTimeout() * 1000L
+									* 60L) {
 						recordRoll.setStatus(KettleVariables.RECORD_STATUS_ERROR);
 						recordRoll.setErrMsg("Kettle的任务[" + recordRoll.getUuid() + "]执行超时!");
 						kettleRecordRepository.updateRecord(recordRoll);
@@ -118,7 +118,8 @@ public class KettleRemoteJobDaemon extends Thread {
 				logger.debug("Kettle-Client[" + client.getHostName() + "]任务管理信息,启动任务[" + kettleRecord.getUuid() + "]!");
 			} catch (KettleException e) {
 				kettleRecord.setStatus(KettleVariables.RECORD_STATUS_ERROR);
-				logger.debug("Kettle-Client[" + client.getHostName() + "]任务管理信息,异常任务[" + kettleRecord.getUuid() + "]!",e);
+				logger.debug("Kettle-Client[" + client.getHostName() + "]任务管理信息,异常任务[" + kettleRecord.getUuid() + "]!",
+						e);
 			}
 			kettleRecordRepository.updateRecord(kettleRecord);
 		}

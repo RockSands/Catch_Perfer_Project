@@ -45,9 +45,10 @@ public class MahoutFile2DBResoluter extends ConsumerRecommendResoluter {
 			throw new Exception("推荐信息导入数据库发生错误，Kettle[" + jobUuid + "]执行错误!");
 		} else if (KettleVariables.RECORD_STATUS_RUNNING.equals(kettleResult.getStatus())
 				|| KettleVariables.RECORD_STATUS_APPLY.equals(kettleResult.getStatus())) {
-			if (System.currentTimeMillis() - track.getUpdateTime().getTime() > 30L * 60L * 1000L) {
-				throw new Exception("推荐信息导入数据库超时，Kettle[" + track.getJobUuid() + "]执行错误!");
-			}
+			// if (System.currentTimeMillis() - track.getUpdateTime().getTime() > 30L * 60L
+			// * 1000L) {
+			// throw new Exception("推荐信息导入数据库超时，Kettle[" + track.getJobUuid() + "]执行错误!");
+			// }
 		} else if (KettleVariables.RECORD_STATUS_FINISHED.equals(kettleResult.getStatus())) {
 			logger.info("推荐信息导入数据库完成!");
 			track.setStep(Consist.RECOM_TASK_TRACK_STEP_FREE);
