@@ -41,10 +41,11 @@ public class MahoutExportResoluter extends ConsumerRecommendResoluter {
 			deamon = null;
 		} else if ("error".equals(deamon.status)) {
 			throw new Exception("消费推荐文件导出失败!");
-		} else {// 运行中
-			if (System.currentTimeMillis() - track.getUpdateTime().getTime() > 60L * 60L * 1000L) {
-				throw new Exception("消费推荐文件导出超时!");
-			}
+		} else {// 运行中 - 不设置超时
+			// if (System.currentTimeMillis() - track.getUpdateTime().getTime() > 3L * 60L *
+			// 60L * 1000L) {
+			// throw new Exception("消费推荐文件导出超时!");
+			// }
 		}
 	}
 
