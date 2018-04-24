@@ -15,15 +15,18 @@ import com.katch.perfer.mybatis.model.RecommendItemScore;
 public interface ItemWeighMapper {
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	@Select("SELECT SPID_1 AS itemId,0 AS score,LRRQ AS createTime FROM SQY_RZDK_SP")
+	@Select("SELECT SPID_1 AS itemId,0 AS score,LRRQ AS createTime FROM SQY_RZDK_SP WHERE regexp_like(SPID_1,'^[0-9]+[0-9]$')")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class),
 			@Result(property = "createTime", column = "createTime", javaType = Date.class) })
 	List<RecommendItemScore> queryAllItems();
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	@Select("SELECT SPID_1 AS itemId,0 AS score,LRRQ AS createTime "
-			+ "FROM SQY_RZDK_SP WHERE LRRQ IS NOT NULL ORDER BY LRRQ DESC LIMIT 100")
+	@Select("SELECT * FROM "
+			+ "(SELECT SPID_1 AS itemId,0 AS score,LRRQ AS createTime "
+			+ "FROM SQY_RZDK_SP "
+			+ "WHERE LRRQ IS NOT NULL ORDER BY LRRQ DESC) "
+			+ "where rownum < 101")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class),
 			@Result(property = "createTime", column = "createTime", javaType = Date.class) })
