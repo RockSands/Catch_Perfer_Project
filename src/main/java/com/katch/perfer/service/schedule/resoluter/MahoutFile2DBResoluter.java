@@ -32,7 +32,7 @@ public class MahoutFile2DBResoluter extends ConsumerRecommendResoluter {
 
 	@Override
 	protected void resolve(RecommendTaskTrack track) throws Exception {
-		if (track.getJobUuid() == null) {
+		if (track.getJobUuid() == null || "".equals(track.getJobUuid())) {
 			recommend2DBService.excute(track);
 		}
 		String jobUuid = track.getJobUuid();
