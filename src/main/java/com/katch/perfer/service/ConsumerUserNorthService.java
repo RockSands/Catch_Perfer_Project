@@ -113,6 +113,6 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 				}
 			}
 		}
-		return returnList.subList(0, recommendRestProperties.getReturnSize());
+		return returnList.subList(0, Math.min(returnList.size(), recommendRestProperties.getReturnSize()));
 	}
 }
