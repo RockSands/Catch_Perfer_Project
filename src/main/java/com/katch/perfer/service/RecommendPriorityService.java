@@ -39,6 +39,14 @@ public class RecommendPriorityService {
 	}
 	
 	/**
+	 * 获取随机Item
+	 * @return
+	 */
+	public List<RecommendItemScore> queryRandomItems() {
+		return itemWeighMapper.queryRandomItems();
+	}
+	
+	/**
 	 * 获取所有Item
 	 * @return
 	 */

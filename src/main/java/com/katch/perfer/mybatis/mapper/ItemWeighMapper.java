@@ -43,4 +43,13 @@ public interface ItemWeighMapper {
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class) })
 	List<RecommendItemScore> queryTopItems();
+	
+	@DataSourceTypeAnno(DataSourceEnum.secondary)
+	@Select("SELECT * FROM ("
+			+ "SELECT SPID_1 AS itemId,0 AS score "
+			+ "FROM SQY_RZDK_SP ORDER BY TRUNC (dbms_random.value(0, 1000))) "
+			+ "WHERE ROWNUM < 101")
+	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
+			@Result(property = "score", column = "score", javaType = Double.class) })
+	List<RecommendItemScore> queryRandomItems();
 }

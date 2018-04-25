@@ -104,6 +104,15 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 				break;
 			}
 		}
-		return returnList;
+		// 如果条数不足,使用随机凑
+		if (returnList.size() < recommendRestProperties.getReturnSize()) {
+			List<RecommendItemScore> randomItems = priorityService.queryRandomItems();
+			for (RecommendItemScore item : randomItems) {
+				if (!returnList.contains(item.getItemId())) {
+					returnList.add(item.getItemId());
+				}
+			}
+		}
+		return returnList.subList(0, recommendRestProperties.getReturnSize());
 	}
 }
