@@ -14,6 +14,8 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
 	@Override
 	public void onApplicationEvent(ApplicationPreparedEvent event) {
 		try {
+			System.setProperty("javax.xml.parsers.DocumentBuilderFactory",
+					"com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl");
 			KettleEnvironment.init();
 		} catch (KettleException e) {
 			throw new RuntimeException("KettleEnvironment初始化失败!");

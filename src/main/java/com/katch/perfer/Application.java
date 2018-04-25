@@ -1,9 +1,5 @@
 package com.katch.perfer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,11 +14,6 @@ import com.katch.perfer.init.ApplicationEnvironmentPreparedEventListener;
 import com.katch.perfer.init.ApplicationFailedEventListener;
 import com.katch.perfer.init.ApplicationPreparedEventListener;
 import com.katch.perfer.init.ApplicationStartedEventListener;
-import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
-import com.katch.perfer.kettle.bean.KettleResult;
-import com.katch.perfer.kettle.metas.KettleTableMeta;
-import com.katch.perfer.kettle.metas.builder.TableDataMigrationBuilder;
-import com.katch.perfer.kettle.service.KettleNorthService;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
