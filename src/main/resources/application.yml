@@ -10,14 +10,15 @@ spring:
     auto: true 
   datasource:
     primary: 
-      url: jdbc:mysql://192.168.80.138:3306/kettle
+      url: jdbc:mysql://192.168.80.138:3306/recommend?useAffectedRows=true
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
     secondary: 
-      url: jdbc:mysql://192.168.80.138:3306/person
-      username: root
-      password: 123456
-      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:oracle:thin:@10.23.10.224:1521:csstax
+      username: hx_zgxt
+      password: css
+      driver-class-name: oracle.jdbc.OracleDriver
+# 配置Mybatis的配置文件位置
 mybatis:
-  mapper-locations: classpath:mapper/*.xml 
+  mapper-locations: classpath:mapper/*.xml
