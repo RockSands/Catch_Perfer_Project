@@ -33,7 +33,7 @@ public interface ItemWeighMapper {
 	List<RecommendItemScore> queryNewItems();
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	@Select("SELECT SPID_1 AS itemId,PJFS/20 AS score FROM SQY_RZDK_SPQYGXB WHERE PJFS IS NOT NULL " + "AND QY_DM = #{qy}")
+	@Select("SELECT SPID_1 AS itemId,PJFS/20 AS score FROM SQY_RZDK_SPQYGXB WHERE PJFS IS NOT NULL AND QY_DM = #{qy} ORDER BY score DESC")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class) })
 	List<RecommendItemScore> queryWeightItems(@Param("qy") String qy);
