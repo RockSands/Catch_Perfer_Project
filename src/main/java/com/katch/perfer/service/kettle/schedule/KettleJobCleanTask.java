@@ -31,8 +31,8 @@ public class KettleJobCleanTask {
 	/**
 	 * 每小时执行一次 仅清理Once执行类型的任务
 	 */
-	//@Scheduled(cron = "0 0 0/1 * * ?")
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0 0/3 * * ?")
+	// @Scheduled(cron = "0 0/1 * * * ?")
 	public void AutoCleanJob() {
 		try {
 			/*
@@ -41,8 +41,8 @@ public class KettleJobCleanTask {
 			List<KettleRecord> records = kettleRecordRepository.allCanDelRecords();
 			Long current = System.currentTimeMillis();
 			for (KettleRecord record : records) {
-				if ((current - record.getUpdateTime().getTime()) / 3600000L > kettleRecordProperties
-						.getOnceRecordSavePeriod()) {
+				if (current - record.getUpdateTime().getTime() > kettleRecordProperties.getOnceRecordSavePeriod() * 60L
+						* 60L * 1000L) {
 					kettleRecordRepository.queryRecordRelations(record);
 					kettleRepoRepository.deleteJobEntireDefine(record);
 					kettleRecordRepository.deleteRecord(record.getUuid());

@@ -30,7 +30,7 @@ public class KettleRemoteJobSchedule extends KettleJobService {
 
 	private final Map<String, KettleRemoteJobDaemon> daemons = new ConcurrentHashMap<String, KettleRemoteJobDaemon>();
 
-	@Scheduled(initialDelay = 1000, fixedRate = 5000)
+	@Scheduled(initialDelay = 5000, fixedRate = 10000)
 	public void schedule() {
 		fixedThreadPool = Executors.newFixedThreadPool(kettleRemotePool.getRemoteclients().size());
 		for (KettleRemoteClient client : kettleRemotePool.getRemoteclients()) {
@@ -59,7 +59,7 @@ public class KettleRemoteJobSchedule extends KettleJobService {
 
 	@Override
 	protected void checkStatus() throws KettleException {
-		if(!kettleRemotePool.isRunning()) {
+		if (!kettleRemotePool.isRunning()) {
 			throw new KettleException("Kettle没有可用的远端节点!");
 		}
 	}

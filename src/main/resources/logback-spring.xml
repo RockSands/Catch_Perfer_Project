@@ -30,6 +30,23 @@
 			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
 		</encoder>
 	</appender>
+	
+	<appender name="INFO_LOG"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<File>${LOG_HOME}/info.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_HOME}/info.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<maxHistory>90</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
 
 	<appender name="ERROR_LOG"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -56,6 +73,7 @@
 
 	<logger name="com.katch.perfer" level="DEBUG" additivity="false">
 		<appender-ref ref="DEBUG_LOG" />
+		<appender-ref ref="INFO_LOG" />
 		<appender-ref ref="ERROR_LOG" />
 		<appender-ref ref="CONSOLE_LOG" />
 	</logger>

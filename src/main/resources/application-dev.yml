@@ -1,6 +1,6 @@
 server:
   # 服务器访问端口
-  port: 8080
+  port: 9090
   # 访问的基础路径
   context-path: /catchPerfer
 logging:
@@ -10,7 +10,7 @@ spring:
     auto: true 
   datasource:
     primary: 
-      url: jdbc:mysql://192.168.80.138:3306/recommend?useAffectedRows=true
+      url: jdbc:mysql://10.23.13.183:3306/recommend?useAffectedRows=true
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
