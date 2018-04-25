@@ -95,7 +95,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 		Collections.sort(mapList, new Comparator<Map.Entry<Long, Double>>() {
 			@Override
 			public int compare(Entry<Long, Double> o1, Entry<Long, Double> o2) {
-				return o1.getValue().compareTo(o2.getValue());
+				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
 		for (Map.Entry<Long, Double> entry : mapList) {
