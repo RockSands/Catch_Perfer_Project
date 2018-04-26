@@ -29,7 +29,7 @@ public class RecommendController {
 		if (yhid == null) {
 			yhid = Long.MIN_VALUE;
 		}
-		return consumerNorthService.queryRecommend(yhid, qy);
+		return consumerNorthService.queryRecommends(yhid, qy);
 	}
 
 }
