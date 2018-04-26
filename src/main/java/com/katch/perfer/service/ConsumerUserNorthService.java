@@ -23,7 +23,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 	private BaseUserRecommendMapper baseUserRecommendMapper;
 
 	@Override
-	public List<Long> queryRecommend(long userId, String qy) {
+	public List<Long> queryAllRecommend(long userId, String qy) {
 		List<Long> returnList = new ArrayList<Long>();
 		// 增加权重
 		List<RecommendItemScore> weightScores = priorityService.queryItemWeight(qy);
@@ -43,7 +43,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 		// 新物品
 		List<RecommendItemScore> newItemScores = new ArrayList<RecommendItemScore>();
 		if (recommendRestProperties.isNewItemOpen()) {
-			newItemScores.addAll(priorityService.queryNewItems(recommendRestProperties.getNewItemTimeOut()));
+			newItemScores.addAll(priorityService.queryNewItems(qy, recommendRestProperties.getNewItemTimeOut()));
 			if (recommendRestProperties.getNewItemSize() > 0) {
 				int index = recommendRestProperties.getNewItemSize();
 				for (Iterator<RecommendItemScore> it = newItemScores.iterator(); it.hasNext();) {
@@ -104,15 +104,6 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 				break;
 			}
 		}
-		// 如果条数不足,使用随机凑
-		if (returnList.size() < recommendRestProperties.getReturnSize()) {
-			List<RecommendItemScore> randomItems = priorityService.queryRandomItems();
-			for (RecommendItemScore item : randomItems) {
-				if (!returnList.contains(item.getItemId())) {
-					returnList.add(item.getItemId());
-				}
-			}
-		}
-		return returnList.subList(0, Math.min(returnList.size(), recommendRestProperties.getReturnSize()));
+		return returnList;
 	}
 }

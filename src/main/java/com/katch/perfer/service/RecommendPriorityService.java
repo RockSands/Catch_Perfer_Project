@@ -18,11 +18,13 @@ public class RecommendPriorityService {
 
 	/**
 	 * 获取新的商品
+	 * @param qy 
+	 * 
 	 * @return
 	 */
-	public List<RecommendItemScore> queryNewItems(int timeout) {
+	public List<RecommendItemScore> queryNewItems(String qy, int timeout) {
 		Date now = new Date();
-		List<RecommendItemScore> itemScores = itemWeighMapper.queryNewItems();
+		List<RecommendItemScore> itemScores = itemWeighMapper.queryNewItems(qy);
 		List<RecommendItemScore> newItems = new ArrayList<RecommendItemScore>();
 		RecommendItemScore itemScore;
 		for (Iterator<RecommendItemScore> it = itemScores.iterator(); it.hasNext();) {
@@ -37,17 +39,19 @@ public class RecommendPriorityService {
 		}
 		return newItems;
 	}
-	
+
 	/**
 	 * 获取随机Item
+	 * 
 	 * @return
 	 */
-	public List<RecommendItemScore> queryRandomItems() {
-		return itemWeighMapper.queryRandomItems();
+	public List<Long> queryAllRandomSortItems(String qy) {
+		return itemWeighMapper.queryAllRandomSortItems(qy);
 	}
-	
+
 	/**
 	 * 获取所有Item
+	 * 
 	 * @return
 	 */
 	public List<RecommendItemScore> queryAllItems() {
@@ -56,6 +60,7 @@ public class RecommendPriorityService {
 
 	/**
 	 * 获取权重
+	 * 
 	 * @param qy
 	 * @return
 	 */
