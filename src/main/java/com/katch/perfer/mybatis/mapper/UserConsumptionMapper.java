@@ -12,5 +12,5 @@ import com.katch.perfer.mybatis.model.UserConsumption;
 @Mapper
 public interface UserConsumptionMapper {
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	List<UserConsumption> queryUserConsumptions(@Param("userID") long userID);
+	List<UserConsumption> queryUserConsumptions(@Param("userID") long userID, @Param("qy")String qy);
 }

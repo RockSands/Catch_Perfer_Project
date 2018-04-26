@@ -48,6 +48,15 @@ public class RecommendPriorityService {
 	public List<Long> queryAllRandomSortItems(String qy) {
 		return itemWeighMapper.queryAllRandomSortItems(qy);
 	}
+	
+	/**
+	 * 获取随机Item
+	 * 
+	 * @return
+	 */
+	public List<Long> queryTopSortItems(String qy) {
+		return itemWeighMapper.queryTopItems(qy);
+	}
 
 	/**
 	 * 获取所有Item

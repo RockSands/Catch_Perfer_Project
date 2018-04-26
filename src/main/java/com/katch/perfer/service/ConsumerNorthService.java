@@ -29,13 +29,24 @@ public abstract class ConsumerNorthService {
 
 	public List<Long> queryRecommends(long yhid, String qy) {
 		List<Long> allRecommends = queryAllRecommend(yhid, qy);
-
+		List<Long> topItems = priorityService.queryTopSortItems(qy);
 		List<Long> randomAllItems = priorityService.queryAllRandomSortItems(qy);
 		Long recommendItemID;
 		for (Iterator<Long> it = allRecommends.iterator(); it.hasNext();) {
 			recommendItemID = it.next();
 			if (!randomAllItems.contains(recommendItemID)) {
 				it.remove();
+			}
+		}
+		// 如果条数不足,使用TOP补充
+		if (allRecommends.size() < recommendRestProperties.getReturnSize()) {
+			for (Long itemId : topItems) {
+				if (!allRecommends.contains(itemId)) {
+					allRecommends.add(itemId);
+					if (allRecommends.size() == recommendRestProperties.getReturnSize()) {
+						break;
+					}
+				}
 			}
 		}
 		// 如果条数不足,使用随机凑

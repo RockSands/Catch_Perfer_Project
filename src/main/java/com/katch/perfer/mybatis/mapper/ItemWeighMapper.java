@@ -40,13 +40,13 @@ public interface ItemWeighMapper {
 	List<RecommendItemScore> queryWeightItems(@Param("qy") String qy);
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	@Select("SELECT SPID_1 AS itemId,COUNT('x') AS score FROM SQY_RZDK_DD GROUP BY SPID_1 ORDER BY score DESC")
-	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
-			@Result(property = "score", column = "score", javaType = Double.class) })
-	List<RecommendItemScore> queryTopItems();
+	@Select("SELECT dd.SPID_1 AS itemId,count('x') score FROM SQY_RZDK_DD dd,SQY_RZDK_SPQYGXB spqy "
+			+ "WHERE dd.SPID_1 = spqy.SPID_1 AND QY_DM = #{qy} GROUP BY dd.SPID_1 ORDER BY score DESC")
+	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class) })
+	List<Long> queryTopItems(@Param("qy") String qy);
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	@Select("SELECT sp.SPID_1 AS itemId, 0 AS score FROM SQY_RZDK_SP sp,SQY_RZDK_SPQYGXB spqy "
+	@Select("SELECT sp.SPID_1 AS itemId FROM SQY_RZDK_SP sp,SQY_RZDK_SPQYGXB spqy "
 			+ "WHERE SP.SPID_1 = spqy.SPID_1 AND spqy.QY_DM = #{qy} ORDER BY TRUNC (dbms_random. VALUE(0, 1000))")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class) })
 	List<Long> queryAllRandomSortItems(@Param("qy") String qy);

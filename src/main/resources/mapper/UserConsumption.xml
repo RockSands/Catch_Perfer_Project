@@ -9,17 +9,18 @@
 		<result column="LRRQ" property="createTime" />
 	</resultMap>
 
-	<sql id="Consumption_Column_List">
-		YHID, SPID_1, LRRQ
-	</sql>
-
-	<select id="queryUserConsumptions" parameterType="long" resultMap="UserConsumptionMap">
+	<select id="queryUserConsumptions" parameterType="long"
+		resultMap="UserConsumptionMap">
 		SELECT
-		<include refid="Consumption_Column_List" />
+		dd.YHID,DD.SPID_1,DD.LRRQ
 		FROM
-		SQY_RZDK_DD
+		SQY_RZDK_DD dd,
+		SQY_RZDK_SPQYGXB sqpy
 		WHERE
-		YHID = #{userID} ORDER BY LRRQ DESC
+		dd.SPID_1 = sqpy.SPID_1
+		AND sqpy.QY_DM = ${qy}
+		AND YHID = ${userID}
+		ORDER BY
+		LRRQ DESC
 	</select>
-
 </mapper>

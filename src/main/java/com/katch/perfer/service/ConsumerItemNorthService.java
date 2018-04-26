@@ -65,7 +65,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 			}
 		}
 		// 消费记录
-		List<UserConsumption> consumptions = userConsumptionMapper.queryUserConsumptions(yhid);
+		List<UserConsumption> consumptions = userConsumptionMapper.queryUserConsumptions(yhid,qy);
 		Map<Long, Double> scoreMap = new HashMap<Long, Double>();
 		double initScore = 4.4;
 		double scortTmp = 0.0;
