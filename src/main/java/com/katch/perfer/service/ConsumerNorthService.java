@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.katch.perfer.config.RecommendRestProperties;
+import com.katch.perfer.control.RecommedRequest;
 
 /**
  * 消费记录导出
@@ -25,18 +26,19 @@ public abstract class ConsumerNorthService {
 	 * @param qy
 	 * @return
 	 */
-	public abstract List<Long> queryAllRecommend(long yhid, String qy);
+	public abstract List<Long> queryAllRecommend(RecommedRequest request);
 
 	/**
 	 * 获取推荐信息
+	 * 
 	 * @param yhid
 	 * @param qy
 	 * @return
 	 */
-	public List<Long> queryRecommends(long yhid, String qy) {
-		List<Long> allRecommends = queryAllRecommend(yhid, qy);
-		List<Long> topItems = priorityService.queryTopSortItems(qy);
-		List<Long> randomAllItems = priorityService.queryAllRandomSortItems(qy);
+	public List<Long> queryRecommends(RecommedRequest request) {
+		List<Long> allRecommends = queryAllRecommend(request);
+		List<Long> topItems = priorityService.queryTopSortItems(request.getQy());
+		List<Long> randomAllItems = priorityService.queryAllRandomSortItems(request.getQy());
 		Long recommendItemID;
 		for (Iterator<Long> it = allRecommends.iterator(); it.hasNext();) {
 			recommendItemID = it.next();

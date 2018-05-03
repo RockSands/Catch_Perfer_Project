@@ -25,11 +25,16 @@ public class RecommendController {
 	 */
 	@ApiOperation(value = "获取推荐列表", notes = "")
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Long> get(@RequestParam(required = false) Long yhid, @RequestParam(required = true) String qy) {
-		if (yhid == null) {
-			yhid = Long.MIN_VALUE;
+	public List<Long> get(@RequestParam(required = false) Long yhid, @RequestParam(required = false) String qyid,
+			@RequestParam(required = true) String qy) {
+		if (yhid == null && qyid != null) {
+			qyid = null;
 		}
-		return consumerNorthService.queryRecommends(yhid, qy);
+		RecommedRequest request = new RecommedRequest();
+		request.setYhid(yhid);
+		request.setQyid(qyid);
+		request.setQy(qy);
+		return consumerNorthService.queryRecommends(request);
 	}
 
 }

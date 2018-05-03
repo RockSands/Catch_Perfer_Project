@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import com.katch.perfer.control.RecommedRequest;
 import com.katch.perfer.mybatis.mapper.BaseUserRecommendMapper;
 import com.katch.perfer.mybatis.model.RecommendItemScore;
 
@@ -23,10 +24,10 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 	private BaseUserRecommendMapper baseUserRecommendMapper;
 
 	@Override
-	public List<Long> queryAllRecommend(long userId, String qy) {
+	public List<Long> queryAllRecommend(RecommedRequest request) {
 		List<Long> returnList = new ArrayList<Long>();
 		// 增加权重
-		List<RecommendItemScore> weightScores = priorityService.queryItemWeight(qy);
+		List<RecommendItemScore> weightScores = priorityService.queryItemWeight(request.getQy());
 		RecommendItemScore itemScore = null;
 		if (recommendRestProperties.getWeightSize() > 0) {
 			int index = recommendRestProperties.getWeightSize();
@@ -43,7 +44,8 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 		// 新物品
 		List<RecommendItemScore> newItemScores = new ArrayList<RecommendItemScore>();
 		if (recommendRestProperties.isNewItemOpen()) {
-			newItemScores.addAll(priorityService.queryNewItems(qy, recommendRestProperties.getNewItemTimeOut()));
+			newItemScores.addAll(
+					priorityService.queryNewItems(request.getQy(), recommendRestProperties.getNewItemTimeOut()));
 			if (recommendRestProperties.getNewItemSize() > 0) {
 				int index = recommendRestProperties.getNewItemSize();
 				for (Iterator<RecommendItemScore> it = newItemScores.iterator(); it.hasNext();) {
@@ -59,15 +61,17 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 				}
 			}
 		}
-		// 用户的物品
-		List<RecommendItemScore> userItemScores = baseUserRecommendMapper.queryRecommenders(userId);
+		// 商品推荐计算
 		Map<Long, Double> map = new HashMap<Long, Double>();
-		for (RecommendItemScore recommend : userItemScores) {
-			returnList.add(recommend.getItemId());
-			if (returnList.contains(recommend.getItemId())) {
-				continue;
+		if (request.getYhid() != null) {
+			List<RecommendItemScore> userItemScores = baseUserRecommendMapper.queryRecommenders(request.getYhid());
+			for (RecommendItemScore recommend : userItemScores) {
+				returnList.add(recommend.getItemId());
+				if (returnList.contains(recommend.getItemId())) {
+					continue;
+				}
+				map.put(recommend.getItemId(), recommend.getScore());
 			}
-			map.put(recommend.getItemId(), recommend.getScore());
 		}
 		for (RecommendItemScore index : weightScores) {// 新物品是否加权
 			if (returnList.contains(index.getItemId())) {
