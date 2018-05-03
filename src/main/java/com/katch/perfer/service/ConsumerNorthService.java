@@ -27,6 +27,12 @@ public abstract class ConsumerNorthService {
 	 */
 	public abstract List<Long> queryAllRecommend(long yhid, String qy);
 
+	/**
+	 * 获取推荐信息
+	 * @param yhid
+	 * @param qy
+	 * @return
+	 */
 	public List<Long> queryRecommends(long yhid, String qy) {
 		List<Long> allRecommends = queryAllRecommend(yhid, qy);
 		List<Long> topItems = priorityService.queryTopSortItems(qy);

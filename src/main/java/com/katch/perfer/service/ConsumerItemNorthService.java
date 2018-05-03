@@ -18,9 +18,10 @@ import com.katch.perfer.mybatis.mapper.UserConsumptionMapper;
 import com.katch.perfer.mybatis.model.RecommendItemScore;
 import com.katch.perfer.mybatis.model.UserConsumption;
 
-@Service("consumerNorthService")
+@Service()
 @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = false)
 public class ConsumerItemNorthService extends ConsumerNorthService {
+
 	@Autowired
 	private BaseItemRecommendMapper baseItemRecommendMapper;
 
@@ -48,7 +49,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 		// 新物品
 		List<RecommendItemScore> newItemScores = new ArrayList<RecommendItemScore>();
 		if (recommendRestProperties.isNewItemOpen()) {
-			newItemScores.addAll(priorityService.queryNewItems(qy,recommendRestProperties.getNewItemTimeOut()));
+			newItemScores.addAll(priorityService.queryNewItems(qy, recommendRestProperties.getNewItemTimeOut()));
 			if (recommendRestProperties.getNewItemSize() > 0) {
 				int index = recommendRestProperties.getNewItemSize();
 				for (Iterator<RecommendItemScore> it = newItemScores.iterator(); it.hasNext();) {
@@ -65,13 +66,13 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 			}
 		}
 		// 消费记录
-		List<UserConsumption> consumptions = userConsumptionMapper.queryUserConsumptions(yhid,qy);
+		List<UserConsumption> consumptions = userConsumptionMapper.queryUserConsumptions(yhid, qy);
 		Map<Long, Double> scoreMap = new HashMap<Long, Double>();
-		double initScore = 4.4;
+		double initScore = 4.5;
 		double scortTmp = 0.0;
 		List<RecommendItemScore> baseItemScores;
 		RecommendItemScore itemRoll;
-		for (UserConsumption consumption : consumptions.subList(0, Math.min(consumptions.size(), 5))) {
+		for (UserConsumption consumption : consumptions.subList(0, Math.min(consumptions.size(), 10))) {
 			initScore = initScore - 0.2;
 			baseItemScores = baseItemRecommendMapper.queryRecommenders(consumption.getItmeId());
 			for (int i = 0; i < baseItemScores.size(); i++) {
@@ -85,10 +86,8 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 					scortTmp = scoreMap.get(itemRoll.getItemId());
 					if (scortTmp > 4.95D) {
 						scoreMap.put(itemRoll.getItemId(), 5.0D);
-					} else if (scortTmp > 4.5) {
-						scoreMap.put(itemRoll.getItemId(), scortTmp + 0.05);
 					} else if (scortTmp > 4) {
-						scoreMap.put(itemRoll.getItemId(), scortTmp + 0.1D);
+						scoreMap.put(itemRoll.getItemId(), scortTmp + 0.15D);
 					} else if (scortTmp > 3) {
 						scoreMap.put(itemRoll.getItemId(), scortTmp + 0.3D);
 					} else {
@@ -129,5 +128,4 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 		}
 		return returnList;
 	}
-
 }
