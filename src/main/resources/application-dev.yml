@@ -15,7 +15,7 @@ spring:
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
     secondary: 
-      url: jdbc:oracle:thin:@10.23.10.224:1521:csstax?autoReconnect=true&characterEncoding=UTF-8
+      url: jdbc:oracle:thin:@10.23.10.224:1521:csstax
       username: hx_zgxt
       password: css
       driver-class-name: oracle.jdbc.OracleDriver

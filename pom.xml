@@ -279,4 +279,19 @@
 			</plugin>
 		</plugins>
 	</build>
+	<!-- GIT配置 -->
+	<scm>
+		<tag>master</tag>
+		<url>https://github.com/RockSands/Catch_Perfer_Project.git</url>
+		<connection>scm:git:https://github.com/RockSands/Catch_Perfer_Project.git</connection>
+		<developerConnection>scm:git:git@github.com:RockSands/Catch_Perfer_Project.git</developerConnection>
+	</scm>
+	<developers>
+		<developer>
+			<id>Catch_Perfer_Project</id>
+			<name>Chenkw</name>
+			<email>117019049@qq.com</email>
+			<url>https://github.com/RockSands</url>
+		</developer>
+	</developers>
 </project>
