@@ -7,35 +7,38 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource("classpath:/config/consumer.properties")
 public class ConsumerProperties {
-	@Value("${consumer.export.source.db.type}")
+	@Value("${consumer.db.type}")
 	private String sourceType;
 
-	@Value("${consumer.export.source.db.host}")
+	@Value("${consumer.db.host}")
 	private String sourceHost;
 
-	@Value("${consumer.export.source.db.port}")
+	@Value("${consumer.db.port}")
 	private String sourcePort;
 
-	@Value("${consumer.export.source.db.database}")
+	@Value("${consumer.db.database}")
 	private String sourceDatabase;
 	
-	@Value("${consumer.export.source.db.user}")
+	@Value("${consumer.db.user}")
 	private String sourceUser;
 
-	@Value("${consumer.export.source.db.passwd}")
+	@Value("${consumer.db.passwd}")
 	private String sourcePasswd;
 
-	@Value("${consumer.export.source.db.sql}")
+	@Value("${consumer.score.export.sql}")
 	private String sourceSql;
 	
-	@Value("${consumer.export.target.file.path}")
+	@Value("${consumer.score.export.target.file.path}")
 	private String targetPath;
 	
-	@Value("${consumer.export.target.file.separator}")
+	@Value("${consumer.score.export.target.file.separator}")
 	private String targetSeparator;
 	
-	@Value("${consumer.export.target.file.extension}")
+	@Value("${consumer.score.export.target.file.extension}")
 	private String targetExtension;
+	
+	@Value("${consumer.tax.enterprise.sql}")
+	private String taxEnterpriseSql;
 
 	public String getSourceType() {
 		return sourceType;
@@ -115,5 +118,13 @@ public class ConsumerProperties {
 
 	public void setSourceUser(String sourceUser) {
 		this.sourceUser = sourceUser;
+	}
+
+	public String getTaxEnterpriseSql() {
+		return taxEnterpriseSql;
+	}
+
+	public void setTaxEnterpriseSql(String taxEnterpriseSql) {
+		this.taxEnterpriseSql = taxEnterpriseSql;
 	}
 }

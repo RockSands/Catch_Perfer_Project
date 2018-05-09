@@ -20,6 +20,7 @@ import com.katch.perfer.service.kettle.ConsumerExportCSVBuilder;
 
 @Service
 public class ConsumerRecommendAutoStartTask {
+	
 	private static Logger logger = LoggerFactory.getLogger(ConsumerRecommendAutoStartTask.class);
 
 	@Autowired

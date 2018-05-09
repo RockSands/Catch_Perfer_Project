@@ -5,12 +5,12 @@ import java.text.DecimalFormat;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.katch.perfer.config.RecommendPropeties;
+import com.katch.perfer.config.RecommendProperties;
 
 public abstract class MahoutExportService {
 
 	@Autowired
-	protected RecommendPropeties recommendPropeties;
+	protected RecommendProperties recommendPropeties;
 
 	/**
 	 * Mahout计算
@@ -44,11 +44,11 @@ public abstract class MahoutExportService {
 		this.dataModel = dataModel;
 	}
 
-	public RecommendPropeties getRecommendPropeties() {
+	public RecommendProperties getRecommendPropeties() {
 		return recommendPropeties;
 	}
 
-	public void setRecommendPropeties(RecommendPropeties recommendPropeties) {
+	public void setRecommendPropeties(RecommendProperties recommendPropeties) {
 		this.recommendPropeties = recommendPropeties;
 	}
 }

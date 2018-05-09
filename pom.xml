@@ -101,12 +101,6 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
 		</dependency>
-		<!-- CSV -->
-		<dependency>
-			<groupId>net.sf.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>2.3</version>
-		</dependency>
 		<!-- mahout -->
 		<dependency>
 			<groupId>org.apache.mahout</groupId>

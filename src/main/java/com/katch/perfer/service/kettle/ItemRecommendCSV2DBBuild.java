@@ -29,7 +29,7 @@ import org.pentaho.di.trans.steps.update.UpdateMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.katch.perfer.config.RecommendPropeties;
+import com.katch.perfer.config.RecommendProperties;
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 
 /**
@@ -42,7 +42,7 @@ import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 @SuppressWarnings("deprecation")
 public class ItemRecommendCSV2DBBuild {
 	@Autowired
-	private RecommendPropeties recommendPropeties;
+	private RecommendProperties recommendPropeties;
 
 	private TransMeta createTrans() throws KettleException {
 		String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -307,11 +307,11 @@ public class ItemRecommendCSV2DBBuild {
 		return kettleJobEntireDefine;
 	}
 
-	public RecommendPropeties getRecommendPropeties() {
+	public RecommendProperties getRecommendPropeties() {
 		return recommendPropeties;
 	}
 
-	public void setRecommendPropeties(RecommendPropeties recommendPropeties) {
+	public void setRecommendPropeties(RecommendProperties recommendPropeties) {
 		this.recommendPropeties = recommendPropeties;
 	}
 }

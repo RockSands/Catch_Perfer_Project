@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:/config/recommend.properties")
-public class RecommendPropeties {
+public class RecommendProperties {
 	
 	@Value("${recommend.insert.target.db.type}")
 	private String targetType;
@@ -31,6 +31,9 @@ public class RecommendPropeties {
 	
 	@Value("${recommend.save.user.fileName}")
 	private String userRecommendFileName;
+	
+	@Value("${recommend.tax.enterprise.select.sql}")
+	private String taxEnterpriseSelectSql;
 	
 	public String getTargetType() {
 		return targetType;
@@ -94,5 +97,13 @@ public class RecommendPropeties {
 
 	public void setUserRecommendFileName(String userRecommendFileName) {
 		this.userRecommendFileName = userRecommendFileName;
+	}
+
+	public String getTaxEnterpriseSelectSql() {
+		return taxEnterpriseSelectSql;
+	}
+
+	public void setTaxEnterpriseSelectSql(String taxEnterpriseSelectSql) {
+		this.taxEnterpriseSelectSql = taxEnterpriseSelectSql;
 	}
 }
