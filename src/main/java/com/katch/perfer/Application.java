@@ -7,10 +7,9 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.katch.perfer.init.ApplicationEnvironmentPreparedEventListener;
 import com.katch.perfer.init.ApplicationFailedEventListener;
 import com.katch.perfer.init.ApplicationPreparedEventListener;
-import com.katch.perfer.init.ApplicationStartedEventListener;
+import com.katch.perfer.init.ApplicationReadyEventListener;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
@@ -20,10 +19,9 @@ public class Application {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication app = new SpringApplication(Application.class);
-		app.addListeners(new ApplicationEnvironmentPreparedEventListener());
 		app.addListeners(new ApplicationFailedEventListener());
 		app.addListeners(new ApplicationPreparedEventListener());
-		app.addListeners(new ApplicationStartedEventListener());
+		app.addListeners(new ApplicationReadyEventListener());
 		app.run(args);
 	}
 }

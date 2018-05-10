@@ -20,7 +20,7 @@ import com.katch.perfer.service.kettle.ConsumerExportCSVBuilder;
 
 @Service
 public class ConsumerRecommendAutoStartTask {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(ConsumerRecommendAutoStartTask.class);
 
 	@Autowired
@@ -42,7 +42,7 @@ public class ConsumerRecommendAutoStartTask {
 	 */
 	@Scheduled(cron = "${consumer.mahout.cron}")
 	public void excute() {
-		RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY00001");
+		RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY_RECOMMEND_DATA_OFF_CREATER");
 		logger.info("消费推荐同步信息准备启动!");
 		if (Consist.RECOM_TASK_TRACK_STEP_FREE.equals(track.getStep())
 				|| (Consist.RECOM_TASK_TRACK_STATUS_ERROR.equals(track.getStep()))) {

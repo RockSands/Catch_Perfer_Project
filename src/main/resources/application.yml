@@ -19,6 +19,11 @@ spring:
       username: hx_zgxt
       password: css
       driver-class-name: oracle.jdbc.OracleDriver
+    thirdary: 
+      url: jdbc:oracle:thin:@10.23.8.113:1521:lthxcx
+      username: zj_wbcx
+      password: hxzgxtoracle7788
+      driver-class-name: oracle.jdbc.OracleDriver
 # 配置Mybatis的配置文件位置
 mybatis:
   mapper-locations: classpath:mapper/*.xml

@@ -7,5 +7,5 @@ package com.katch.perfer.mybatis.config;
  *
  */
 public enum DataSourceEnum {
-    primary, secondary;
+	primary, secondary, thirdary;
 }
