@@ -17,25 +17,19 @@ import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.trans.steps.dummytrans.DummyTransMeta;
 import org.pentaho.di.trans.steps.filterrows.FilterRowsMeta;
-import org.pentaho.di.trans.steps.mergejoin.MergeJoinMeta;
 import org.pentaho.di.trans.steps.mergerows.MergeRowsMeta;
 import org.pentaho.di.trans.steps.sort.SortRowsMeta;
 import org.pentaho.di.trans.steps.tableinput.TableInputMeta;
-import org.pentaho.di.trans.steps.tableoutput.TableOutputMeta;
 import org.pentaho.di.trans.steps.update.UpdateMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.katch.perfer.config.ConsumerProperties;
 import com.katch.perfer.config.RecommendProperties;
 import com.katch.perfer.config.TaxEnterpriseProperties;
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 
 @Component
 public class TaxEnterpriseImportBuilder {
-	@Autowired
-	private ConsumerProperties consumerProperties;
-
 	@Autowired
 	private RecommendProperties recommendProperties;
 
@@ -53,12 +47,6 @@ public class TaxEnterpriseImportBuilder {
 				taxEnterpriseProperties.getDbType(), "Native", taxEnterpriseProperties.getDbHost(),
 				taxEnterpriseProperties.getDbDatabase(), taxEnterpriseProperties.getDbPort(),
 				taxEnterpriseProperties.getDbUser(), taxEnterpriseProperties.getDbPasswd());
-		final DatabaseMeta joinDataBase = new DatabaseMeta(
-				consumerProperties.getSourceHost() + "_" + consumerProperties.getSourcePort() + "_"
-						+ consumerProperties.getSourceDatabase() + "_" + consumerProperties.getSourceUser(),
-				consumerProperties.getSourceType(), "Native", consumerProperties.getSourceHost(),
-				consumerProperties.getSourceDatabase(), consumerProperties.getSourcePort(),
-				consumerProperties.getSourceUser(), consumerProperties.getSourcePasswd());
 		final DatabaseMeta targetDatabase = new DatabaseMeta(
 				recommendProperties.getTargetHost() + "_" + recommendProperties.getTargetPort() + "_"
 						+ recommendProperties.getTargetDatabase() + "_" + recommendProperties.getTargetUser(),
@@ -109,66 +97,39 @@ public class TaxEnterpriseImportBuilder {
 		StepMeta sourceSort = new StepMeta("sourceSort", sourceSR);
 		sourceSort.setLocation(350, 100);
 		sourceSort.setDraw(true);
-		sourceSort.setDescription("STEP-SOURCETARGET");
+		sourceSort.setDescription("STEP-sourceSort");
 		transMeta.addStep(sourceSort);
 		transMeta.addTransHop(new TransHopMeta(source, sourceSort));
-		/*
-		 * Join
-		 */
-		final TableInputMeta tii2 = new TableInputMeta();
-		tii2.setDatabaseMeta(joinDataBase);
-		final String selectSQL2 = consumerProperties.getTaxEnterpriseSql();
-		tii2.setSQL(selectSQL2);
-		final StepMeta join = new StepMeta("join", tii2);
-		join.setLocation(150, 300);
-		join.setDraw(true);
-		join.setDescription("STEP-JOIN");
-		transMeta.addStep(join);
-		/*
-		 * joinSort
-		 */
-		SortRowsMeta joinSR = new SortRowsMeta();
-		joinSR.setFieldName(pkColumns);
-		joinSR.setDirectory("%%java.io.tmpdir%%");
-		joinSR.setPrefix("joinSortOut");
-		joinSR.setSortSize("1000000");
-		joinSR.setAscending(new boolean[] { true });
-		joinSR.setCaseSensitive(new boolean[] { true });
-		joinSR.setCollatorStrength(new int[] { 0 });
-		joinSR.setCollatorEnabled(new boolean[] { false });
-		joinSR.setPreSortedField(new boolean[] { false });
-		StepMeta joinSort = new StepMeta("joinSort", joinSR);
-		joinSort.setLocation(350, 300);
-		joinSort.setDraw(true);
-		joinSort.setDescription("STEP-JOINSORT");
-		transMeta.addStep(joinSort);
-		transMeta.addTransHop(new TransHopMeta(join, joinSort));
-		/*
-		 * JoinMerage
-		 */
-		MergeJoinMeta mjm = new MergeJoinMeta();
-		mjm.setJoinType("INNER");
-		mjm.setKeyFields1(pkColumns);
-		mjm.setKeyFields2(pkColumns);
-		mjm.getStepIOMeta().setInfoSteps(new StepMeta[] { sourceSort, joinSort });
-		StepMeta JoinMerage = new StepMeta("JoinMerage", mjm);
-		JoinMerage.setLocation(550, 200);
-		JoinMerage.setDraw(true);
-		JoinMerage.setDescription("STEP-JoinMerage");
-		transMeta.addStep(JoinMerage);
-		transMeta.addTransHop(new TransHopMeta(sourceSort, JoinMerage));
-		transMeta.addTransHop(new TransHopMeta(joinSort, JoinMerage));
 		/*
 		 * Target
 		 */
 		TableInputMeta targettii = new TableInputMeta();
 		targettii.setDatabaseMeta(targetDatabase);
-		targettii.setSQL("SELECT NSRSBH,SNYYE,QSYYSJ FROM tax_enterprise_info ORDER BY NSRSBH");
+		targettii.setSQL("SELECT NSRSBH,SNYYE,QSYYSJ FROM tax_enterprise_info");
 		StepMeta target = new StepMeta("target", targettii);
 		transMeta.addStep(target);
-		target.setLocation(750, 400);
+		target.setLocation(150, 300);
 		target.setDraw(true);
 		target.setDescription("STEP-TARGET");
+		/*
+		 * targetSort
+		 */
+		SortRowsMeta targetSR = new SortRowsMeta();
+		targetSR.setFieldName(pkColumns);
+		targetSR.setDirectory("%%java.io.tmpdir%%");
+		targetSR.setPrefix("targetSortOut");
+		targetSR.setSortSize("1000000");
+		targetSR.setAscending(new boolean[] { true });
+		targetSR.setCaseSensitive(new boolean[] { true });
+		targetSR.setCollatorStrength(new int[] { 0 });
+		targetSR.setCollatorEnabled(new boolean[] { false });
+		targetSR.setPreSortedField(new boolean[] { false });
+		StepMeta targetSort = new StepMeta("targetSort", targetSR);
+		targetSort.setLocation(350, 300);
+		targetSort.setDraw(true);
+		targetSort.setDescription("STEP-TARGETSORT");
+		transMeta.addStep(targetSort);
+		transMeta.addTransHop(new TransHopMeta(target, targetSort));
 		/*
 		 * merage
 		 */
@@ -176,67 +137,14 @@ public class TaxEnterpriseImportBuilder {
 		mrm.setFlagField("flagfield");
 		mrm.setValueFields(targetAllColumns);
 		mrm.setKeyFields(pkColumns);
-		mrm.getStepIOMeta().setInfoSteps(new StepMeta[] { target, sourceSort });
+		mrm.getStepIOMeta().setInfoSteps(new StepMeta[] { targetSort, sourceSort });
 		StepMeta merage = new StepMeta("merage", mrm);
 		transMeta.addStep(merage);
-		merage.setLocation(650, 300);
+		merage.setLocation(550, 200);
 		merage.setDraw(true);
 		merage.setDescription("STEP-MERAGE");
-		transMeta.addTransHop(new TransHopMeta(target, merage));
-		transMeta.addTransHop(new TransHopMeta(JoinMerage, merage));
-		/*
-		 * noChange
-		 */
-		FilterRowsMeta frm_nochange = new FilterRowsMeta();
-		frm_nochange.setCondition(
-				new Condition("flagfield", Condition.FUNC_EQUAL, null, new ValueMetaAndData("constant", "identical")));
-		StepMeta nochang = new StepMeta("nochang", frm_nochange);
-		nochang.setLocation(850, 300);
-		nochang.setDraw(true);
-		nochang.setDescription("STEP-NOCHANGE");
-		transMeta.addStep(nochang);
-		transMeta.addTransHop(new TransHopMeta(merage, nochang));
-		/*
-		 * nothing
-		 */
-		StepMeta nothing = new StepMeta("nothing", new DummyTransMeta());
-		nothing.setLocation(850, 500);
-		nothing.setDraw(true);
-		nothing.setDescription("STEP-NOTHING");
-		transMeta.addStep(nothing);
-		transMeta.addTransHop(new TransHopMeta(nochang, nothing));
-		frm_nochange.getStepIOMeta().getTargetStreams().get(0).setStepMeta(nothing);
-		/*
-		 * isNew
-		 */
-		FilterRowsMeta frm_new = new FilterRowsMeta();
-		frm_new.setCondition(
-				new Condition("flagfield", Condition.FUNC_EQUAL, null, new ValueMetaAndData("constant", "new")));
-		StepMeta isNew = new StepMeta("isNew", frm_new);
-		isNew.setLocation(1050, 300);
-		isNew.setDraw(true);
-		isNew.setDescription("STEP-ISNEW");
-		transMeta.addStep(isNew);
-		transMeta.addTransHop(new TransHopMeta(nochang, isNew));
-		frm_nochange.getStepIOMeta().getTargetStreams().get(1).setStepMeta(isNew);
-		/*
-		 * insert
-		 */
-		TableOutputMeta toi = new TableOutputMeta();
-		toi.setDatabaseMeta(targetDatabase);
-		toi.setTableName("TAX_ENTERPRISE_INFO");
-		toi.setCommitSize(100);
-		toi.setTruncateTable(false);
-		toi.setSpecifyFields(true);
-		toi.setFieldDatabase(targetAllColumns);
-		toi.setFieldStream(targetAllColumns);
-		StepMeta insert = new StepMeta("insert", toi);
-		insert.setLocation(1050, 500);
-		insert.setDraw(true);
-		insert.setDescription("STEP-INSERT");
-		transMeta.addStep(insert);
-		transMeta.addTransHop(new TransHopMeta(isNew, insert));
-		frm_new.getStepIOMeta().getTargetStreams().get(0).setStepMeta(insert);
+		transMeta.addTransHop(new TransHopMeta(targetSort, merage));
+		transMeta.addTransHop(new TransHopMeta(sourceSort, merage));
 		/*
 		 * isChange
 		 */
@@ -244,12 +152,11 @@ public class TaxEnterpriseImportBuilder {
 		frm_isChange.setCondition(
 				new Condition("flagfield", Condition.FUNC_EQUAL, null, new ValueMetaAndData("constant", "changed")));
 		StepMeta isChange = new StepMeta("isChange", frm_isChange);
-		isChange.setLocation(1250, 300);
+		isChange.setLocation(750, 200);
 		isChange.setDraw(true);
 		isChange.setDescription("STEP-ISCHANGE");
 		transMeta.addStep(isChange);
-		transMeta.addTransHop(new TransHopMeta(isNew, isChange));
-		frm_new.getStepIOMeta().getTargetStreams().get(1).setStepMeta(isChange);
+		transMeta.addTransHop(new TransHopMeta(merage, isChange));
 		/*
 		 * update
 		 */
@@ -267,37 +174,22 @@ public class TaxEnterpriseImportBuilder {
 		um.setUpdateStream(targetAllColumns);
 
 		StepMeta update = new StepMeta("update", um);
-		update.setLocation(1250, 500);
+		update.setLocation(950, 200);
 		update.setDraw(true);
 		update.setDescription("STEP-UPDATE");
 		transMeta.addStep(update);
 		transMeta.addTransHop(new TransHopMeta(isChange, update));
 		frm_isChange.getStepIOMeta().getTargetStreams().get(0).setStepMeta(update);
 		/*
-		 * delete
+		 * nothing
 		 */
-		// DeleteMeta dm = new DeleteMeta();
-		// dm.setDatabaseMeta(targetDatabase);
-		// dm.setTableName("TAX_ENTERPRISE_INFO");
-		// dm.setCommitSize("100");
-		// dm.setKeyCondition(conditions);
-		// dm.setKeyLookup(pkColumns);
-		// dm.setKeyStream2(new String[2]);
-		// dm.setKeyStream(pkColumns);
-		// StepMeta delete = new StepMeta("delete", dm);
-		// delete.setLocation(1450, 300);
-		// delete.setDraw(true);
-		// delete.setDescription("STEP-DELETE");
-		// transMeta.addStep(delete);
-		// transMeta.addTransHop(new TransHopMeta(isChange, delete));
-		// frm_isChange.getStepIOMeta().getTargetStreams().get(1).setStepMeta(delete);
-		StepMeta nothing2 = new StepMeta("nothing2", new DummyTransMeta());
-		nothing2.setLocation(1450, 300);
-		nothing2.setDraw(true);
-		nothing2.setDescription("STEP-NOTHING2");
-		transMeta.addStep(nothing2);
-		transMeta.addTransHop(new TransHopMeta(nochang, nothing2));
-		frm_isChange.getStepIOMeta().getTargetStreams().get(1).setStepMeta(nothing2);
+		StepMeta nothing = new StepMeta("nothing", new DummyTransMeta());
+		nothing.setLocation(750, 400);
+		nothing.setDraw(true);
+		nothing.setDescription("STEP-NOTHING");
+		transMeta.addStep(nothing);
+		transMeta.addTransHop(new TransHopMeta(isChange, nothing));
+		frm_isChange.getStepIOMeta().getTargetStreams().get(1).setStepMeta(nothing);
 		return transMeta;
 	}
 
