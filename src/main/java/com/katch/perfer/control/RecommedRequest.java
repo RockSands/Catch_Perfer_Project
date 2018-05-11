@@ -1,14 +1,16 @@
 package com.katch.perfer.control;
 
+import com.katch.perfer.mybatis.model.TaxEnterpriseInfo;
+
 public class RecommedRequest {
 	/*
 	 * 用户ID
 	 */
 	private Long yhid;
 	/*
-	 * 企业ID
+	 * 企业
 	 */
-	private String qyid;
+	private TaxEnterpriseInfo taxEnterpriseInfo;
 	
 	/*
 	 * 区域
@@ -23,12 +25,12 @@ public class RecommedRequest {
 		this.yhid = yhid;
 	}
 
-	public String getQyid() {
-		return qyid;
+	public TaxEnterpriseInfo getTaxEnterpriseInfo() {
+		return taxEnterpriseInfo;
 	}
 
-	public void setQyid(String qyid) {
-		this.qyid = qyid;
+	public void setTaxEnterpriseInfo(TaxEnterpriseInfo taxEnterpriseInfo) {
+		this.taxEnterpriseInfo = taxEnterpriseInfo;
 	}
 
 	public String getQy() {

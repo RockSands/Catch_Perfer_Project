@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.katch.perfer.mybatis.model.TaxEnterpriseInfo;
 import com.katch.perfer.service.ConsumerNorthService;
+import com.katch.perfer.service.TaxEnterpriseService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -17,6 +19,9 @@ import io.swagger.annotations.ApiOperation;
 public class RecommendController {
 	@Autowired
 	private ConsumerNorthService consumerNorthService;
+	
+	@Autowired
+	private TaxEnterpriseService taxEnterpriseService;
 
 	/**
 	 * 查询
@@ -25,14 +30,14 @@ public class RecommendController {
 	 */
 	@ApiOperation(value = "获取推荐列表", notes = "")
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Long> get(@RequestParam(required = false) Long yhid, @RequestParam(required = false) String qyid,
+	public List<Long> get(@RequestParam(required = false) Long yhid, @RequestParam(required = false) String nsrsbh,
 			@RequestParam(required = true) String qy) {
-		if (yhid == null && qyid != null) {
-			qyid = null;
-		}
 		RecommedRequest request = new RecommedRequest();
+		if(nsrsbh != null) {
+			TaxEnterpriseInfo taxEnterprise = taxEnterpriseService.queryTaxEnterpriseInfo(nsrsbh);
+			request.setTaxEnterpriseInfo(taxEnterprise);
+		}
 		request.setYhid(yhid);
-		request.setQyid(qyid);
 		request.setQy(qy);
 		return consumerNorthService.queryRecommends(request);
 	}
