@@ -54,6 +54,7 @@ public class TaxEnterpriseImportBuilder {
 				recommendProperties.getTargetDatabase(), recommendProperties.getTargetPort(),
 				recommendProperties.getTargetUser(), recommendProperties.getTargetPasswd());
 		transMeta.addDatabase(sourceDataBase);
+		transMeta.addDatabase(targetDatabase);
 		/*
 		 * 构建
 		 */
@@ -105,7 +106,7 @@ public class TaxEnterpriseImportBuilder {
 		 */
 		TableInputMeta targettii = new TableInputMeta();
 		targettii.setDatabaseMeta(targetDatabase);
-		targettii.setSQL("SELECT NSRSBH,SNYYE,QSYYSJ FROM tax_enterprise_info");
+		targettii.setSQL("SELECT NSRSBH,QSYYSJ,SNYYE FROM TAX_ENTERPRISE_INFO");
 		StepMeta target = new StepMeta("target", targettii);
 		transMeta.addStep(target);
 		target.setLocation(150, 300);

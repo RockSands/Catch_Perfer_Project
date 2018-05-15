@@ -21,7 +21,7 @@ public class TaxEnterpriseInfo {
 	/**
 	 * 上年营业额
 	 */
-	private String snyye;
+	private Double snyye;
 
 	public String getNsrsbh() {
 		return nsrsbh;
@@ -39,11 +39,11 @@ public class TaxEnterpriseInfo {
 		this.qsyysj = qsyysj;
 	}
 
-	public String getSnyye() {
+	public Double getSnyye() {
 		return snyye;
 	}
 
-	public void setSnyye(String snyye) {
+	public void setSnyye(Double snyye) {
 		this.snyye = snyye;
 	}
 }

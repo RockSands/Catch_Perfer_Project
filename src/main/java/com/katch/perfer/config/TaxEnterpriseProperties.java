@@ -7,80 +7,80 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource("classpath:/config/taxes_enterprise.properties")
 public class TaxEnterpriseProperties {
-    @Value("${consumer.db.type}")
+	@Value("${taxes.db.type}")
 	private String dbType;
 
-	@Value("${consumer.db.host}")
+	@Value("${taxes.db.host}")
 	private String dbHost;
 
-	@Value("${consumer.db.port}")
+	@Value("${taxes.db.port}")
 	private String dbPort;
 
-	@Value("${consumer.db.database}")
+	@Value("${taxes.db.database}")
 	private String dbDatabase;
-	
-	@Value("${consumer.db.user}")
+
+	@Value("${taxes.db.user}")
 	private String dbUser;
 
-	@Value("${consumer.db.passwd}")
+	@Value("${taxes.db.passwd}")
 	private String dbPasswd;
-	
+
 	@Value("${taxes.enterprise.import.sql}")
 	private String taxesEnterpriseImportSQL;
-	
+
 	public String getDbType() {
-	    return dbType;
+		return dbType;
 	}
 
 	public void setDbType(String dbType) {
-	    this.dbType = dbType;
+		this.dbType = dbType;
 	}
 
 	public String getDbHost() {
-	    return dbHost;
+		return dbHost;
 	}
 
 	public void setDbHost(String dbHost) {
-	    this.dbHost = dbHost;
+		this.dbHost = dbHost;
 	}
 
 	public String getDbPort() {
-	    return dbPort;
+		return dbPort;
 	}
 
 	public void setDbPort(String dbPort) {
-	    this.dbPort = dbPort;
+		this.dbPort = dbPort;
 	}
 
 	public String getDbDatabase() {
-	    return dbDatabase;
+		return dbDatabase;
 	}
 
 	public void setDbDatabase(String dbDatabase) {
-	    this.dbDatabase = dbDatabase;
+		this.dbDatabase = dbDatabase;
 	}
 
 	public String getDbUser() {
-	    return dbUser;
+		return dbUser;
 	}
 
 	public void setDbUser(String dbUser) {
-	    this.dbUser = dbUser;
+		this.dbUser = dbUser;
 	}
 
 	public String getDbPasswd() {
-	    return dbPasswd;
+		return dbPasswd;
 	}
 
 	public void setDbPasswd(String dbPasswd) {
-	    this.dbPasswd = dbPasswd;
+		this.dbPasswd = dbPasswd;
 	}
 
 	public String getTaxesEnterpriseImportSQL() {
-	    return taxesEnterpriseImportSQL;
+		return taxesEnterpriseImportSQL;
 	}
 
 	public void setTaxesEnterpriseImportSQL(String taxesEnterpriseImportSQL) {
-	    this.taxesEnterpriseImportSQL = taxesEnterpriseImportSQL;
+		this.taxesEnterpriseImportSQL = taxesEnterpriseImportSQL;
 	}
 }
