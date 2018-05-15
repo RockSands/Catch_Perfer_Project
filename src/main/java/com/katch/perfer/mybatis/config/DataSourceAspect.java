@@ -13,24 +13,26 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class DataSourceAspect {
-    @Pointcut("execution(* com.katch.perfer.mybatis.mapper..*.*(..))")
-    public void dataSourcePointcut() {
-    }
-
-    @Before("dataSourcePointcut()")
-    public void doBefore(JoinPoint point) {
-	MethodSignature methodSignature = (MethodSignature) point.getSignature();
-	Method method = methodSignature.getMethod();
-	DataSourceTypeAnno typeAnno = method.getAnnotation(DataSourceTypeAnno.class);
-	if (typeAnno != null && typeAnno.value() == DataSourceEnum.secondary) {
-	    DataSourceContextHolder.setDataSourceType(DataSourceEnum.secondary);
-	} else {
-	    DataSourceContextHolder.setDataSourceType(DataSourceEnum.primary);
+	@Pointcut("execution(* com.katch.perfer.mybatis.mapper..*.*(..))")
+	public void dataSourcePointcut() {
 	}
-    }
 
-    @After("dataSourcePointcut()")
-    public void doAfter(JoinPoint point) {
-	DataSourceContextHolder.resetDataSourceType();
-    }
+	@Before("dataSourcePointcut()")
+	public void doBefore(JoinPoint point) {
+		MethodSignature methodSignature = (MethodSignature) point.getSignature();
+		Method method = methodSignature.getMethod();
+		DataSourceTypeAnno typeAnno = method.getAnnotation(DataSourceTypeAnno.class);
+		if (typeAnno != null && typeAnno.value() == DataSourceEnum.secondary) {
+			DataSourceContextHolder.setDataSourceType(DataSourceEnum.secondary);
+		} else if (typeAnno != null && typeAnno.value() == DataSourceEnum.thirdary) {
+			DataSourceContextHolder.setDataSourceType(DataSourceEnum.thirdary);
+		} else {
+			DataSourceContextHolder.setDataSourceType(DataSourceEnum.primary);
+		}
+	}
+
+	@After("dataSourcePointcut()")
+	public void doAfter(JoinPoint point) {
+		DataSourceContextHolder.resetDataSourceType();
+	}
 }

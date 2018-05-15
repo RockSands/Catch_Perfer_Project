@@ -1,5 +1,6 @@
 package com.katch.perfer.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.mybatis.mapper.TaxEnterPriseMapper;
@@ -7,6 +8,7 @@ import com.katch.perfer.mybatis.model.TaxEnterpriseInfo;
 
 @Service
 public class TaxEnterpriseService {
+	@Autowired
 	private TaxEnterPriseMapper taxEnterPriseMapper;
 
 	/**
@@ -26,6 +28,7 @@ public class TaxEnterpriseService {
 
 	/**
 	 * 插入
+	 * 
 	 * @param taxEnterprise
 	 */
 	private void insertNE(TaxEnterpriseInfo taxEnterprise) {

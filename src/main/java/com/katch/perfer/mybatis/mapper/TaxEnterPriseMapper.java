@@ -36,7 +36,7 @@ public interface TaxEnterPriseMapper {
 			+ "FROM hx_sb.sb_sbb T,hx_sb.SB_SDS_JMCZ_14ND_QYSDSNDNSSBZB t1," + "hx_sb.SB_SDS_JMHD_YJND t2,dj_nsrxx t3 "
 			+ "WHERE T.sbuuid = t1.sbuuid (+) AND T.sbuuid = t2.sbuuid (+) "
 			+ "AND T.djxh = T3.djxh AND T.zfbz_1 = 'N' AND T.gzlx_dm_1 IN ('1', '4', '5') "
-			+ "AND T.yzpzzl_dm != 'BDA0610922' AND (T.skssqz - T.skssqq) > 300 AND T3.nsrsbh = #{nsrsbh} ")
+			+ "AND T.yzpzzl_dm != 'BDA0610922' AND (T.skssqz - T.skssqq) > 300 AND T3.nsrsbh = #{nsrsbh} GROUP BY T3.nsrsbh")
 	@Results({ @Result(property = "nsrsbh", column = "NSRSBH", javaType = Long.class),
 			@Result(property = "snyye", column = "SNYYE", javaType = Double.class),
 			@Result(property = "qsyysj", column = "QSYYSJ", javaType = Date.class) })
