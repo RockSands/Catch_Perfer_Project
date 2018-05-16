@@ -12,7 +12,7 @@ import com.katch.perfer.mybatis.config.DataSourceTypeAnno;
 import com.katch.perfer.mybatis.model.LoanConditionDefine;
 
 public interface LoanConditionsMapper {
-	@DataSourceTypeAnno(DataSourceEnum.primary)
+	@DataSourceTypeAnno(DataSourceEnum.secondary)
 	@Select("SELECT TJLX_1 type,VALUE val FROM SQY_RZDK_SPSQTJ WHERE YXBZ = 'Y' AND SPID = #{spid}")
 	@Results({ @Result(property = "type", column = "type", javaType = String.class),
 			@Result(property = "val", column = "val", javaType = String.class) })
