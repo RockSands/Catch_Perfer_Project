@@ -1,4 +1,4 @@
-package com.katch.perfer.service;
+package com.katch.perfer.service.north;
 
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.katch.perfer.config.RecommendRestProperties;
 import com.katch.perfer.control.RecommedRequest;
+import com.katch.perfer.service.comm.RecommendPriorityService;
 
 /**
  * 消费记录导出

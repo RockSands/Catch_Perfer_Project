@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.katch.perfer.mybatis.model.TaxEnterpriseInfo;
-import com.katch.perfer.service.ConsumerNorthService;
-import com.katch.perfer.service.TaxEnterpriseService;
+import com.katch.perfer.service.comm.TaxEnterpriseService;
+import com.katch.perfer.service.north.ConsumerNorthService;
 
 import io.swagger.annotations.ApiOperation;
 

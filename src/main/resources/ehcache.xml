@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+	
+	<!-- 默认缓存配置 -->
+	<defaultCache eternal="false" timeToIdleSeconds="180"
+		timeToLiveSeconds="600" overflowToDisk="true" diskPersistent="true" />
+		
+	<!-- LoanApplyConditions,贷款申请条件 -->
+	<cache name="LoanConditionsCache" maxElementsInMemory="10000" eternal="false"
+		timeToIdleSeconds="180" timeToLiveSeconds="600" overflowToDisk="true" />
+</ehcache>

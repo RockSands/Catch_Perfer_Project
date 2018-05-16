@@ -1,4 +1,4 @@
-package com.katch.perfer.service;
+package com.katch.perfer.service.comm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
