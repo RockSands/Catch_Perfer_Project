@@ -28,6 +28,6 @@ public class Application {
 		// TaxEnterpriseOffImport taxEnterpriseOffImport =
 		// context.getBean(TaxEnterpriseOffImport.class);
 		// taxEnterpriseOffImport.excute();
-		// 测试用数据localhost:9090/catchPerfer/recommend?yhid=100000001&nsrsbh=440606152527002&qy=210000
+		// 测试用数据 http://localhost:9090/catchPerfer/recommend?yhid=100000001&nsrsbh=440606152527002&qy=210000
 	}
 }

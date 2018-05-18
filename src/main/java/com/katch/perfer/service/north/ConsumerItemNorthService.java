@@ -162,7 +162,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 			}
 		}
 		for (Map.Entry<Long, Double> entry : recommendScoreMap.entrySet()) {
-			if (scoreMap.containsKey(entry.getKey())) {
+			if (!scoreMap.containsKey(entry.getKey())) {
 				scoreMap.put(entry.getKey(), entry.getValue());
 			} else {
 				scoreMap.put(entry.getKey(), entry.getValue() + scoreMap.get(entry.getKey()));

@@ -13,7 +13,7 @@ import com.katch.perfer.mybatis.model.LoanConditionDefine;
 
 public interface LoanConditionsMapper {
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	@Select("SELECT TJLX_1 type,VALUE val FROM SQY_RZDK_SPSQTJ WHERE YXBZ = 'Y' AND SPID = #{spid}")
+	@Select("SELECT TJLX_1 type,VALUE val FROM SQY_RZDK_SPSQTJ WHERE YXBZ = 'Y' AND SPID_1 = #{spid}")
 	@Results({ @Result(property = "type", column = "type", javaType = String.class),
 			@Result(property = "val", column = "val", javaType = String.class) })
 	List<LoanConditionDefine> queryLoanCondition(@Param("spid") long spid);
