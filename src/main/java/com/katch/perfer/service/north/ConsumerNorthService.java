@@ -1,12 +1,13 @@
 package com.katch.perfer.service.north;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.katch.perfer.config.RecommendRestProperties;
 import com.katch.perfer.control.RecommedRequest;
+import com.katch.perfer.mybatis.model.TaxEnterpriseInfo;
+import com.katch.perfer.service.comm.LoanConditionService;
 import com.katch.perfer.service.comm.RecommendPriorityService;
 
 /**
@@ -21,6 +22,9 @@ public abstract class ConsumerNorthService {
 
 	@Autowired
 	protected RecommendPriorityService priorityService;
+
+	@Autowired
+	protected LoanConditionService loanConditionService;
 
 	/**
 	 * @param yhid
@@ -37,38 +41,39 @@ public abstract class ConsumerNorthService {
 	 * @return
 	 */
 	public List<Long> queryRecommends(RecommedRequest request) {
-		List<Long> allRecommends = queryAllRecommend(request);
+		List<Long> recommends = queryAllRecommend(request);
 		List<Long> topItems = priorityService.queryTopSortItems(request.getQy());
 		List<Long> randomAllItems = priorityService.queryAllRandomSortItems(request.getQy());
-		Long recommendItemID;
-		for (Iterator<Long> it = allRecommends.iterator(); it.hasNext();) {
-			recommendItemID = it.next();
-			if (!randomAllItems.contains(recommendItemID)) {
-				it.remove();
-			}
-		}
 		// 如果条数不足,使用TOP补充
-		if (allRecommends.size() < recommendRestProperties.getReturnSize()) {
+		if (recommends.size() < recommendRestProperties.getReturnSize()) {
 			for (Long itemId : topItems) {
-				if (!allRecommends.contains(itemId)) {
-					allRecommends.add(itemId);
-					if (allRecommends.size() == recommendRestProperties.getReturnSize()) {
-						break;
+				if (!recommends.contains(itemId) && loanApplyConstraint(itemId, request.getTaxEnterpriseInfo())) {
+					recommends.add(itemId);
+					if (recommends.size() == recommendRestProperties.getReturnSize()) {
+						return recommends;
 					}
 				}
 			}
 		}
 		// 如果条数不足,使用随机凑
-		if (allRecommends.size() < recommendRestProperties.getReturnSize()) {
-			for (Long itemId : randomAllItems) {
-				if (!allRecommends.contains(itemId)) {
-					allRecommends.add(itemId);
-					if (allRecommends.size() == recommendRestProperties.getReturnSize()) {
-						break;
-					}
+		for (Long itemId : randomAllItems) {
+			if (!recommends.contains(itemId) && loanApplyConstraint(itemId, request.getTaxEnterpriseInfo())) {
+				recommends.add(itemId);
+				if (recommends.size() == recommendRestProperties.getReturnSize()) {
+					return recommends;
 				}
 			}
 		}
-		return allRecommends;
+		return recommends;
+	}
+
+	protected boolean loanApplyConstraint(Long spid, TaxEnterpriseInfo info) {
+		if (spid == null) {
+			return false;
+		}
+		if (info == null) {
+			return true;
+		}
+		return loanConditionService.getLoanApplyConstraint(spid).constraint(info);
 	}
 }

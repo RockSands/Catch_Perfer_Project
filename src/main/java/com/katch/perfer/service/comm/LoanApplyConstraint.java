@@ -21,7 +21,7 @@ public class LoanApplyConstraint {
 	 */
 	private final List<LoanCondition> loanConditions;
 
-	public LoanApplyConstraint(long spid,List<LoanCondition> loanConditions) {
+	public LoanApplyConstraint(long spid, List<LoanCondition> loanConditions) {
 		this.spid = spid;
 		this.loanConditions = loanConditions;
 	}
@@ -31,6 +31,9 @@ public class LoanApplyConstraint {
 	}
 
 	public boolean constraint(TaxEnterpriseInfo info) {
+		if (loanConditions == null) {
+			return true;
+		}
 		for (LoanCondition loanCondition : loanConditions) {
 			if (!loanCondition.constraint(info)) {
 				return false;

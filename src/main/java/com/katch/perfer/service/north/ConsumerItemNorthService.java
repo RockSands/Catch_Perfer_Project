@@ -32,96 +32,14 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 	@Override
 	public List<Long> queryAllRecommend(RecommedRequest request) {
 		List<Long> returnList = new ArrayList<Long>();
-		// 增加权重
-		List<RecommendItemScore> weightScores = priorityService.queryItemWeight(request.getQy());
-		RecommendItemScore itemScore = null;
-		if (recommendRestProperties.getWeightSize() > 0) {
-			int index = recommendRestProperties.getWeightSize();
-			for (Iterator<RecommendItemScore> it = weightScores.iterator(); it.hasNext();) {
-				if (index < 1) {
-					break;
-				}
-				itemScore = it.next();
-				returnList.add(itemScore.getItemId());
-				it.remove();
-				index--;
-			}
-		}
-		// 新物品
-		List<RecommendItemScore> newItemScores = new ArrayList<RecommendItemScore>();
-		if (recommendRestProperties.isNewItemOpen()) {
-			newItemScores.addAll(
-					priorityService.queryNewItems(request.getQy(), recommendRestProperties.getNewItemTimeOut()));
-			if (recommendRestProperties.getNewItemSize() > 0) {
-				int index = recommendRestProperties.getNewItemSize();
-				for (Iterator<RecommendItemScore> it = newItemScores.iterator(); it.hasNext();) {
-					if (index < 1) {
-						break;
-					}
-					itemScore = it.next();
-					if (!returnList.contains(itemScore.getItemId())) {
-						returnList.add(itemScore.getItemId());
-						it.remove();
-						index--;
-					}
-				}
-			}
-		}
-		// 消费记录推荐
 		Map<Long, Double> scoreMap = new HashMap<Long, Double>();
-		if (request.getYhid() != null) {
-			List<UserConsumption> consumptions = userConsumptionMapper.queryUserConsumptions(request.getYhid(),
-					request.getQy());
-			double initScore = 4.5;
-			double scortTmp = 0.0;
-			List<RecommendItemScore> baseItemScores;
-			RecommendItemScore itemRoll;
-			for (UserConsumption consumption : consumptions.subList(0, Math.min(consumptions.size(), 10))) {
-				initScore = initScore - 0.2;
-				baseItemScores = baseItemRecommendMapper.queryRecommenders(consumption.getItmeId());
-				for (int i = 0; i < baseItemScores.size(); i++) {
-					itemRoll = baseItemScores.get(i);
-					if (returnList.contains(itemRoll.getItemId())) {
-						continue;
-					}
-					if (!scoreMap.containsKey(itemRoll.getItemId())) {
-						scoreMap.put(itemRoll.getItemId(), itemRoll.getScore() - 0.1 * i);
-					} else {
-						scortTmp = scoreMap.get(itemRoll.getItemId());
-						if (scortTmp > 4.95D) {
-							scoreMap.put(itemRoll.getItemId(), 5.0D);
-						} else if (scortTmp > 4) {
-							scoreMap.put(itemRoll.getItemId(), scortTmp + 0.15D);
-						} else if (scortTmp > 3) {
-							scoreMap.put(itemRoll.getItemId(), scortTmp + 0.3D);
-						} else {
-							scoreMap.put(itemRoll.getItemId(), scortTmp + 0.5D);
-						}
-					}
-				}
-			}
-		}
-		// 开始加权并排序
-		for (RecommendItemScore roll : weightScores) {
-			if (returnList.contains(roll.getItemId())) {
-				continue;
-			}
-			if (!scoreMap.containsKey(roll.getItemId())) {
-				scoreMap.put(roll.getItemId(), roll.getScore());
-			} else {
-				scoreMap.put(roll.getItemId(), roll.getScore() + scoreMap.get(roll.getItemId()));
-			}
-		}
-		for (RecommendItemScore roll : newItemScores) {
-			if (returnList.contains(roll.getItemId())) {
-				continue;
-			}
-			if (!scoreMap.containsKey(roll.getItemId())) {
-				scoreMap.put(roll.getItemId(), roll.getScore());
-			} else {
-				scoreMap.put(roll.getItemId(), roll.getScore() + scoreMap.get(roll.getItemId()));
-			}
-		}
+		// 处理权重
+		dealWeightItems(request, returnList, scoreMap);
+		// 处理新物品
+		dealNewItems(request, returnList, scoreMap);
+		// 处理推荐物品
+		dealRecommendItems(request, returnList, scoreMap);
+		// 开始排序
 		List<Map.Entry<Long, Double>> mapList = new ArrayList<Map.Entry<Long, Double>>(scoreMap.entrySet());
 		Collections.sort(mapList, new Comparator<Map.Entry<Long, Double>>() {
 			@Override
@@ -133,5 +51,122 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 			returnList.add(entry.getKey());
 		}
 		return returnList;
+	}
+
+	/**
+	 * 处理权重商品
+	 * 
+	 * @param request
+	 * @param returnList
+	 * @param scoreMap
+	 */
+	private void dealWeightItems(RecommedRequest request, List<Long> returnList, Map<Long, Double> scoreMap) {
+		List<RecommendItemScore> weightScores = priorityService.queryItemWeight(request.getQy());
+		RecommendItemScore itemScore = null;
+		// 过滤
+		int count = recommendRestProperties.getWeightSize();
+		for (Iterator<RecommendItemScore> it = weightScores.iterator(); it.hasNext();) {
+			itemScore = it.next();
+			if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
+				continue;
+			} else if (count > 0) {
+				returnList.add(itemScore.getItemId());
+				scoreMap.remove(itemScore.getItemId());
+				count--;
+			} else if (!scoreMap.containsKey(itemScore.getItemId())) {
+				scoreMap.put(itemScore.getItemId(), itemScore.getScore());
+			} else {
+				scoreMap.put(itemScore.getItemId(), itemScore.getScore() + scoreMap.get(itemScore.getItemId()));
+			}
+		}
+	}
+
+	/**
+	 * 处理权重商品
+	 * 
+	 * @param request
+	 * @param returnList
+	 * @param scoreMap
+	 */
+	private void dealNewItems(RecommedRequest request, List<Long> returnList, Map<Long, Double> scoreMap) {
+		RecommendItemScore itemScore = null;
+		if (!recommendRestProperties.isNewItemOpen()) {
+			return;
+		}
+		int count = recommendRestProperties.getNewItemSize();
+		List<RecommendItemScore> allNewItems = priorityService.queryNewItems(request.getQy(),
+				recommendRestProperties.getNewItemTimeOut());
+		for (Iterator<RecommendItemScore> it = allNewItems.iterator(); it.hasNext();) {
+			itemScore = it.next();
+			if (!returnList.contains(itemScore.getItemId())) {
+				continue;
+			}
+			if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
+				continue;
+			}
+			if (count > 0) {
+				returnList.add(itemScore.getItemId());
+				scoreMap.remove(itemScore.getItemId());
+				count--;
+			} else if (!scoreMap.containsKey(itemScore.getItemId())) {
+				scoreMap.put(itemScore.getItemId(), itemScore.getScore());
+			} else {
+				scoreMap.put(itemScore.getItemId(), itemScore.getScore() + scoreMap.get(itemScore.getItemId()));
+			}
+		}
+	}
+
+	/**
+	 * 处理权重商品
+	 * 
+	 * @param request
+	 * @param returnList
+	 * @param scoreMap
+	 */
+	private void dealRecommendItems(RecommedRequest request, List<Long> returnList, Map<Long, Double> scoreMap) {
+		if (request.getYhid() == null) {
+			return;
+		}
+		// 消费记录
+		List<UserConsumption> consumptions = userConsumptionMapper.queryUserConsumptions(request.getYhid(),
+				request.getQy());
+		double devalue = 0.0D;
+		double scortTmp = 0.0;
+		Map<Long, Double> recommendScoreMap = new HashMap<Long, Double>();
+		List<RecommendItemScore> baseItemScores;
+		// 计算推荐评分
+		for (UserConsumption consumption : consumptions.subList(0, Math.min(consumptions.size(), 10))) {
+			devalue = devalue - 0.2D;
+			baseItemScores = baseItemRecommendMapper.queryRecommenders(consumption.getItmeId());
+			for (RecommendItemScore itemScore : baseItemScores) {
+				if (!returnList.contains(itemScore.getItemId())) {
+					continue;
+				}
+				if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
+					continue;
+				}
+				if (!recommendScoreMap.containsKey(itemScore.getItemId())) {
+					recommendScoreMap.put(itemScore.getItemId(), itemScore.getScore() + devalue);
+				} else {
+					scortTmp = recommendScoreMap.get(itemScore.getItemId());
+					if (scortTmp >= 4.9D) {
+						recommendScoreMap.put(itemScore.getItemId(), 5.0D);
+					} else if (scortTmp > 4) {
+						recommendScoreMap.put(itemScore.getItemId(), scortTmp + 0.15D);
+					} else if (scortTmp > 3) {
+						recommendScoreMap.put(itemScore.getItemId(), scortTmp + 0.3D);
+					} else {
+						recommendScoreMap.put(itemScore.getItemId(), scortTmp + 0.5D);
+					}
+				}
+			}
+		}
+		for (Map.Entry<Long, Double> entry : recommendScoreMap.entrySet()) {
+			if (scoreMap.containsKey(entry.getKey())) {
+				scoreMap.put(entry.getKey(), entry.getValue());
+			} else {
+				scoreMap.put(entry.getKey(), entry.getValue() + scoreMap.get(entry.getKey()));
+			}
+		}
 	}
 }
