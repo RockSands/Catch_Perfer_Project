@@ -7,6 +7,6 @@
 		timeToLiveSeconds="600" overflowToDisk="true" diskPersistent="true" />
 		
 	<!-- LoanApplyConditions,贷款申请条件 -->
-	<cache name="LoanConditionsCache" maxElementsInMemory="10000" eternal="false"
+	<cache name="LoanApplyConstraintCache" maxElementsInMemory="10000" eternal="false"
 		timeToIdleSeconds="180" timeToLiveSeconds="600" overflowToDisk="true" />
 </ehcache>

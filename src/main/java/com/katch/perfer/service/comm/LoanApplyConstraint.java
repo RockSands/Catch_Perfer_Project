@@ -1,9 +1,7 @@
 package com.katch.perfer.service.comm;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.katch.perfer.mybatis.model.LoanConditionDefine;
 import com.katch.perfer.mybatis.model.TaxEnterpriseInfo;
 import com.katch.perfer.service.comm.loan.LoanCondition;
 
@@ -13,44 +11,32 @@ import com.katch.perfer.service.comm.loan.LoanCondition;
  */
 public class LoanApplyConstraint {
 
-    /**
-     * 商品ID
-     */
-    private final long spid;
+	/**
+	 * 商品ID
+	 */
+	private final long spid;
 
-    /**
-     * 申请定义
-     */
-    private List<LoanCondition> loanConditions;
+	/**
+	 * 申请定义
+	 */
+	private final List<LoanCondition> loanConditions;
 
-    public LoanApplyConstraint(long spid) {
-	this.spid = spid;
-    }
-
-    public long getSpid() {
-	return spid;
-    }
-
-    /**
-     * @param loanConditionDefines
-     */
-    public synchronized void loadLoanConditionDefines(List<LoanConditionDefine> loanConditionDefines) {
-	if (loanConditions == null) {
-	    loanConditions = new ArrayList<LoanCondition>();
+	public LoanApplyConstraint(long spid,List<LoanCondition> loanConditions) {
+		this.spid = spid;
+		this.loanConditions = loanConditions;
 	}
-	loanConditions.clear();
-	for (LoanConditionDefine define : loanConditionDefines) {
-	    loanConditions.add(LoanCondition.getLoanCondition(define));
-	}
-    }
 
-    public boolean constraint(TaxEnterpriseInfo info) {
-	for (LoanCondition loanCondition : loanConditions) {
-	    if (!loanCondition.constraint(info)) {
-		return false;
-	    }
+	public long getSpid() {
+		return spid;
 	}
-	return true;
-    }
+
+	public boolean constraint(TaxEnterpriseInfo info) {
+		for (LoanCondition loanCondition : loanConditions) {
+			if (!loanCondition.constraint(info)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 }
