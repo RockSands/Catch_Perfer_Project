@@ -37,7 +37,7 @@ public interface TaxEnterPriseMapper {
 			+ "dj_nsrxx t3, (SELECT nsrsbh,min(SBRQ_1) QSYYSJ FROM hx_sb.sb_sbb GROUP BY nsrsbh) t4 "
 			+ "WHERE T .sbuuid = t1.sbuuid (+) AND T .sbuuid = t2.sbuuid (+) AND T .djxh = T3.djxh "
 			+ "AND T.nsrsbh = t4.nsrsbh AND T .zfbz_1 = 'N' AND T .gzlx_dm_1 IN ('1', '4', '5') "
-			//+ "AND T .yzpzzl_dm != 'BDA0610922' AND (T .skssqz - T .skssqq) > 300 "
+			+ "AND T .yzpzzl_dm != 'BDA0610922' AND (T .skssqz - T .skssqq) > 300 "
 			+ "AND t.SKSSQQ > add_months(sysdate,-12) AND T3.nsrsbh = #{nsrsbh} GROUP BY T3.nsrsbh,t4.QSYYSJ")
 	@Results({ @Result(property = "nsrsbh", column = "NSRSBH", javaType = String.class),
 			@Result(property = "snyye", column = "SNYYE", javaType = Double.class),
