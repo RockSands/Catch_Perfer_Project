@@ -61,9 +61,13 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 		int count = recommendRestProperties.getWeightSize();
 		for (Iterator<RecommendItemScore> it = weightScores.iterator(); it.hasNext();) {
 			itemScore = it.next();
+			if (returnList.contains(itemScore.getItemId())) {
+				continue;
+			}
 			if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
 				continue;
-			} else if (count > 0) {
+			} 
+			if (count > 0) {
 				returnList.add(itemScore.getItemId());
 				scoreMap.remove(itemScore.getItemId());
 				count--;
@@ -92,7 +96,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 				recommendRestProperties.getNewItemTimeOut());
 		for (Iterator<RecommendItemScore> it = allNewItems.iterator(); it.hasNext();) {
 			itemScore = it.next();
-			if (!returnList.contains(itemScore.getItemId())) {
+			if (returnList.contains(itemScore.getItemId())) {
 				continue;
 			}
 			if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
@@ -127,7 +131,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 		// 计算推荐评分
 		for (int i = 0; i < userItemScores.size(); i++) {
 			itemScore = userItemScores.get(i);
-			if (!returnList.contains(itemScore.getItemId())) {
+			if (returnList.contains(itemScore.getItemId())) {
 				continue;
 			}
 			if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
