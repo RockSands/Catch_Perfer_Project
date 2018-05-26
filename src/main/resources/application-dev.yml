@@ -10,26 +10,43 @@ spring:
     auto: true 
   datasource:
     primary: 
-      url: jdbc:mysql://10.23.13.183:3306/recommend?useAffectedRows=true&autoReconnect=true&characterEncoding=UTF-8
+      url: jdbc:mysql://10.23.13.183:3306/recommend
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
+      # 数据库连接池
       type: org.apache.commons.dbcp2.BasicDataSource
-      dbcp2.max-wait-millis: 10000
-      dbcp2.min-idle: 5
       initial-size: 5
+      max-active: 20
+      max-wait-millis: 10000
+      min-idle: 5
+      max-idle: 15
       validation-query: SELECT 1
-      connection-properties: characterEncoding=utf8
+      connection-properties: characterEncoding=utf8;autoReconnect=true;useAffectedRows=true
     secondary: 
       url: jdbc:oracle:thin:@10.23.10.224:1521:csstax
       username: hx_zgxt
       password: css
       driver-class-name: oracle.jdbc.OracleDriver
+      # 数据库连接池
+      type: org.apache.commons.dbcp2.BasicDataSource
+      initial-size: 5
+      max-active: 20
+      max-wait-millis: 10000
+      min-idle: 5
+      max-idle: 15
     thirdary: 
       url: jdbc:oracle:thin:@10.23.8.113:1521:lthxcx
       username: zj_wbcx
       password: hxzgxtoracle7788
       driver-class-name: oracle.jdbc.OracleDriver
+      # 数据库连接池
+      type: org.apache.commons.dbcp2.BasicDataSource
+      initial-size: 2
+      max-active: 20
+      max-wait-millis: 10000
+      min-idle: 2
+      max-idle: 5
 # 配置Mybatis的配置文件位置
 mybatis:
   mapper-locations: classpath:mapper/*.xml 

@@ -34,21 +34,21 @@ public class MyBatisConfig {
 	@Bean("primaryDataSource")
 	@ConfigurationProperties(prefix = "spring.datasource.primary")
 	public DataSource primaryDataSource() throws Exception {
-		DataSourceBuilder builder = DataSourceBuilder.create();
+		DataSourceBuilder builder = DataSourceBuilder.create().type(org.apache.commons.dbcp2.BasicDataSource.class);
 		return builder.build();
 	}
 
 	@Bean("secondaryDataSource")
 	@ConfigurationProperties(prefix = "spring.datasource.secondary")
 	public DataSource secondaryDataSource() throws Exception {
-		DataSourceBuilder builder = DataSourceBuilder.create();
+		DataSourceBuilder builder = DataSourceBuilder.create().type(org.apache.commons.dbcp2.BasicDataSource.class);
 		return builder.build();
 	}
 
 	@Bean("thirdaryDataSource")
 	@ConfigurationProperties(prefix = "spring.datasource.thirdary")
 	public DataSource thirdaryDataSource() throws Exception {
-		DataSourceBuilder builder = DataSourceBuilder.create();
+		DataSourceBuilder builder = DataSourceBuilder.create().type(org.apache.commons.dbcp2.BasicDataSource.class);
 		return builder.build();
 	}
 
