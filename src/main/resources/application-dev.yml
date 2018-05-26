@@ -14,6 +14,12 @@ spring:
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
+      type: org.apache.commons.dbcp2.BasicDataSource
+      dbcp2.max-wait-millis: 10000
+      dbcp2.min-idle: 5
+      initial-size: 5
+      validation-query: SELECT 1
+      connection-properties: characterEncoding=utf8
     secondary: 
       url: jdbc:oracle:thin:@10.23.10.224:1521:csstax
       username: hx_zgxt
