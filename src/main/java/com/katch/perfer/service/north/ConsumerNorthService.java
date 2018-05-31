@@ -43,7 +43,7 @@ public abstract class ConsumerNorthService {
 	public List<Long> queryRecommends(RecommedRequest request) {
 		List<Long> recommends = queryAllRecommend(request);
 		List<Long> topItems = priorityService.queryTopSortItems(request.getQy());
-		List<Long> randomAllItems = priorityService.queryAllRandomSortItems(request.getQy());
+		List<Long> allItems = priorityService.queryAllItems(request.getQy());
 		// 如果条数不足,使用TOP补充
 		if (recommends.size() < recommendRestProperties.getReturnSize()) {
 			for (Long itemId : topItems) {
@@ -56,7 +56,7 @@ public abstract class ConsumerNorthService {
 			}
 		}
 		// 如果条数不足,使用随机凑
-		for (Long itemId : randomAllItems) {
+		for (Long itemId : allItems) {
 			if (!recommends.contains(itemId) && loanApplyConstraint(itemId, request.getTaxEnterpriseInfo())) {
 				recommends.add(itemId);
 				if (recommends.size() == recommendRestProperties.getReturnSize()) {

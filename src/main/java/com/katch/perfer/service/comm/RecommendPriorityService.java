@@ -45,8 +45,9 @@ public class RecommendPriorityService {
 	 * 
 	 * @return
 	 */
-	public List<Long> queryAllRandomSortItems(String qy) {
-		return itemWeighMapper.queryAllRandomSortItems(qy);
+	public List<Long> queryAllItems(String qy) {
+		// return itemWeighMapper.queryAllRandomSortItems(qy);
+		return itemWeighMapper.queryAllItems(qy);
 	}
 	
 	/**
