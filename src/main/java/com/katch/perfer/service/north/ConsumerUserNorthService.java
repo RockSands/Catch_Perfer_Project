@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.katch.perfer.control.RecommedRequest;
 import com.katch.perfer.mybatis.mapper.BaseUserRecommendMapper;
+import com.katch.perfer.mybatis.mapper.UserConsumptionMapper;
 import com.katch.perfer.mybatis.model.RecommendItemScore;
 
 @Service()
@@ -22,6 +23,9 @@ import com.katch.perfer.mybatis.model.RecommendItemScore;
 public class ConsumerUserNorthService extends ConsumerNorthService {
 	@Autowired
 	private BaseUserRecommendMapper baseUserRecommendMapper;
+	
+	@Autowired
+	private UserConsumptionMapper userConsumptionMapper;
 
 	@Override
 	public List<Long> queryAllRecommend(RecommedRequest request) {
@@ -129,6 +133,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 		List<RecommendItemScore> userItemScores = baseUserRecommendMapper.queryRecommenders(request.getYhid());
 		RecommendItemScore itemScore;
 		// 计算推荐评分
+		Map<Long, Double> recommendScoreMap = new HashMap<Long, Double>();
 		for (int i = 0; i < userItemScores.size(); i++) {
 			itemScore = userItemScores.get(i);
 			if (returnList.contains(itemScore.getItemId())) {
@@ -137,10 +142,22 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 			if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
 				continue;
 			}
-			if (!scoreMap.containsKey(itemScore.getItemId())) {
-				scoreMap.put(itemScore.getItemId(), itemScore.getScore());
+			if (!recommendScoreMap.containsKey(itemScore.getItemId())) {
+				recommendScoreMap.put(itemScore.getItemId(), itemScore.getScore());
 			} else {
-				scoreMap.put(itemScore.getItemId(), itemScore.getScore() + scoreMap.get(itemScore.getItemId()));
+				recommendScoreMap.put(itemScore.getItemId(), itemScore.getScore() + scoreMap.get(itemScore.getItemId()));
+			}
+		}
+		// 过滤
+		List<Long> spids = userConsumptionMapper.recommednQYFilter(recommendScoreMap.keySet(), request.getQy());
+		for (Map.Entry<Long, Double> entry : recommendScoreMap.entrySet()) {
+			if (!spids.contains(entry.getKey())) {
+				continue;
+			}
+			if (!scoreMap.containsKey(entry.getKey())) {
+				scoreMap.put(entry.getKey(), entry.getValue());
+			} else {
+				scoreMap.put(entry.getKey(), entry.getValue() + scoreMap.get(entry.getKey()));
 			}
 		}
 	}

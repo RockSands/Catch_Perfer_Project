@@ -55,5 +55,5 @@ public interface ItemWeighMapper {
 	@Select("SELECT sp.SPID_1 AS itemId FROM SQY_RZDK_SP sp,SQY_RZDK_SPQYGXB spqy "
 			+ "WHERE SP.SPID_1 = spqy.SPID_1 AND spqy.QY_DM = #{qy}")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class) })
-	List<Long> queryAllItems(@Param("qy") String qy);
+	List<Long> queryAllItemsWithQy(@Param("qy") String qy);
 }

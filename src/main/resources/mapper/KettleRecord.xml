@@ -88,8 +88,7 @@
 		'FINISHED')
 	</select>
 
-	<select id="queryRecordRelations" parameterType="string"
-		resultMap="KettleRecordRelationMap">
+	<select id="queryRecordRelations" resultMap="KettleRecordRelationMap">
 		SELECT
 		<include refid="KettleRecordRelation_Column_List" />
 		FROM R_RECORD_DEPENDENT
@@ -160,13 +159,13 @@
 		META_ID = #{oldID}
 	</update>
 
-	<delete id="deleteRecord" parameterType="string">
+	<delete id="deleteRecord">
 		DELETE FROM R_RECORD_JOB
 		WHERE
 		UUID =#{uuid}
 	</delete>
 
-	<delete id="deleteRecordRelations" parameterType="string">
+	<delete id="deleteRecordRelations">
 		DELETE FROM
 		R_RECORD_DEPENDENT WHERE
 		MASTER_UUID_ID =#{masterUUID}

@@ -67,12 +67,12 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 		int count = recommendRestProperties.getWeightSize();
 		for (Iterator<RecommendItemScore> it = weightScores.iterator(); it.hasNext();) {
 			itemScore = it.next();
-			if(returnList.contains(itemScore.getItemId())) {
+			if (returnList.contains(itemScore.getItemId())) {
 				continue;
 			}
 			if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
 				continue;
-			} 
+			}
 			if (count > 0) {
 				returnList.add(itemScore.getItemId());
 				scoreMap.remove(itemScore.getItemId());
@@ -165,7 +165,11 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 				}
 			}
 		}
+		List<Long> spids = userConsumptionMapper.recommednQYFilter(recommendScoreMap.keySet(), request.getQy());
 		for (Map.Entry<Long, Double> entry : recommendScoreMap.entrySet()) {
+			if (!spids.contains(entry.getKey())) {
+				continue;
+			}
 			if (!scoreMap.containsKey(entry.getKey())) {
 				scoreMap.put(entry.getKey(), entry.getValue());
 			} else {

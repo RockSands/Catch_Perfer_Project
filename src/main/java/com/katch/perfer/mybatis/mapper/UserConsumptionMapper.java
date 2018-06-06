@@ -1,5 +1,6 @@
 package com.katch.perfer.mybatis.mapper;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -13,4 +14,7 @@ import com.katch.perfer.mybatis.model.UserConsumption;
 public interface UserConsumptionMapper {
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
 	List<UserConsumption> queryUserConsumptions(@Param("userID") long userID, @Param("qy")String qy);
+	
+	@DataSourceTypeAnno(DataSourceEnum.secondary)
+	List<Long> recommednQYFilter(@Param("userID") Collection<Long> spids, @Param("qy")String qy);
 }

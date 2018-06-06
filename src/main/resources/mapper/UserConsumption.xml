@@ -9,18 +9,33 @@
 		<result column="LRRQ" property="createTime" />
 	</resultMap>
 
-	<select id="queryUserConsumptions" parameterType="long"
-		resultMap="UserConsumptionMap">
+	<select id="queryUserConsumptions" resultMap="UserConsumptionMap">
 		SELECT
 		dd.YHID,DD.SPID_1,DD.LRRQ
 		FROM
 		SQY_RZDK_DD dd,
-		SQY_RZDK_SPQYGXB sqpy
+		SQY_RZDK_SPQYGXB spqy
 		WHERE
-		dd.SPID_1 = sqpy.SPID_1
-		AND sqpy.QY_DM = ${qy}
-		AND YHID = ${userID}
+		dd.SPID_1 = spqy.SPID_1
+		AND spqy.QY_DM = #{qy}
+		AND YHID = #{userID}
 		ORDER BY
 		LRRQ DESC
+	</select>
+
+	<select id="recommednQYFilter" resultType="long" parameterType="java.util.Collection">
+		SELECT
+			sp.SPID_1
+		FROM
+			SQY_RZDK_SP sp
+			SQY_RZDK_SPQYGXB spqy
+		WHERE
+			sp.SPID_1 = spqy.SPID_1
+			AND spqy.QY_DM = #{qy} 
+			AND sp.SPID_1 IN
+		<foreach collection="spids" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
 	</select>
 </mapper>

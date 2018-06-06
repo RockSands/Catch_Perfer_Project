@@ -11,7 +11,7 @@
 		ITEM_ID2, SCORE
 	</sql>
 
-	<select id="queryRecommenders" parameterType="long" resultMap="RecommendItemScore">
+	<select id="queryRecommenders" resultMap="RecommendItemScore">
 		SELECT
 		<include refid="Recommender_Column_List" />
 		FROM
