@@ -27,7 +27,7 @@
 		SELECT
 			sp.SPID_1
 		FROM
-			SQY_RZDK_SP sp
+			SQY_RZDK_SP sp,
 			SQY_RZDK_SPQYGXB spqy
 		WHERE
 			sp.SPID_1 = spqy.SPID_1

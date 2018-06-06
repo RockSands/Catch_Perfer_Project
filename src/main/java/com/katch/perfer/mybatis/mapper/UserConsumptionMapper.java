@@ -16,5 +16,5 @@ public interface UserConsumptionMapper {
 	List<UserConsumption> queryUserConsumptions(@Param("userID") long userID, @Param("qy")String qy);
 	
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	List<Long> recommednQYFilter(@Param("userID") Collection<Long> spids, @Param("qy")String qy);
+	List<Long> recommednQYFilter(@Param("spids") Collection<Long> spids, @Param("qy")String qy);
 }
