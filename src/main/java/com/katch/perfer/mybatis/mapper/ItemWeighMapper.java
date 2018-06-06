@@ -16,7 +16,7 @@ public interface ItemWeighMapper {
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
 	@Select("SELECT SPID_1 AS itemId,0 AS score,LRRQ AS createTime FROM SQY_RZDK_SP "
-			+ "WHERE regexp_like(SPID_1,'^[0-9]+[0-9]$')")
+			+ "WHERE YXBZ = 'Y' AND NVL (XYBZ, 'Y') = 'Y'")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class),
 			@Result(property = "createTime", column = "createTime", javaType = Date.class) })
@@ -25,7 +25,8 @@ public interface ItemWeighMapper {
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
 	@Select("SELECT * FROM (SELECT sp.SPID_1 AS itemId,0 AS score,spqy.LRRQ AS createTime "
 			+ "FROM SQY_RZDK_SP sp, SQY_RZDK_SPQYGXB spqy "
-			+ "WHERE sp.SPID_1 = spqy.SPID_1 AND spqy.LRRQ IS NOT NULL AND spqy.QY_DM = #{qy} "
+			+ "WHERE sp.SPID_1 = spqy.SPID_1 AND spqy.LRRQ IS NOT NULL AND sp.YXBZ = 'Y' "
+			+ "AND NVL (sp.XYBZ, 'Y') = 'Y' AND spqy.QY_DM = #{qy} "
 			+ "ORDER BY spqy.LRRQ DESC ) where rownum < 101")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class),
@@ -33,27 +34,32 @@ public interface ItemWeighMapper {
 	List<RecommendItemScore> queryNewItems(@Param("qy") String qy);
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	@Select("SELECT SPID_1 AS itemId,PJFS/20 AS score FROM SQY_RZDK_SPQYGXB "
-			+ "WHERE PJFS IS NOT NULL AND QY_DM = #{qy} ORDER BY score DESC")
+	@Select("SELECT spqy.SPID_1 AS itemId,spqy.PJFS/20 AS score FROM SQY_RZDK_SPQYGXB spqy "
+			+ "INNER JOIN SQY_RZDK_SP sp ON spqy.spid_1 = sp.spid_1 AND sp.YXBZ = 'Y' AND NVL (sp.XYBZ, 'Y') = 'Y' "
+			+ "WHERE spqy.PJFS IS NOT NULL AND spqy.QY_DM = #{qy} ORDER BY score DESC")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class),
 			@Result(property = "score", column = "score", javaType = Double.class) })
 	List<RecommendItemScore> queryWeightItems(@Param("qy") String qy);
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
-	@Select("SELECT dd.SPID_1 AS itemId,count('x') score FROM SQY_RZDK_DD dd,SQY_RZDK_SPQYGXB spqy "
-			+ "WHERE dd.SPID_1 = spqy.SPID_1 AND QY_DM = #{qy} GROUP BY dd.SPID_1 ORDER BY score DESC")
+	@Select("SELECT dd.SPID_1 AS itemId,count('x') score FROM SQY_RZDK_DD dd "
+			+ "INNER JOIN SQY_RZDK_SPQYGXB spqy ON dd.SPID_1 = spqy.SPID_1 AND spqy.QY_DM = #{qy} "
+			+ "INNER JOIN SQY_RZDK_SP sp ON spqy.spid_1 = sp.spid_1 AND sp.YXBZ = 'Y' AND NVL (sp.XYBZ, 'Y') = 'Y' "
+			+ "GROUP BY dd.SPID_1 ORDER BY score DESC")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class) })
 	List<Long> queryTopItems(@Param("qy") String qy);
 
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
 	@Select("SELECT sp.SPID_1 AS itemId FROM SQY_RZDK_SP sp,SQY_RZDK_SPQYGXB spqy "
-			+ "WHERE SP.SPID_1 = spqy.SPID_1 AND spqy.QY_DM = #{qy} ORDER BY TRUNC (dbms_random. VALUE(0, 1000))")
+			+ "WHERE SP.SPID_1 = spqy.SPID_1 AND sp.YXBZ = 'Y' AND NVL (sp.XYBZ, 'Y') = 'Y' "
+			+ "AND spqy.QY_DM = #{qy} ORDER BY TRUNC (dbms_random. VALUE(0, 1000))")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class) })
 	List<Long> queryAllRandomSortItems(@Param("qy") String qy);
 	
 	@DataSourceTypeAnno(DataSourceEnum.secondary)
 	@Select("SELECT sp.SPID_1 AS itemId FROM SQY_RZDK_SP sp,SQY_RZDK_SPQYGXB spqy "
-			+ "WHERE SP.SPID_1 = spqy.SPID_1 AND spqy.QY_DM = #{qy}")
+			+ "WHERE SP.SPID_1 = spqy.SPID_1 AND sp.YXBZ = 'Y' AND NVL (sp.XYBZ, 'Y') = 'Y' "
+			+ "AND spqy.QY_DM = #{qy}")
 	@Results({ @Result(property = "itemId", column = "itemId", javaType = Long.class) })
 	List<Long> queryAllItemsWithQy(@Param("qy") String qy);
 }
