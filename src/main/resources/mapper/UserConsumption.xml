@@ -11,36 +11,40 @@
 
 	<select id="queryUserConsumptions" resultMap="UserConsumptionMap">
 		SELECT
-			dd.YHID,
-			DD.SPID_1,
-			DD.LRRQ
+		dd.YHID,
+		DD.SPID_1,
+		DD.LRRQ
 		FROM
-			SQY_RZDK_DD dd
+		SQY_RZDK_DD dd
 		INNER JOIN SQY_RZDK_SPQYGXB spqy ON dd.SPID_1 = spqy.SPID_1
-		INNER JOIN SQY_RZDK_SP sp ON spqy.spid_1 = sp.spid_1
+		INNER
+		JOIN SQY_RZDK_SP sp ON spqy.spid_1 = sp.spid_1
 		AND sp.YXBZ = 'Y'
-		AND NVL (sp.XYBZ, 'Y') = 'Y'
+		AND NVL
+		(sp.XYBZ, 'Y') = 'Y'
 		WHERE
-			dd.SPID_1 = spqy.SPID_1
+		dd.SPID_1 = spqy.SPID_1
 		AND spqy.QY_DM = #{qy}
 		AND dd.YHID = #{userID}
 		ORDER BY
-			LRRQ DESC
+		LRRQ DESC
 	</select>
 
 	<select id="recommednQYFilter" resultType="long" parameterType="java.util.Collection">
 		SELECT
-			sp.SPID_1
+		sp.SPID_1
 		FROM
-			SQY_RZDK_SP sp,
-			SQY_RZDK_SPQYGXB spqy
+		SQY_RZDK_SP sp,
+		SQY_RZDK_SPQYGXB spqy
 		WHERE
-			sp.SPID_1 = spqy.SPID_1
-			AND spqy.QY_DM = #{qy} 
+		sp.SPID_1 = spqy.SPID_1
+		AND spqy.QY_DM = #{qy}
+		<if test="spids != null and spids.size>0 ">
 			AND sp.SPID_1 IN
-		<foreach collection="spids" index="index" item="item" open="("
-			separator="," close=")">
-			#{item}
-		</foreach>
+			<foreach collection="spids" index="index" item="item" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
 	</select>
 </mapper>
