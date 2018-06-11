@@ -23,7 +23,7 @@ import com.katch.perfer.mybatis.model.RecommendItemScore;
 public class ConsumerUserNorthService extends ConsumerNorthService {
 	@Autowired
 	private BaseUserRecommendMapper baseUserRecommendMapper;
-	
+
 	@Autowired
 	private UserConsumptionMapper userConsumptionMapper;
 
@@ -70,7 +70,7 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 			}
 			if (!loanApplyConstraint(itemScore.getItemId(), request.getTaxEnterpriseInfo())) {
 				continue;
-			} 
+			}
 			if (count > 0) {
 				returnList.add(itemScore.getItemId());
 				scoreMap.remove(itemScore.getItemId());
@@ -145,10 +145,16 @@ public class ConsumerUserNorthService extends ConsumerNorthService {
 			if (!recommendScoreMap.containsKey(itemScore.getItemId())) {
 				recommendScoreMap.put(itemScore.getItemId(), itemScore.getScore());
 			} else {
-				recommendScoreMap.put(itemScore.getItemId(), itemScore.getScore() + scoreMap.get(itemScore.getItemId()));
+				recommendScoreMap.put(itemScore.getItemId(),
+						itemScore.getScore() + scoreMap.get(itemScore.getItemId()));
 			}
 		}
-		// 过滤
+		/*
+		 * 过滤区域
+		 */
+		if (recommendScoreMap.size() == 0) {
+			return;
+		}
 		List<Long> spids = userConsumptionMapper.recommednQYFilter(recommendScoreMap.keySet(), request.getQy());
 		for (Map.Entry<Long, Double> entry : recommendScoreMap.entrySet()) {
 			if (!spids.contains(entry.getKey())) {

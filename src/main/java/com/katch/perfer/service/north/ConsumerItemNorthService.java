@@ -165,6 +165,12 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 				}
 			}
 		}
+		/*
+		 * 过滤区域
+		 */
+		if (recommendScoreMap.size() == 0) {
+			return;
+		}
 		List<Long> spids = userConsumptionMapper.recommednQYFilter(recommendScoreMap.keySet(), request.getQy());
 		for (Map.Entry<Long, Double> entry : recommendScoreMap.entrySet()) {
 			if (!spids.contains(entry.getKey())) {
