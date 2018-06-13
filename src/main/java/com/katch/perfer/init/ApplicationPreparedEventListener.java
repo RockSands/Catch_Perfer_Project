@@ -17,7 +17,7 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
 			System.setProperty("javax.xml.parsers.DocumentBuilderFactory",
 					"com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl");
 			KettleEnvironment.init();
-			ConfigurableApplicationContext context = event.getApplicationContext();
+			//ConfigurableApplicationContext context = event.getApplicationContext();
 		} catch (KettleException e) {
 			throw new RuntimeException("KettleEnvironment初始化失败!");
 		}
