@@ -10,9 +10,9 @@ spring:
     auto: true 
   datasource:
     primary: 
-      url: jdbc:mysql://10.23.13.183:3306/recommend
+      url: jdbc:mysql://94.12.64.46:3306/kettle
       username: root
-      password: 123456
+      password: mysql123
       driver-class-name: com.mysql.jdbc.Driver
       # 数据库连接池
       type: org.apache.commons.dbcp2.BasicDataSource
@@ -24,9 +24,9 @@ spring:
       validation-query: SELECT 1
       connection-properties: characterEncoding=utf8;autoReconnect=true;useAffectedRows=true
     secondary: 
-      url: jdbc:oracle:thin:@10.23.10.224:1521:csstax
+      url: jdbc:oracle:thin:@94.12.73.35:1521:nxstqsyn
       username: hx_zgxt
-      password: css
+      password: nxstqsy
       driver-class-name: oracle.jdbc.OracleDriver
       # 数据库连接池
       type: org.apache.commons.dbcp2.BasicDataSource
@@ -36,9 +36,9 @@ spring:
       min-idle: 5
       max-idle: 15
     thirdary: 
-      url: jdbc:oracle:thin:@10.23.8.113:1521:lthxcx
+      url: jdbc:oracle:thin:@94.12.72.16:1521:nxstcxff1
       username: zj_wbcx
-      password: hxzgxtoracle7788
+      password: cx123
       driver-class-name: oracle.jdbc.OracleDriver
       # 数据库连接池
       type: org.apache.commons.dbcp2.BasicDataSource

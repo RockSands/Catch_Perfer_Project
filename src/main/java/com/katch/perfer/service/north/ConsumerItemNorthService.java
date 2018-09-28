@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.control.RecommedRequest;
@@ -20,7 +19,7 @@ import com.katch.perfer.mybatis.model.RecommendItemScore;
 import com.katch.perfer.mybatis.model.UserConsumption;
 
 @Service()
-@ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = false)
+//@ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = false)
 public class ConsumerItemNorthService extends ConsumerNorthService {
 
 	@Autowired
@@ -28,7 +27,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 
 	@Autowired
 	private UserConsumptionMapper userConsumptionMapper;
-
+	
 	@Override
 	public List<Long> queryAllRecommend(RecommedRequest request) {
 		List<Long> returnList = new ArrayList<Long>();
@@ -86,7 +85,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 	}
 
 	/**
-	 * 处理权重商品
+	 * 处理新商品
 	 * 
 	 * @param request
 	 * @param returnList
@@ -121,7 +120,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 	}
 
 	/**
-	 * 处理权重商品
+	 * 处理正常商品
 	 * 
 	 * @param request
 	 * @param returnList
@@ -135,7 +134,7 @@ public class ConsumerItemNorthService extends ConsumerNorthService {
 		List<UserConsumption> consumptions = userConsumptionMapper.queryUserConsumptions(request.getYhid(),
 				request.getQy());
 		double devalue = 0.0D;
-		double scortTmp = 0.0;
+		double scortTmp;
 		Map<Long, Double> recommendScoreMap = new HashMap<Long, Double>();
 		List<RecommendItemScore> baseItemScores;
 		// 计算推荐评分

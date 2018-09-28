@@ -23,7 +23,7 @@ import com.katch.perfer.mybatis.model.KettleRecord;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Lazy
-public class KettleRemoteJobDaemon extends Thread {
+public class KettleRemoteJobDaemon implements Runnable {
 
 	private static Logger logger = LoggerFactory.getLogger(KettleRemoteJobDaemon.class);
 
@@ -55,10 +55,10 @@ public class KettleRemoteJobDaemon extends Thread {
 				recordRoll.setStatus(KettleVariables.RECORD_STATUS_ERROR);
 				recordRoll.setUpdateTime(now);
 				kettleRecordRepository.updateRecord(recordRoll);
+				it.remove();
 				logger.debug(
 						"Kettle-Client[" + client.getHostName() + "]任务管理由于远端无法连接,失败任务[" + recordRoll.getUuid() + "]!");
 			}
-			return;
 		}
 		// 处理运行中的
 		for (Iterator<KettleRecord> it = runningRecords.iterator(); it.hasNext();) {

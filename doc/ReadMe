@@ -1,0 +1,26 @@
+数据库数据源存在三个
+
+1.primary库
+	推荐库,为本地kettle-Mysql.sql中的库
+2.secondary库
+	商品库,为商品所在的库
+3.thirdary库
+	企业-纳税信息库,为征收税款的库
+
+配置文件
+1.consumer.properties
+	商品评分抽取配置,数据库配置商品库
+2.kettle_env.propterites
+	Kettle的资源库,如果目录变更修改kettle.repository.baseDirectory
+3.recommend.properties
+	推荐商品信息配置,数据库配置为推荐库
+4.taxes_enterprise.properties
+	企业纳税信息抽取配置,数据库配置企业-纳税信息库
+	
+NFS的目录说明:
+	NFS的根目录为/shareDatas
+其中三个子目录分别为:
+	/shareDatas/recommendDatas	-->  保存消费导出数据的目录
+	/shareDatas/consumerDatas	-->	  保存推荐信息的目录
+	/shareDatas/FileRepo		-->  保存kettle的资源文件
+	

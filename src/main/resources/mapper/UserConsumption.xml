@@ -16,18 +16,22 @@
 		DD.LRRQ
 		FROM
 		SQY_RZDK_DD dd
-		INNER JOIN SQY_RZDK_SPQYGXB spqy ON dd.SPID_1 = spqy.SPID_1
+		INNER JOIN SQY_RZDK_SPQYGXB spqy ON
+		dd.SPID_1 = spqy.SPID_1
 		INNER
-		JOIN SQY_RZDK_SP sp ON spqy.spid_1 = sp.spid_1
+		JOIN SQY_RZDK_SP sp ON spqy.spid_1 =
+		sp.spid_1
 		AND sp.YXBZ = 'Y'
 		AND NVL
 		(sp.XYBZ, 'Y') = 'Y'
 		WHERE
-		dd.SPID_1 = spqy.SPID_1
+		dd.SPID_1 =
+		spqy.SPID_1
 		AND spqy.QY_DM = #{qy}
 		AND dd.YHID = #{userID}
 		ORDER BY
-		LRRQ DESC
+		LRRQ
+		DESC
 	</select>
 
 	<select id="recommednQYFilter" resultType="long" parameterType="java.util.Collection">
@@ -37,7 +41,8 @@
 		SQY_RZDK_SP sp,
 		SQY_RZDK_SPQYGXB spqy
 		WHERE
-		sp.SPID_1 = spqy.SPID_1
+		sp.SPID_1
+		= spqy.SPID_1
 		AND spqy.QY_DM = #{qy}
 		<if test="spids != null and spids.size>0 ">
 			AND sp.SPID_1 IN
@@ -46,5 +51,18 @@
 				#{item}
 			</foreach>
 		</if>
+	</select>
+
+	<select id="querySpidsByDklxEqual1" resultType="long"
+		parameterType="java.util.Collection">
+		SELECT sp.SPID_1 AS itemId
+		FROM SQY_RZDK_SP
+		sp,SQY_RZDK_SPQYGXB spqy
+		WHERE
+		sp.SPID_1 = spqy.SPID_1
+		AND sp.YXBZ = 'Y'
+		AND NVL
+		(sp.XYBZ, 'Y') = 'Y'
+		AND sp.DKLX = '1'
 	</select>
 </mapper>

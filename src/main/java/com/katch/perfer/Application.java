@@ -25,9 +25,5 @@ public class Application {
 		app.addListeners(new ApplicationPreparedEventListener());
 		app.addListeners(new ApplicationReadyEventListener());
 		app.run(args);
-		// TaxEnterpriseOffImport taxEnterpriseOffImport =
-		// context.getBean(TaxEnterpriseOffImport.class);
-		// taxEnterpriseOffImport.excute();
-		// 测试用数据 http://localhost:9090/catchPerfer/recommend?yhid=100000001&nsrsbh=440606152527002&qy=210000
 	}
 }

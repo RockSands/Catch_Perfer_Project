@@ -23,6 +23,10 @@ import org.springframework.stereotype.Component;
 import com.katch.perfer.config.ConsumerProperties;
 import com.katch.perfer.kettle.bean.KettleJobEntireDefine;
 
+/**
+ * 将消费数据输出到CSV文件,等待系统读取计算
+ *
+ */
 @Component()
 public class ConsumerExportCSVBuilder {
 	@Autowired
@@ -85,6 +89,7 @@ public class ConsumerExportCSVBuilder {
 		field_2.setType(ValueMetaInterface.TYPE_NUMBER);
 		field_2.setTrimType(ValueMetaInterface.TRIM_TYPE_BOTH);
 		field_2.setFormat("#######.###");
+
 		TextFileField[] outputFields = new TextFileField[] { field_0, field_1, field_2 };
 		tfom.setOutputFields(outputFields);
 		final StepMeta export = new StepMeta("export", tfom);

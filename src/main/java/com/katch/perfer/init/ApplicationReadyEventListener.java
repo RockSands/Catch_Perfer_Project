@@ -14,8 +14,7 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
-		logger.error("Catch_Perfer_Project项目Boot启动成功!");
-		//ConfigurableApplicationContext context = event.getApplicationContext();
+		logger.info("Catch_Perfer_Project项目Boot启动成功!");
 	}
 
 }

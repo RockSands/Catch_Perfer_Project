@@ -8,12 +8,6 @@
 			<pattern>%d %logger{36} %msg%n</pattern>
 		</layout>
 	</appender>
-
-	<appender name="CONSOLE_LOG" class="ch.qos.logback.core.ConsoleAppender">
-		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>%d %logger{36} %msg%n</pattern>
-		</layout>
-	</appender>
 	<appender name="DEBUG_LOG"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">

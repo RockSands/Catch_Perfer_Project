@@ -58,8 +58,8 @@ public class TaxEnterpriseImportBuilder {
 		/*
 		 * 构建
 		 */
-		String[] pkColumns = new String[] { "NSRSBH" };
-		String[] targetAllColumns = new String[] { "NSRSBH", "SNYYE", "QSYYSJ" };
+		String[] pkColumns = new String[] { "DJXH" };
+		String[] targetAllColumns = new String[] { "DJXH", "SNYYE", "QSYYSJ" };
 		String[] conditions = new String[1];
 		for (int i = 0; i < conditions.length; i++) {
 			conditions[i] = "=";
@@ -106,7 +106,7 @@ public class TaxEnterpriseImportBuilder {
 		 */
 		TableInputMeta targettii = new TableInputMeta();
 		targettii.setDatabaseMeta(targetDatabase);
-		targettii.setSQL("SELECT NSRSBH,QSYYSJ,SNYYE FROM TAX_ENTERPRISE_INFO");
+		targettii.setSQL("SELECT DJXH,QSYYSJ,SNYYE FROM TAX_ENTERPRISE_INFO");
 		StepMeta target = new StepMeta("target", targettii);
 		transMeta.addStep(target);
 		target.setLocation(150, 300);

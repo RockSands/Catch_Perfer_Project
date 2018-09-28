@@ -14,6 +14,11 @@ import com.katch.perfer.kettle.service.KettleNorthService;
 import com.katch.perfer.mybatis.model.RecommendTaskTrack;
 import com.katch.perfer.service.schedule.ConsumerRecommendResoluter;
 
+/**
+ * 将消费记录导入CVS任务的监控,
+ * @author Administrator
+ *
+ */
 @Component
 public class CSVExportTrackResoluter extends ConsumerRecommendResoluter {
 

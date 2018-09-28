@@ -5,7 +5,6 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.pentaho.di.core.exception.KettleException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.katch.perfer.kettle.bean.KettleResult;
@@ -15,7 +14,8 @@ import com.katch.perfer.service.kettle.ItemRecommendCSV2DBBuild;
 import com.katch.perfer.service.schedule.Recommend2DBService;
 
 @Service()
-@ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item", matchIfMissing = false)
+// @ConditionalOnProperty(name = "consumer.mahout.type", havingValue = "item",
+// matchIfMissing = false)
 public class ItemRecommend2DBService extends Recommend2DBService {
 
 	@Autowired

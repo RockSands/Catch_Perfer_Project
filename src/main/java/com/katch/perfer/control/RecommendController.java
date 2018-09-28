@@ -30,11 +30,11 @@ public class RecommendController {
 	 */
 	@ApiOperation(value = "获取推荐列表", notes = "")
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Long> get(@RequestParam(required = false) Long yhid, @RequestParam(required = false) String nsrsbh,
+	public List<Long> get(@RequestParam(required = false) Long yhid, @RequestParam(required = false) String djxh,
 			@RequestParam(required = true) String qy) {
 		RecommedRequest request = new RecommedRequest();
-		if(nsrsbh != null) {
-			TaxEnterpriseInfo taxEnterprise = taxEnterpriseService.queryTaxEnterpriseInfo(nsrsbh);
+		if(djxh != null) {
+			TaxEnterpriseInfo taxEnterprise = taxEnterpriseService.queryTaxEnterpriseInfo(djxh);
 			request.setTaxEnterpriseInfo(taxEnterprise);
 		}
 		request.setYhid(yhid);

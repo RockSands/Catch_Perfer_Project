@@ -12,13 +12,13 @@ public class TaxEnterpriseService {
 	private TaxEnterPriseMapper taxEnterPriseMapper;
 
 	/**
-	 * @param nsrsbh
+	 * @param djxh
 	 * @return
 	 */
-	public TaxEnterpriseInfo queryTaxEnterpriseInfo(String nsrsbh) {
-		TaxEnterpriseInfo taxEnterprise = taxEnterPriseMapper.queryOne(nsrsbh);
+	public TaxEnterpriseInfo queryTaxEnterpriseInfo(String djxh) {
+		TaxEnterpriseInfo taxEnterprise = taxEnterPriseMapper.queryOne(djxh);
 		if (taxEnterprise == null) {
-			taxEnterprise = taxEnterPriseMapper.queryThirdOne(nsrsbh);
+			taxEnterprise = taxEnterPriseMapper.queryThirdOne(djxh);
 		}
 		if (taxEnterprise != null) {
 			insertNE(taxEnterprise);

@@ -19,7 +19,7 @@ public class ConsumerRecommendProcess {
 	@Autowired
 	private List<ConsumerRecommendResoluter> resoluters;
 
-	@Scheduled(cron = "*/20 * * * * ?")
+	@Scheduled(cron = "0/20 * * * * ?")
 	public void excute() {
 		RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY_RECOMMEND_DATA_OFF_CREATER");
 		if(!Consist.RECOM_TASK_TRACK_STATUS_RUNNING.equals(track.getStatus())) {

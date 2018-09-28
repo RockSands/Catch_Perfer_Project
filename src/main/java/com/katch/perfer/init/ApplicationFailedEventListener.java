@@ -6,7 +6,7 @@ import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationListener;
 
 /**
- * 当Application启动失败时,调用改坚挺
+ * 
  */
 public class ApplicationFailedEventListener implements ApplicationListener<ApplicationFailedEvent> {
 

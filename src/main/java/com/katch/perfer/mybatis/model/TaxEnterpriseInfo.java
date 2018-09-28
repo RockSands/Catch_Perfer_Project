@@ -4,14 +4,15 @@ import java.util.Date;
 
 /**
  * 企业涉税信息
+ * 
  * @author Administrator
  *
  */
 public class TaxEnterpriseInfo {
 	/**
-	 * 纳税人识别号
+	 * 登记序号
 	 */
-	private String nsrsbh;
+	private String djxh;
 
 	/**
 	 * 企业最早涉税
@@ -23,12 +24,19 @@ public class TaxEnterpriseInfo {
 	 */
 	private Double snyye;
 
-	public String getNsrsbh() {
-		return nsrsbh;
+	/**
+	 * @return the djxh
+	 */
+	public String getDjxh() {
+		return djxh;
 	}
 
-	public void setNsrsbh(String nsrsbh) {
-		this.nsrsbh = nsrsbh;
+	/**
+	 * @param djxh
+	 *            the djxh to set
+	 */
+	public void setDjxh(String djxh) {
+		this.djxh = djxh;
 	}
 
 	public Date getQsyysj() {

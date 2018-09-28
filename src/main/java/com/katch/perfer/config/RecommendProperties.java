@@ -26,11 +26,11 @@ public class RecommendProperties {
 	@Value("${recommend.insert.target.db.passwd}")
 	private String targetPasswd;
 	
-	@Value("${recommend.save.item.fileName}")
-	private String itemRecommendFileName;
+	@Value("${recommend.save.item.mixfileName}")
+	private String itemMixRecommendFileName;
 	
-	@Value("${recommend.save.user.fileName}")
-	private String userRecommendFileName;
+	@Value("${recommend.save.item.grfileName}")
+	private String itemGrRecommendFileName;
 	
 	@Value("${recommend.tax.enterprise.select.sql}")
 	private String taxEnterpriseSelectSql;
@@ -83,20 +83,32 @@ public class RecommendProperties {
 		this.targetPasswd = targetPasswd;
 	}
 
-	public String getItemRecommendFileName() {
-		return itemRecommendFileName;
+	/**
+	 * @return the itemMixRecommendFileName
+	 */
+	public String getItemMixRecommendFileName() {
+		return itemMixRecommendFileName;
 	}
 
-	public void setItemRecommendFileName(String itemRecommendFileName) {
-		this.itemRecommendFileName = itemRecommendFileName;
+	/**
+	 * @param itemMixRecommendFileName the itemMixRecommendFileName to set
+	 */
+	public void setItemMixRecommendFileName(String itemMixRecommendFileName) {
+		this.itemMixRecommendFileName = itemMixRecommendFileName;
 	}
 
-	public String getUserRecommendFileName() {
-		return userRecommendFileName;
+	/**
+	 * @return the itemGrRecommendFileName
+	 */
+	public String getItemGrRecommendFileName() {
+		return itemGrRecommendFileName;
 	}
 
-	public void setUserRecommendFileName(String userRecommendFileName) {
-		this.userRecommendFileName = userRecommendFileName;
+	/**
+	 * @param itemGrRecommendFileName the itemGrRecommendFileName to set
+	 */
+	public void setItemGrRecommendFileName(String itemGrRecommendFileName) {
+		this.itemGrRecommendFileName = itemGrRecommendFileName;
 	}
 
 	public String getTaxEnterpriseSelectSql() {

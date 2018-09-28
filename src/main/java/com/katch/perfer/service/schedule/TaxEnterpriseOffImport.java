@@ -31,9 +31,14 @@ public class TaxEnterpriseOffImport {
 
 	@Scheduled(cron = "0 0 0/1 * * ?")
 	public void excute() {
-		RecommendTaskTrack track = recommendTaskTrackMapper.queryRecommendTaskTrack("SQY_TAX_ENTERPRISE_OFF_IMPORT");
-		logger.info("纳税企业信息同步信息准备启动!");
-		excute(track);
+		try {
+			RecommendTaskTrack track = recommendTaskTrackMapper
+					.queryRecommendTaskTrack("SQY_TAX_ENTERPRISE_OFF_IMPORT");
+			logger.info("纳税企业信息同步信息准备启动!");
+			excute(track);
+		} catch (Exception ex) {
+			logger.info("纳税企业信息同步信息准备启动异常!", ex);
+		}
 	}
 
 	private void excute(RecommendTaskTrack track) {

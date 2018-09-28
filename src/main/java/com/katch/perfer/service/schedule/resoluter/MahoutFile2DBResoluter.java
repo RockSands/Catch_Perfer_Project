@@ -57,13 +57,6 @@ public class MahoutFile2DBResoluter extends ConsumerRecommendResoluter {
 			throw new Exception("推荐信息导入数据库失败!Kettle[" + jobUuid + "]状态非法[" + kettleResult.getStatus() + "]!");
 		}
 	}
-	// private void deleteJob(String jobId) {
-	// try {
-	// kettleNorthService.deleteJob(jobId);
-	// } catch (Exception e) {
-	// logger.error("关闭Kettle任务[" + jobId + "]失败!", e);
-	// }
-	// }
 
 	private void deleteJobForce(String uuid) {
 		try {

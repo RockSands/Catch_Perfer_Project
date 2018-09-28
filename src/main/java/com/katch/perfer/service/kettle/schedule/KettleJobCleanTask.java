@@ -33,7 +33,7 @@ public class KettleJobCleanTask {
 	 */
 	@Scheduled(cron = "0 0 0/3 * * ?")
 	// @Scheduled(cron = "0 0/1 * * * ?")
-	public void AutoCleanJob() {
+	public void autoCleanJob() {
 		try {
 			/*
 			 * 清理任务

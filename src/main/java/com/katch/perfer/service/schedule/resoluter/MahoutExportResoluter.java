@@ -12,6 +12,11 @@ import com.katch.perfer.mahout.service.MahoutExportService;
 import com.katch.perfer.mybatis.model.RecommendTaskTrack;
 import com.katch.perfer.service.schedule.ConsumerRecommendResoluter;
 
+/**
+ * 将Mahout的记录导出
+ * @author Administrator
+ *
+ */
 @Component
 public class MahoutExportResoluter extends ConsumerRecommendResoluter {
 	private static Logger logger = LoggerFactory.getLogger(MahoutExportResoluter.class);

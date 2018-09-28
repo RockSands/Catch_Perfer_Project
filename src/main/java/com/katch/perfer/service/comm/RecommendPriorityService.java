@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.katch.perfer.control.RecommedRequest;
 import com.katch.perfer.mybatis.mapper.ItemWeighMapper;
 import com.katch.perfer.mybatis.model.RecommendItemScore;
 
@@ -45,18 +46,27 @@ public class RecommendPriorityService {
 	 * 
 	 * @return
 	 */
-	public List<Long> queryAllItems(String qy) {
-		// return itemWeighMapper.queryAllRandomSortItems(qy);
-		return itemWeighMapper.queryAllItemsWithQy(qy);
+	public List<Long> queryAllItems(RecommedRequest request) {
+		return itemWeighMapper.queryAllItemsWithQy(request.getQy(),request.getDklx());
 	}
 	
 	/**
-	 * 获取随机Item
+	 * 获取热门Item
 	 * 
 	 * @return
 	 */
-	public List<Long> queryTopSortItems(String qy) {
-		return itemWeighMapper.queryTopItems(qy);
+	public List<Long> queryHotSortItems(RecommedRequest request) {
+		return itemWeighMapper.queryHotItems(request.getQy(),request.getDklx());
+	}
+	
+	/**
+	 * 获取TOP,Item
+	 * 
+	 * @return
+	 */
+	public List<Long> queryTopSortItems(RecommedRequest request) {
+//		RecommedRequest request;
+		return itemWeighMapper.queryTopItemsWithQy(request.getQy(),request.getDklx());
 	}
 
 	/**

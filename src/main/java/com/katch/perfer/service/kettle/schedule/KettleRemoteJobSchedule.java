@@ -42,7 +42,7 @@ public class KettleRemoteJobSchedule extends KettleJobService {
 		try {
 			fixedThreadPool.shutdown();
 			fixedThreadPool.awaitTermination(5, TimeUnit.MINUTES);
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			logger.error("线程池执行超时!", e);
 		}
 	}

@@ -42,11 +42,15 @@ public abstract class ConsumerNorthService {
 	 */
 	public List<Long> queryRecommends(RecommedRequest request) {
 		List<Long> recommends = queryAllRecommend(request);
-		List<Long> topItems = priorityService.queryTopSortItems(request.getQy());
-		List<Long> allItems = priorityService.queryAllItems(request.getQy());
+		List<Long> topItems = priorityService.queryTopSortItems(request);
+		List<Long> hotItems = priorityService.queryHotSortItems(request);
+		List<Long> allItems = priorityService.queryAllItems(request);
+		for (Long itemId : topItems) {
+			recommends.add(0, itemId);
+		}
 		// 如果条数不足,使用TOP补充
 		if (recommends.size() < recommendRestProperties.getReturnSize()) {
-			for (Long itemId : topItems) {
+			for (Long itemId : hotItems) {
 				if (!recommends.contains(itemId) && loanApplyConstraint(itemId, request.getTaxEnterpriseInfo())) {
 					recommends.add(itemId);
 					if (recommends.size() == recommendRestProperties.getReturnSize()) {
@@ -64,7 +68,7 @@ public abstract class ConsumerNorthService {
 				}
 			}
 		}
-		return recommends;
+		return recommends.subList(0, recommendRestProperties.getReturnSize());
 	}
 
 	protected boolean loanApplyConstraint(Long spid, TaxEnterpriseInfo info) {

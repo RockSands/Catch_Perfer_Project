@@ -76,7 +76,7 @@ public class KettleRemotePool {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Kettle远程池刷新失败!", e);
+			logger.error("Kettle远程池刷新失败,无法对Kettle远端执行添加操作!", e);
 		}
 	}
 
@@ -104,7 +104,11 @@ public class KettleRemotePool {
 	 */
 	@Scheduled(initialDelay = 10000, fixedRate = 10000)
 	public void refreshRemoteStatusScheduled() {
-		refreshRemoteStatus();
+		try {
+			refreshRemoteStatus();
+		} catch (Exception ex) {
+			logger.error("Kettle远端监控进程发生异常!", ex);
+		}
 	}
 
 	/**
@@ -141,6 +145,7 @@ public class KettleRemotePool {
 
 	/**
 	 * 是否运行中
+	 * 
 	 * @return
 	 */
 	public boolean isRunning() {
